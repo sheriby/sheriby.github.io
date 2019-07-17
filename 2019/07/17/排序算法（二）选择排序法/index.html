@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">排序算法(一） 冒泡排序法 | Sher的小博客</title>
+  <title itemprop="name">排序算法（二）选择排序法 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,19 +346,19 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(5).jpg.webp);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(5).jpg.webp">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(7).jpg.webp);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(7).jpg.webp">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      排序算法(一） 冒泡排序法</h1>
+      排序算法（二）选择排序法</h1>
       <p class="entry-census">
         <span>
-          <a href="sheriby.github.io">
-            <img src="https://wx1.sinaimg.cn/large/006bYVyvgy1ftand2qurdj303c03cdfv.jpg">
+          <a href="">
+            <img src="">
           </a>
         </span>
         <span>
-          <a href="sheriby.github.io">Hony Sher</a>
+          <a href="">Hony Sher</a>
         </span>
         <span class="bull">
         ·</span>
@@ -376,51 +376,63 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h2 id="排序算法（一）-冒泡排序法"><a href="#排序算法（一）-冒泡排序法" class="headerlink" title="排序算法（一） 冒泡排序法"></a>排序算法（一） 冒泡排序法</h2><p>冒泡排序法可谓是我们学到的第一个排序算法了，以其简单易懂而闻名，但是这个算法又是特别的垃圾，因为效率及其的低下。</p>
-<p>下面是一些经典的排序算法的时间复杂度：</p>
-<blockquote>
-<p> <img src="https://forum.mianbaoban.cn/data/attachment/forum/201803/20/140151tbt1kcsjbds6bsbd.jpg" alt="排序算法的时间复杂度"></p>
-</blockquote>
-<p>别看这个冒泡排序法的时间复杂度和选择，插入是一样的，但是效率却远远比选择，插入低，尤其是数据量很大的时候。</p>
-<h3 id="冒泡排序的思路"><a href="#冒泡排序的思路" class="headerlink" title="冒泡排序的思路"></a>冒泡排序的思路</h3><p>冒泡排序的思路就是<strong>每次把最大的数挑出来放到数组的最后面</strong>(排序皆是从小到大)。如下图所示</p>
-<p><img src="https://img-blog.csdn.net/20180626221749653?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5NzQxNjA1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="冒泡排序"></p>
-<p>每一次将最大的元素移动到数组的后面，移动了5次，这个数组就是从大到小有序的了。</p>
-<h3 id="代码的实现"><a href="#代码的实现" class="headerlink" title="代码的实现"></a>代码的实现</h3><p>冒泡排序比较容易理解，代码也是比较好写的。</p>
-<pre><code class="java">public static void bubbleSort(int[] arr) {
-        boolean flag = false;
+          <h2 id="排序算法（二）选择排序法"><a href="#排序算法（二）选择排序法" class="headerlink" title="排序算法（二）选择排序法"></a>排序算法（二）选择排序法</h2><p>选择排序算法和冒泡排序算法算是难兄难弟了，都是以其简单而闻名，也是在学校中我们主要学习的排序算法。但是不是不说，这个选择排序算法除了不稳定，其他都可以吊打冒泡排序算法。那现在难兄没了，只剩下这个难弟冒泡排序算法了。</p>
+<h3 id="选择排序法的基本介绍"><a href="#选择排序法的基本介绍" class="headerlink" title="选择排序法的基本介绍"></a>选择排序法的基本介绍</h3><table>
+<thead>
+<tr>
+<th>名字</th>
+<th>平均时间复杂度</th>
+<th>最好时间复杂度</th>
+<th>最差时间复杂度</th>
+<th>空间复杂度</th>
+<th>是否流弊</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>选择排序法</td>
+<td>O(n^2)</td>
+<td>O(n^2)</td>
+<td>O(n^2)</td>
+<td>O(1)</td>
+<td>否</td>
+</tr>
+</tbody></table>
+<p>选择排序法是一种不稳定的算法，也就是说相同的数据经过选择排序法之后不一定会保持原来的顺序。</p>
+<h3 id="选择排序法的基本思路"><a href="#选择排序法的基本思路" class="headerlink" title="选择排序法的基本思路"></a>选择排序法的基本思路</h3><p>每次使用第一个位置的（不一定是arr[0]）和之后的数据比较，<strong>找到最小的那个数据然后两者交换</strong>。如此一来，<em>小的数据就往数组的前面去了</em>，数组也就变得有序了。不是我说，这个排序一看就比冒泡排序法好，因为<strong>每一轮排序只需要进行一次的交换</strong>。当然比较节省时间了。</p>
+<p><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563376672116&di=805a72ab53b676b83ad8056843b5eb39&imgtype=0&src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fpng%2F9dfe748626359c47ab419434e21da4d6.png" alt="选择排序法"></p>
+<p>从上图可以看出来，选择排序似乎和冒泡排序有点相似，一个是把大的数据往后边沉，一个是把小的数据往前面搬。</p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><pre><code class="java">    public static void selectSort(int[] arr) {
         int temp;
 
         for (int i = 0; i &lt; arr.length-1; i++) {
-            for (int j = 0; j &lt; arr.length-i-1; j++) {
-                if (arr[j] &gt; arr[j+1]) {
-                    temp = arr[j];
-                    arr[j] = arr[j+1];
-                    arr[j+1] = temp;
-                    flag = true;
+            int minIndex = i;
+            for (int j = i+1; j &lt; arr.length; j++) {
+                if (arr[minIndex] &gt; arr[j]) {
+                    minIndex = j;
                 }
             }
-            if (!flag) {
-                break;
-            }else {
-                flag = false;
+            if (minIndex != i) {
+                temp = arr[i];
+                arr[i] = arr[minIndex];
+                arr[minIndex] = temp;
             }
         }
     }</code></pre>
 <blockquote>
-<p>代码的几点说明：</p>
+<p><strong>代码的几点说明</strong>：</p>
 <ol>
-<li><p>i和j的含义 </p>
+<li><p>i，j的作用：</p>
 <ul>
-<li>可以清除的看到在两个for循环的循环体中是没有i变量的，也就是说i变量只是用来计量<strong>有几个大数被移动到了数组的末尾</strong>。</li>
-<li>j变量是用于交换. j &lt; arr.length - 1-i的作用是后面的几个变量已经排过序了，他们就是最大的那几个数，j变量可以不用对他们进行<strong>比较交换</strong>啦。j从0开始每次和j+1进行比较，如果arr[j]大，也就是前面的数大，就把他往后面移动。如此一来，前面的几个数中最大的那个数就被移动到当前j所比较的末尾arr.lenght-1-i处。</li>
+<li>i变量指的是数组开始排序的位置，因为每排一个序，前面就多一个数字变得有序，所以我们就没有必要动那些已经变得有序的数组了。所以说需要排序的范围就是 i 到 arr.length -1</li>
+<li>j变量值的是i后面的那些数据，所以从i+1开始一直到数组的结束。i的结束的数组的倒数第二数，如果i到最后一个数的话后面已经没有数据，一个数怎么说都是有序的，所以说i没有必要到最后一个数。每次arr[i]也就是当前循环的第一个数都会与后面的arr[j]进行比较，一轮之后和最小的数进行交换然后i移动到下一个数</li>
 </ul>
 </li>
-<li><p>flag的作用是什么？</p>
-<p>flag这个是对冒泡排序法的一个优化，虽然优化过后这个算法还是一样的垃圾。。。<strong>flag所代表的含义是该次循环中有没有发生过交换</strong>。一开始我们将其置为flag(<em>不初始化也是可以的，boolean型的变量的初始值就是false</em>).当本次循环进行过交换的时候，将flag置为true。然后再将循环置为false。当有某次的循环中没有进行过交换，这个也就是意味着<strong>此时数组前面的那几个数已经是有序的了</strong>，而数组后面的数同样也是有序的，所以退出循环排序结束。</p>
+<li><p>为什么只有一次交换？</p>
+<p>因为minIndex变量的存在（<em>minIndex被初始化为了i</em>），我们可以存储找到的最小的值的下标，而不是一味的交换i与j的数据。当我们发现arr[j] &lt; arr[minIndex]时，就把minIndex = j；因为他的值更小嘛，如此一来，我们就可以得到后面的最小值的下标了。一轮循环结束之后再进行交换（<strong>i != minIndex</strong> 如果i == minIndex那就说明if语句一直都是假的，arr[i]处的值就是最小的，没有必要和谁交换啦)。</p>
 </li>
 </ol>
 </blockquote>
-<h3 id="冒泡排序的测试："><a href="#冒泡排序的测试：" class="headerlink" title="冒泡排序的测试："></a>冒泡排序的测试：</h3><p>测试环境及工具：<em>我的电脑 Huawei MateBook 13+JDK1.8+Eclipse</em></p>
+<h3 id="选择排序的测试"><a href="#选择排序的测试" class="headerlink" title="选择排序的测试"></a>选择排序的测试</h3><p>测试环境及工具：<em>我的电脑 Huawei MateBook 13+JDK1.8+Eclipse</em></p>
 <p>测试手段：<em>随机生成80000个[0,800000）的整数的数组进行排序，观察所花费的时间</em></p>
 <p>测试代码：</p>
 <pre><code class="java">public static void main(String[] args) {
@@ -431,21 +443,20 @@
         }
 //        System.out.println(Arrays.toString(arr));
         long start_time = System.currentTimeMillis();
-        bubbleSort(arr);
+        selectSort(arr);
         long end_time = System.currentTimeMillis();
 //        System.out.println(Arrays.toString(arr));
-        System.out.println(&quot;Time :&quot;+(end_time-start_time)+&quot;ms&quot;);</code></pre>
+        System.out.println(&quot;Time :&quot;+(end_time-start_time)+&quot;ms&quot;);
+}</code></pre>
 <p>测试结果：</p>
 <blockquote>
 <ol>
-<li>Time： 8786ms</li>
-<li>Time： 8706ms</li>
-<li>Time： 8661ms</li>
+<li>Time:  1629ms</li>
+<li>Time:  1417ms</li>
+<li>Time:  1606ms</li>
 </ol>
 </blockquote>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>哇！！！八万个数据的排序才花了八秒，这个算法好厉害啊！！！<del>我是不会告诉你后面的堆排序，归并排序排序八万个数只是用了10ms，排序八百万个也用不了一秒的。。</del></p>
-<p>冒泡排序算法中有着大量的数据的交换，这就注定了这是一个低效的算法。但是还好的是，冒泡排序算法是一个稳定的算法。所谓稳定的算法就是<strong>拥有相同的值的数据在排序完之后的顺序保持不变</strong>.</p>
-<p>比如说 8 3 4 5 3 6 排序后是 3 3 4 5 6 8，<em>排序完的第一3仍然是原来数组中的第一个3</em></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>选择排序法虽然和冒泡排序深处基本排序算法之列，但是选择排序的速度比冒泡排序法快的不是一点半点。虽然说冒泡排序法有稳定性上面的优势，但是同处基本排序算法的插入排序法也是稳定的，而且插入排序法的效率也蛮高的。冒泡排序。。。很危险吖<del>~</del></p>
 
         </div>
         <!-- .entry-content -->
@@ -477,15 +488,15 @@
           
             <div class="post-nepre full next">
           
-            <a href="/2019/07/17/利用赫夫曼编码来压缩数据/" rel="next">
+            <a href="/2019/07/17/排序算法（一）冒泡排序法/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(2).jpg.webp" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(2).jpg.webp">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(5).jpg.webp" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(5).jpg.webp">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                利用赫夫曼编码来压缩数据</h3>
+                排序算法(一） 冒泡排序法</h3>
                 <hr>
               </div>
             </a>
@@ -509,11 +520,11 @@
 
       <section class="author-profile">
         <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <a href="sheriby.github.io" class="profile gravatar"><img src="https://wx1.sinaimg.cn/large/006bYVyvgy1ftand2qurdj303c03cdfv.jpg" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
+          <a href="" class="profile gravatar"><img src="" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
           <div class="meta">
             <span class="title">Author</span>
             <h3 itemprop="name">
-            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
+            <a href="" itemprop="url" rel="author">Hony Sher</a>
             </h3>
           </div>
         </div>

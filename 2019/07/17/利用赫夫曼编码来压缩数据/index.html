@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">archive_a: 2018 | Sher的小博客</title>
+  <title itemprop="name">利用赫夫曼编码来压缩数据 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,133 +340,569 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 75px;">
-</div>
-<div id="content" class="site-content">
-  <div id="main">
-    <header class="page-header">
-      <h1 class="cat-title">
-      归档</h1>
-      <span class="cat-des">
-        <p>
-        Archives</p>
-      </span>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(2).jpg.webp);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(2).jpg.webp">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      利用赫夫曼编码来压缩数据</h1>
+      <p class="entry-census">
+        <span>
+          <a href="sheriby.github.io">
+            <img src="https://wx1.sinaimg.cn/large/006bYVyvgy1ftand2qurdj303c03cdfv.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="sheriby.github.io">Hony Sher</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2019-7-17<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
-    <div id="main-part">
-      <article class="art">
-        <div class="art-main">
-          <div class="art-content">
-            <div id="archives">
-              <p style="text-align:right;">
-                [<span id="al_expand_collapse" style="cursor: s-resize;">
-                全部展开/收缩</span>
-              ]</p>
-              
-              
-              
-              
-              
-                
-                <h3 class="al_year">2019年</h3>
-              
-              
-                
-                <ul class="al_mon_list">
-                  <li class="al_li">
-                    <span class="al_mon" style="cursor: s-resize;">
-                      07月(<span id="post-num">
-                      3</span>
-                    篇文章)</span>
-                    <ul class="al_post_list" style="">
-              
-                      <li>
-                        <a href="/2019/07/17/利用赫夫曼编码来压缩数据/">
-                          <span style="color:#0bf;">
-                          17日16:36:39</span>
-                          利用赫夫曼编码来压缩数据
-                        </a>
-                      </li>
-                      
-              
-              
-              
-              
-              
-                      <li>
-                        <a href="/2019/07/17/MarkDown的基本使用/">
-                          <span style="color:#0bf;">
-                          17日14:49:04</span>
-                          MarkDown的基本使用
-                        </a>
-                      </li>
-                      
-              
-              
-              
-              
-              
-                      <li>
-                        <a href="/2019/07/17/第一个博客HelloWorld/">
-                          <span style="color:#0bf;">
-                          17日13:27:20</span>
-                          第一个博客 HelloWorld
-                        </a>
-                      </li>
-                      
-              
-              
-              
-              
-              
-                      <li>
-                        <a href="/2019/07/17/hello-world/">
-                          <span style="color:#0bf;">
-                          17日13:14:50</span>
-                          Hello World
-                        </a>
-                      </li>
-                      
-                    </ul>
-                  </li>
-                </ul>
-              
-              
-              
-              
-              
-                
-                <h3 class="al_year">2018年</h3>
-              
-              
-                
-                <ul class="al_mon_list">
-                  <li class="al_li">
-                    <span class="al_mon" style="cursor: s-resize;">
-                      12月(<span id="post-num">
-                      3</span>
-                    篇文章)</span>
-                    <ul class="al_post_list" style="">
-              
-                      <li>
-                        <a href="/2018/12/12/Hexo-Theme-Sakura/">
-                          <span style="color:#0bf;">
-                          12日22:16:01</span>
-                          Hexo-Theme-Sakura
-                        </a>
-                      </li>
-                      
-                    </ul>
-                  </li>
-                </ul>
-              
-              
+  </div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h2 id="利用赫夫曼算法来压缩数据"><a href="#利用赫夫曼算法来压缩数据" class="headerlink" title="利用赫夫曼算法来压缩数据"></a>利用赫夫曼算法来压缩数据</h2><p>压缩文件是我们经常碰到的文件类型，一般在windows上 <strong>rar zip 7z</strong>这几种格式是最常见的。因为格式的不同他们的原理也同样不同。这里介绍的是使用赫夫曼算法进行简单的压缩数据。</p>
+<p>首先要来了解一下赫夫曼树是什么。</p>
+<h3 id="赫夫曼树"><a href="#赫夫曼树" class="headerlink" title="赫夫曼树"></a>赫夫曼树</h3><blockquote>
+<p>给定n个权值作为n个<a href="https://baike.baidu.com/item/叶子结点/3620239" target="_blank" rel="noopener">叶子结点</a>，构造一棵二叉树，若该树的带权路径长度达到最小，称这样的二叉树为最优二叉树，也称为哈夫曼树(Huffman Tree)。哈夫曼树是带权路径长度最短的树，权值较大的结点离根较近。</p>
+</blockquote>
+<p>简单的来说<em>赫夫曼树就是WPL最小的树</em>。</p>
+<h4 id="WPL"><a href="#WPL" class="headerlink" title="WPL"></a>WPL</h4><p>计算WPL首先要知道这个树的权值，然后还要知道这个树的高度(所谓高度就是到根节点的经过的节点的个数)。</p>
+<p>想要一个树是<strong>最优二叉树</strong>(WPL最小的树)，我们就要尽量把权值较大的数据放在靠近跟节点的地方，把权值较小的数据放在远离根节点的地方。</p>
+<h4 id="如何构造赫夫曼树"><a href="#如何构造赫夫曼树" class="headerlink" title="如何构造赫夫曼树"></a>如何构造赫夫曼树</h4><p>首先我们要新建一个节点，因为赫夫曼树要比较权值的大小，所以这个节点类还要实现Comparable接口.</p>
+<pre><code class="java">// ：让Node是实现Comparable接口，使之可以排序
+class Node implements Comparable&lt;Node&gt;{
+    private int value;
+    private Node left;
+    private Node right;
+
+    public Node(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public Node getLeft() {
+        return left;
+    }
+
+    public void setLeft(Node left) {
+        this.left = left;
+    }
+
+    public Node getRight() {
+        return right;
+    }
+
+    public void setRight(Node right) {
+        this.right = right;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;[value=&quot; + value + &quot;]&quot;;
+    }
+
+    //：返回 -1 0 1
+    @Override
+    public int compareTo(Node o) {
+        //： 表示从小到大排序
+        return this.value - o.value;
+        //： 表示从大到小的排序是 return o.value - this.value
+    }
+}
+</code></pre>
+<p>这样一个节点就创建好了。</p>
+<p>接下来就可以来生成一个赫夫曼树了</p>
+<pre><code class="java">class HuffmanTree {
+    public static Node createHuffmanTree(int[] arr) {
+        List&lt;Node&gt; nodes = new ArrayList&lt;Node&gt;();
+        for (int val : arr) {
+            nodes.add(new Node(val));
+        }
+        while(nodes.size() &gt; 1) {
+            Collections.sort(nodes);
+
+            Node leftNode = nodes.get(0); // ：最小的那个节点
+            Node rightNode = nodes.get(1); //：第二小的那个节点
+
+            Node parentNode = new Node(leftNode.getValue() + rightNode.getValue());
+
+            parentNode.setLeft(leftNode);
+            parentNode.setRight(rightNode);
+
+            nodes.remove(leftNode);
+            nodes.remove(rightNode);
+            nodes.add(parentNode);
+        }
+        //：实现了Comparable，可以进行排序
+        return nodes.get(0);    
+    }
+}</code></pre>
+<p>由代码可见，上面的算法的步骤是：</p>
+<pre><code>1. 先将所有的节点放入到一个ArrayList中。
+2. 先将这个ArrayList排序，找到最小两个节点，同时new一个新的节点，使其左节点指向稍微小的那个节点，右节点指向稍微大的那个节点。
+3. 从ArrayList中去除刚才取出的两个节点，放入新的节点。
+4. 循环第二步和第三步，知道ArrayList中就剩下最后一个节点。这个节点就是赫夫曼树的根节点</code></pre><p>这个算法还是蛮容易理解的，刚才所有的节点都是赫夫曼树的叶子节点，所有的非叶子节点都是我们新生成的。通过上面的这个算法，我们就能轻松的得到一个赫夫曼树。</p>
+<h4 id="赫夫曼编码"><a href="#赫夫曼编码" class="headerlink" title="赫夫曼编码"></a>赫夫曼编码</h4><p>计算机中的文件都是以二进制的格式存放的。我们先以字符串来举例。</p>
+<p><code>java java java is good good but cpp cpp is best best</code></p>
+<p>上面的这段话，在计算机中储存也是以二进制的文件进行储存的。我们知道一个字符对应了一个八位的byte，也就是一个ascii。那上面的数据在计算机中储存就是n*8bit。</p>
+<p>这就是最直接的编码，每8位对应一个字符。</p>
+<p>但是不难发现上面的字符串中存在不少的<em>重复的字符</em>。</p>
+<p>j出现了3次，a出现了六次，空格出现了11次。</p>
+<p>如果我们按照<strong>这些字符出现的顺序对其重新进行编码</strong>，不是就节省了不少的内存了吗？</p>
+<p>空格编为0，a编为1， o编为10， p编为11.。。。</p>
+<p>但是这样也带来了更大的问题，比如说计算机中的11解码成aa还是p呢？？也就是说这样的编码会代码混乱，这样的编码不是一个前缀编码。前缀编码需要满足这样的条件，任何一个码不能是另外的码的前缀。</p>
+<p><strong>这些字符出现的顺序对其重新进行编码</strong>这种思路是对的，但是如何采取最优的措施呢？</p>
+<p>这不难想到上面说的赫夫曼树，字符出现的顺序就是字符的权重，构造一颗赫夫曼树或许能够解决我们的问题。</p>
+<h4 id="利用字符串来构造赫夫曼树"><a href="#利用字符串来构造赫夫曼树" class="headerlink" title="利用字符串来构造赫夫曼树"></a>利用字符串来构造赫夫曼树</h4><p>首先我们要构造一个新的节点</p>
+<pre><code class="java">class NewNode implements Comparable&lt;NewNode&gt;{
+    private Byte data;// 字母
+    private int weight;// 出现了多少次
+
+    private NewNode left;
+    private NewNode right;
+
+    public NewNode(Byte data, int weight) {
+        this.data = data;
+        this.weight = weight;
+    }
+
+    public Byte getData() {
+        return data;
+    }
+
+    public void setData(Byte data) {
+        this.data = data;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public NewNode getLeft() {
+        return left;
+    }
+
+    public void setLeft(NewNode left) {
+        this.left = left;
+    }
+
+    public NewNode getRight() {
+        return right;
+    }
+
+    public void setRight(NewNode right) {
+        this.right = right;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;[data=&quot; + data + &quot;, weight=&quot; + weight + &quot;]&quot;;
+    }
+
+    @Override
+    public int compareTo(NewNode o) {
+        return this.weight - o.weight;
+    }
+
+    public void preOrder() {
+        System.out.println(this);
+        if (this.left != null) {
+            this.left.preOrder();
+        }
+
+        if (this.right != null) {
+            this.right.preOrder();
+        }
+    }
+}</code></pre>
+<p>然后我们还需要统计每个字符出现的次数，将结果放入一个ArrayList中</p>
+<pre><code class="java">    /**
+     * 由原始字节数组生成对应的集合
+     * @param bytes 原始字节数组
+     * @return 数值加权重的对应集合
+     */
+    public static ArrayList&lt;NewNode&gt; getNodes(byte[] bytes){
+        ArrayList&lt;NewNode&gt; nodes = new ArrayList&lt;NewNode&gt;();
+
+        //：使用map[key, value]遍历统计每个字符出现的次数
+        HashMap&lt;Byte, Integer&gt; counts = new HashMap&lt;Byte, Integer&gt;();
+        for (byte b : bytes) {
+            Integer count = counts.get(b);
+            if (count == null) {
+                counts.put(b, 1);
+            }else {
+                counts.put(b, count+1);
+            }
+        }
+
+        //：把键值对转为NewNode对象，并放入ArrayList中
+        for (Map.Entry&lt;Byte, Integer&gt; entry : counts.entrySet()) {
+            nodes.add(new NewNode(entry.getKey(), entry.getValue()));
+        }
+
+        return nodes;
+    }</code></pre>
+<p>这样这个ArrayList中就存放了字符和他的权重了。</p>
+<p>然后我们可以利用上面的方法来构造一颗胡夫曼树。</p>
+<pre><code class="java">/**
+     * 生成一个赫夫曼树
+     * @param nodes 由原始字节数组形成的集合
+     * @return 赫夫曼数的根节点
+     */
+    public static NewNode createHuffmanTree(ArrayList&lt;NewNode&gt; nodes) {
+
+        while (nodes.size() &gt; 1) {
+            Collections.sort(nodes);
+
+            NewNode leftNode = nodes.get(0);
+            NewNode rightNode = nodes.get(1);
+
+            NewNode parentNode = new NewNode(null, leftNode.getWeight() + rightNode.getWeight());
+            parentNode.setLeft(leftNode);
+            parentNode.setRight(rightNode);
+
+            nodes.remove(leftNode);
+            nodes.remove(rightNode);
+            nodes.add(parentNode);
+        }
+
+        return nodes.get(0);
+    }</code></pre>
+<p>这样一颗赫夫曼树就构建好了，但是如何得到我们之前说的那个最优的前缀编码呢？？？</p>
+<p>很简单当我们从<strong><em>一个节点走向他的左节点的时候，我们为编码加上0，向右走的时候加上1</em></strong>，因为赫夫曼树中的所有的非叶子节点都是null，有意义的仅仅是叶子节点。叶子节点是没有子节点的，所有这样生成的赫夫曼编码就是一种<em>前缀编码</em>。而且他也是<em>最优的前缀编码</em>。</p>
+<h3 id="获取赫夫曼编码"><a href="#获取赫夫曼编码" class="headerlink" title="获取赫夫曼编码"></a>获取赫夫曼编码</h3><pre><code class="java">/**
+     * 获取赫夫曼编码表
+     * @param node 赫夫曼树的根节点
+     * @param huffmanCodes 用来储存赫夫曼编码的map
+     * @param code 左走是0 右走是1
+     * @param stringBuilder 用来连接0和1
+     */
+    public static void getCodes(NewNode node, HashMap&lt;Byte, String&gt; huffmanCodes,
+                                String code, StringBuilder stringBuilder) {
+        StringBuilder stringBuilder2 = new StringBuilder(stringBuilder);
+        stringBuilder2.append(code);
+        if (node != null) {
+            if (node.getData() == null) {
+                getCodes(node.getLeft(), huffmanCodes, &quot;0&quot;, stringBuilder2);
+                getCodes(node.getRight(), huffmanCodes, &quot;1&quot;, stringBuilder2);
+            }else {
+                huffmanCodes.put(node.getData(), stringBuilder2.toString());
+            }
+        }
+    }</code></pre>
+<p>可以给这个方法一些默认的参数</p>
+<pre><code class="java">public static void getCodes(NewNode node, HashMap&lt;Byte, String&gt; huffmanCodes){
+        getCodes(node, huffmanCodes, &quot;&quot;, new StringBuilder());
+    }</code></pre>
+<p>这样我们就得到了赫夫曼编码表。得到了赫夫曼编码我们就可以对数据进行压缩了。</p>
+<h3 id="压缩字符串"><a href="#压缩字符串" class="headerlink" title="压缩字符串"></a>压缩字符串</h3><pre><code class="java">/**
+       *  使用赫夫曼编码压缩字符数组的长度
+     * @param contentBytes 要进行压缩的字符数组
+     * @param huffmanCodes 传入一个哈希Map，传出的就是 对应的赫夫曼表Map。可用于之后的解压！
+     * @return 返回压缩后的字节数组
+     */
+    public static byte[] zip(byte[] contentBytes, HashMap&lt;Byte, String&gt; huffmanCodes) {
+        ArrayList&lt;NewNode&gt; nodes = HuffmanTree.getNodes(contentBytes);
+        NewNode root = HuffmanTree.createHuffmanTree(nodes);
+
+        HuffmanTree.getCodes(root, huffmanCodes);
+
+        String codes = HuffmanTree.huffmanCodes(contentBytes, huffmanCodes);
+//        System.out.println(codes);
+
+        int len = (codes.length() + 7)/8;
+        byte[] by = new byte[len];
+
+
+        for (int i = 0, index=0; i &lt; codes.length(); i+=8) {
+            String strBytes;
+            if (i+8 &gt; codes.length()) {
+                strBytes = codes.substring(i);
+            }else {
+                strBytes = codes.substring(i, i+8);
+            }
+            by[index] = (byte) Integer.parseInt(strBytes, 2);
+            index++;
+        }
+        return by;
+    }</code></pre>
+<p>上面的代码需要注意的是code（10100010011….)的长度不一定是8的倍数，最后的一个字符串可能是没有8位的，所以我们要进行一次判断。</p>
+<p>至此，我们已经完成了压缩的所有的工作。进入主方法进行一次测试。</p>
+<pre><code>压缩前的长度：52
+压缩后的长度：24
+压缩率：53.84615384615385%
+解压数据： java java java is good good but cpp cpp is best best
+是否解压成功：true
+</code></pre><p>赫夫曼编码表如下所示，可见确实是前缀编码。</p>
+<pre><code>{32=00, 97=010, 98=0110, 99=10101, 100=11100, 101=11101, 103=11110, 105=11111, 106=0111, 111=1011, 112=1100, 115=1101, 116=1000, 117=10100, 118=1001}</code></pre><p>生成的二进制补码如下所示，这个一看就比原来的少多了，毕竟这个字符中我估计加入了不少重复的字符。</p>
+<pre><code>01110101001010000111010100101000011101010010100011111110100111101011101111100001111010111011111000001101010010000010101110011000010101110011000011111110100011011101110110000001101110111011000</code></pre><h3 id="解压字符串"><a href="#解压字符串" class="headerlink" title="解压字符串"></a>解压字符串</h3><p>首先我们需要将一个byte转为一个二进制补码类型的字符串</p>
+<pre><code class="java">/**
+     * 将一个byte转为一个二进制的字符串
+     * @param flag 是不是最后一个不满8位的byte 看是否需要按位与来补位 true代表需要补高位， false代表不需要补高位
+     * @param b
+     * @return 按补码返回的 正数的补码就是原码，负数的补码是反码+1
+     */
+    private static String byteToBitString(boolean flag, byte b) {
+        int temp = b;
+        if (flag) {
+            temp |= 256;// 256: 1 0000 0000
+        }
+
+        String str = Integer.toBinaryString(temp);//:返回二进制的补码
+
+        if(flag) {
+            return str.substring(str.length()-8);//：只是取得后面的八位
+        }else {
+            return str;
+        }
+    }</code></pre>
+<p>同样的，我们要考虑到最后几位的问题。还有补码的有关的操作我也在上面注释清楚了。</p>
+<p>下面就可以来解压了</p>
+<pre><code class="java">    /**
+     * 解压之前使用赫夫曼编码的数据
+     * @param contentBytes 压缩之后的字节流
+     * @param huffmanCodes 之前压缩的时候使用的赫夫曼编码map
+     * @return 解压之后的字节数组
+     */
+    public static byte[] unzip(byte[] contentBytes, HashMap&lt;Byte, String&gt; huffmanCodes) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i &lt; contentBytes.length; i++) {
+            byte b = contentBytes[i];
+            boolean flag = (i != contentBytes.length-1);
+            stringBuilder.append(byteToBitString(flag, b));
+        }
+
+//        System.out.println(stringBuilder.toString());
+
+        HashMap&lt;String, Byte&gt; reverseMap = new HashMap&lt;String, Byte&gt;();
+        for (Map.Entry&lt;Byte, String&gt; val : huffmanCodes.entrySet()) {
+            reverseMap.put(val.getValue(), val.getKey());
+        }
+
+        int i=0;
+        int count = 1;
+        ArrayList&lt;Byte&gt; arrayList = new ArrayList&lt;Byte&gt;();
+        while (i &lt; stringBuilder.length() &amp;&amp; i+count&lt;=stringBuilder.length()) {
+            Byte b = null ;
+            while (i+count &lt;= stringBuilder.length()) {
+                String str = stringBuilder.substring(i, i+count);
+                b = reverseMap.get(str);
+                if (b == null) {
+                    count++;
+                }else {
+                    i += count;
+                    count = 1;
+                    break;
+                }
+            }
+            arrayList.add(b);
+        }
+        byte[] resultBytes = new byte[arrayList.size()];
+
+        for (int j = 0; j &lt; resultBytes.length; j++) {
+            if (arrayList.get(j) == null) {
+                break;
+            }
+            resultBytes[j] = arrayList.get(j);
+        }
+
+        return resultBytes;
+    }</code></pre>
+<p>上面将赫夫曼编码进行了对调键值，这样更有利于后面的解压。通过扫描的方式逐个进行配对。</p>
+<p>至此，压缩和解压字符串的操作就都已经完成了。。。</p>
+<p>等等，，不是将压缩和解压文件的吗，怎么只讲了字符串？？？</p>
+<p>其实刚才我们处理时并不是字符串，而是一个byte[]数组，我们只是把字符串转为了一个byte[]数组进行处理了。而任何文件都是以字节进行储存的，所以说这个解压和压缩的方法不仅适用于这个字符串还适用于各种各样的文件。如文本文件，视频，图片等，不过压缩的效率怎么样就不能保证了。只能说重复的越多，压缩的效率越高。对于文件的处理就是简单的加上Java当中IO流罢了。</p>
+<p>直接上代码吧。</p>
+<pre><code class="java">    /**
+     * 使用赫夫曼编码来压缩文件
+     * @param srcFile 要压缩的文件的原地址
+     * @param dstFile 压缩后的文件的地址
+     */
+    public static void zipFile(String srcFile, String dstFile) {
+        FileInputStream is = null;
+        FileOutputStream os = null;
+        ObjectOutputStream oos = null;
+
+        try {
+            is = new FileInputStream(srcFile);
+            byte[] b = new byte[is.available()];
+            is.read(b);
+            HashMap&lt;Byte, String&gt; huffmanCodes = new HashMap&lt;Byte, String&gt;();
+            byte[] zipcontent = zip(b, huffmanCodes);
+//            System.out.println(huffmanCodes);
+//            System.out.println(new String(zipcontent).substring(1,10));
+            os = new FileOutputStream(dstFile);
+            oos = new ObjectOutputStream(os);
+            //：以对象流的形式写入， 方便之后的解码
+            oos.writeObject(zipcontent);
+            oos.writeObject(huffmanCodes);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                is.close();
+                os.close();
+                oos.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+    }</code></pre>
+<p>需要注意的是：使用ObjecOutpuStream使用对象流的方式将对象写入文件中,利于后面解压的时候提取数据。注意：<strong><em>赫夫曼编码表需要写入到文件中</em></strong>,不然就没办法解压了！</p>
+<pre><code class="java">/**
+     * 使用赫夫曼编码来解压文件
+     * @param srcFile 需要解压的文件地址
+     * @param dstFile 解压后的文件地址
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public static void unzipFile(String srcFile, String dstFile) {
+        FileInputStream is = null;
+        ObjectInputStream ois = null;
+        FileOutputStream os = null;
+        try {
+            is = new FileInputStream(srcFile);
+            ois = new ObjectInputStream(is);
+            byte[] zipBytes = (byte[]) ois.readObject();
+            HashMap&lt;Byte, String&gt; huffmanCodes = (HashMap&lt;Byte, String&gt;) ois.readObject();
+//            System.out.println(huffmanCodes);
+//            System.out.println(new String(zipBytes).substring(1,10));
+            byte[] unzipBytes = unzip(zipBytes, huffmanCodes);
+            os = new FileOutputStream(dstFile);
+            os.write(unzipBytes);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+//            System.out.println(e.getStackTrace());
+        } finally {
+            try {
+                if (is!=null) {
+                    is.close();
+                }
+                if (ois!=null) {
+                    ois.close();
+                }
+                if (os!=null) {
+                    os.close();
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+    }</code></pre>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>总的来说，上面所提供的压缩和解压文件的方式还是非常简陋的，不过还是足以让我们来了解压缩文件的本质是什么。所谓的zip 7z rar无损压缩都是采用的这个思路，<em>利用重复</em>！如果没用大量的重复，而是杂乱无规则的话，就是神仙来了都压缩不了1kb…</p>
+<p>​                                            ———— Hony Sher 7/17/2019</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/WechatPayQr.png"></li>
+              </ul>
             </div>
           </div>
         </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
       </article>
-    </div>
-  </div>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2019/07/17/MarkDown的基本使用/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/16.jpeg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/16.jpeg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                MarkDown的基本使用</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="sheriby.github.io" class="profile gravatar"><img src="https://wx1.sinaimg.cn/large/006bYVyvgy1ftand2qurdj303c03cdfv.jpg" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
 
     </div>    
     <div class="ins-search">

@@ -400,6 +400,7 @@
 <p>选择排序法是一种不稳定的算法，也就是说相同的数据经过选择排序法之后不一定会保持原来的顺序。</p>
 <h3 id="选择排序法的基本思路"><a href="#选择排序法的基本思路" class="headerlink" title="选择排序法的基本思路"></a>选择排序法的基本思路</h3><p>每次使用第一个位置的（不一定是arr[0]）和之后的数据比较，<strong>找到最小的那个数据然后两者交换</strong>。如此一来，<em>小的数据就往数组的前面去了</em>，数组也就变得有序了。不是我说，这个排序一看就比冒泡排序法好，因为<strong>每一轮排序只需要进行一次的交换</strong>。当然比较节省时间了。</p>
 <p><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563376672116&di=805a72ab53b676b83ad8056843b5eb39&imgtype=0&src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fpng%2F9dfe748626359c47ab419434e21da4d6.png" alt="选择排序法"></p>
+<p><img src="https://forum.mianbaoban.cn/data/attachment/forum/201803/20/140154j0ci8n9nvvn353n0.gif" alt="选择排序动图"></p>
 <p>从上图可以看出来，选择排序似乎和冒泡排序有点相似，一个是把大的数据往后边沉，一个是把小的数据往前面搬。</p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><pre><code class="java">    public static void selectSort(int[] arr) {
         int temp;

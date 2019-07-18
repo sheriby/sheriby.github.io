@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Category: 技术 | Sher的小博客</title>
+  <title itemprop="name">排序算法（四）希尔排序 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,501 +340,270 @@
   </div>
 </header>
 
-      
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
 <div class="pattern-center-blank"></div>
-<div class="pattern-center ">
-  <div class="pattern-attachment-img">
-    <img data-src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/banner/coding.jpg" class="lazyload" onerror="imgError(this,3)" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/12.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/12.png">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      排序算法（四）希尔排序</h1>
+      <p class="entry-census">
+        <span>
+          <a href="sheriby.github.io">
+            <img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true">
+          </a>
+        </span>
+        <span>
+          <a href="sheriby.github.io">Hony Sher</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2019-7-18<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
   </div>
-  <header class="pattern-header ">
-    <h1 class="cat-title">野生技术协会</h1>
-    <span class="cat-des">
-      <p>Geek – Only for Love</p>
-    </span>
-  </header>
-</div>
+
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h2 id="排序算法（四）希尔排序"><a href="#排序算法（四）希尔排序" class="headerlink" title="排序算法（四）希尔排序"></a>排序算法（四）希尔排序</h2><blockquote>
+<p>之前说的是插入排序，虽然插入排序的效率嘛已经说是可以的了，但是插入排序有一个明显的漏动。比如说给定的数组如果是 <code>1 2 3 4 5 6 7 8 9 0</code>使用插入排序要将这个0移动到数组的最前面还是非常费力的。也就说是<strong>如果有很多小数据位于数组的末端，插入排序的效率就会极大的降低</strong>。而这次要说的希尔排序就是插入排序的一种，也就死来解决这个问题的。</p>
+</blockquote>
+<h3 id="希尔排序的基本介绍"><a href="#希尔排序的基本介绍" class="headerlink" title="希尔排序的基本介绍"></a>希尔排序的基本介绍</h3><table>
+<thead>
+<tr>
+<th align="center">名字</th>
+<th align="center">平均时间复杂度</th>
+<th align="center">最好时间复杂度</th>
+<th align="center">最差时间复杂度</th>
+<th align="center">空间复杂度</th>
+<th align="center">是否流弊</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">希尔排序</td>
+<td align="center">O(nlog<sup>2</sup>n)</td>
+<td align="center">O(nlog<sup>2</sup>n)</td>
+<td align="center">O(nlog<sup>2</sup>n)</td>
+<td align="center">O(1)</td>
+<td align="center">一般</td>
+</tr>
+</tbody></table>
+<p><em>希尔排序虽然是插入排序的一种优化，但是希尔排序是不稳定的，插入排序是稳定的。于此类似的是快速排序是冒泡排序的优化，但是快速排序不稳定，冒泡排序稳定。</em>不过。。稳定性这个玩意我到现在还没有用到过。</p>
+<h3 id="希尔排序的基本思路"><a href="#希尔排序的基本思路" class="headerlink" title="希尔排序的基本思路"></a>希尔排序的基本思路</h3><p>希尔排序的基本思路就是<strong>分组进行插入排序</strong>。就还比如说上面的那个数组 <code>1 2 3 4 5 6 7 8 9 0</code>，我们将其分为五组，1 6 ，2 7.3 8.4 9.5 0。对这五组数据进行插入排序，那么清晰的可以看见0到前面却。然后将数据分为两组，继续插入排序。再将数据分为一组(<em>此时就是插入排序了</em>)进行排序就完事了。既然希尔排序中包含这插入排序那为啥希尔排序的速度还比插入排序快啊，<em>希尔排序的前面的几次分组将小的数据往前面进行了移动，最后的那次插入排序移动的次数是很少的。</em>所以说希尔排序是一种较为高效的算法。</p>
+<p>下面的图片基本上就讲的比较清楚了。</p>
+<p><img src="http://p1.pstatp.com/large/pgc-image/1523763390411731c4d486d" alt="希尔排序"></p>
+<p><img src="http://p9.pstatp.com/large/pgc-image/1523763390605f1acc654c8" alt="希尔排序"></p>
+<p><img src="http://p3.pstatp.com/large/pgc-image/15237633906876d1db94cf9" alt="希尔排序"></p>
+<p><img src="http://p9.pstatp.com/large/pgc-image/1523763390761f7f32df528" alt></p>
+<p><img src="http://p3.pstatp.com/large/pgc-image/152376339087072702782c5" alt></p>
+<p><em>再来一个图片演示一下</em></p>
+<p><img src="https://forum.mianbaoban.cn/data/attachment/forum/201803/20/140156o7nq6qd76zd66nzn.jpg" alt></p>
+<p>希尔排序和插入排序一样，都有交换法和移动法的实现，我们就分别都用代码演示一下。</p>
+<h3 id="希尔排序——交换法代码实现"><a href="#希尔排序——交换法代码实现" class="headerlink" title="希尔排序——交换法代码实现"></a>希尔排序——交换法代码实现</h3><pre><code class="java">//这也是插入排序的一种 ,因为插入排序是 ,如果小的数在后面的话 插入排序的效率特别的低,所以出现了希尔排序，是插入排序的一种改进
+    public static void shellSort(int[] arr) {
+        int temp = 0;
+//        System.out.println(&quot;原来的数组：&quot;+Arrays.toString(arr));
+        // 这里的gap指的是不同的组数据之间的距离。
+        for (int gap = arr.length / 2; gap &gt; 0; gap /= 2) {
+            for (int i = gap; i &lt; arr.length; i++) {
+                for (int j = i; j &gt;= gap; j -= gap) {
+                    // 交换的次数太多了 太浪费时间
+                    if (arr[j] &lt; arr[j - gap]) {
+                        temp = arr[j];
+                        arr[j] = arr[j - gap];
+                        arr[j - gap] = temp;
+                    }else break; // 分组进行插入排序，如果上面的条件不成立就说明已经插入到了指定的位置。
+                }
+            }
+//            System.out.println(&quot;第x次排序：&quot; + Arrays.toString(arr));
+        }
+    }</code></pre>
+<blockquote>
+<p><strong>代码说明：</strong></p>
+<ol>
+<li><p>gap是什么？</p>
+<p>gap指的是同一组当中相邻的元素之前的距离。初始值是arr.length/2，以后每次都除以2，这就是为什么我在一开始的那个数组中先分为五组再分为两组最后再分为一组。等到gap等于1也排序完成了之后，gap/2变成了0，此时排序完成，就可以退出循环了。</p>
+</li>
+<li><p>i和j代表着什么含义？</p>
+<ul>
+<li>i从gap开始是为什么？ i代表的是每组元素的后面<strong>无序</strong>元素，从每组第二个元素开始。这就好比插入排序，每一组的第一个元素是有序的，而后面的元素是无序的，我们要将后面的无序的数据插入到前面的有序的数据中。其实我们完全可以写了个函数<strong>insertSort(int arr[], int gap)</strong>。<em>gap等于1的时候就是上面篇博客当中的插入排序的算法</em>。</li>
+<li>j就是要插入的元素所在的位置，只不过这一次他前面的那个元素不再是j-1，而是j-gap，</li>
+<li>如果理解了上篇博客的插入排序的思路的话，这个希尔排序也是非常容易理解的。</li>
+</ul>
+</li>
+<li><p>有三层for循环，效率为什么高？</p>
+<p>有三层for循环并不代表这时间复杂度就是O(n^3^)，第一层for循环每次都除以2，时间复杂度是O(log<del>2</del>n)。第二层的for循环每次都加1，时间复杂度是O(n)，第三层for循环的每次都减去gap，复杂度也在O(logn)左右。所以这个算法的时间复杂度是O(nlog^2^n)。数据量越大，越是比O(n^2^)的排序算法来的优越。</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="希尔排序——移位法代码实现"><a href="#希尔排序——移位法代码实现" class="headerlink" title="希尔排序——移位法代码实现"></a>希尔排序——移位法代码实现</h3><pre><code class="java">    // 和插入排序法相似，希尔排序也有两种实现的方式，一个是上面的那个交换法，另一个就是下面的移动法。
+    // 采用移动法 对交换式的希尔排序进行改进 思路与之前的插入排序是相似的
+    public static void shellSortPlus(int[] arr) {
+        for (int gap = arr.length/2; gap &gt; 0; gap/=2) {
+            for (int i = gap; i &lt; arr.length; i++) {
+                int insertIndex = i;
+                int insertVal = arr[i];
+                    while (insertIndex-gap &gt;=0 &amp;&amp; insertVal &lt; arr[insertIndex-gap]) {
+                        arr[insertIndex] = arr[insertIndex-gap];
+                        insertIndex -= gap;
+                    }
+                    arr[insertIndex] = insertVal;
+            }
+        }
+    }</code></pre>
+<blockquote>
+<p><strong>代码说明：</strong></p>
+<p>其实这个代码也没有什么要说明的，这就是插入排序的套了个gap嘛。不懂的可以去看看插入排序的那个算法去。嘤嘤嘤~</p>
+</blockquote>
+<h3 id="希尔排序的测试"><a href="#希尔排序的测试" class="headerlink" title="希尔排序的测试"></a>希尔排序的测试</h3><p>测试环境及工具：<em>我的电脑 Huawei MateBook 13+JDK1.8+Eclipse</em></p>
+<p>测试手段：<em>随机生成80000个[0,800000）的整数的数组进行排序，观察所花费的时间</em></p>
+<p>测试代码：</p>
+<pre><code class="java">public static void main(String[] args) {
+        int[] arr = new int[80000];
+        for (int i = 0; i &lt; arr.length; i++) {
+//            arr[i] = (int) (Math.random() * 800000);
+            arr[i] = new Random().nextInt(800000);
+        }
+//        System.out.println(Arrays.toString(arr));
+        long start_time = System.currentTimeMillis();
+        shellSort(arr);
+//        shellSortPlus(arr);
+        long end_time = System.currentTimeMillis();
+//        System.out.println(Arrays.toString(arr));
+        System.out.println(&quot;Time :&quot; + (end_time - start_time) + &quot;ms&quot;);
+    }</code></pre>
+<h4 id="交换法"><a href="#交换法" class="headerlink" title="交换法"></a>交换法</h4><blockquote>
+<p><strong>80,000数据时：</strong></p>
+<ul>
+<li><p><em>Time :  14ms</em></p>
+</li>
+<li><p><em>Time :  16ms</em></p>
+</li>
+<li><p><em>Time :  17ms</em></p>
+</li>
+</ul>
+<p><strong>8,000,000数据时：</strong></p>
+<ul>
+<li><p><em>Time :  2008ms</em></p>
+</li>
+<li><p><em>Time :  2018ms</em></p>
+</li>
+<li><p><em>Time :  1973ms</em></p>
+</li>
+</ul>
+</blockquote>
+<h4 id="移位法"><a href="#移位法" class="headerlink" title="移位法"></a>移位法</h4><blockquote>
+<p><strong>80,000数据时：</strong></p>
+<ul>
+<li><p><em>Time :   17ms</em></p>
+</li>
+<li><p><em>Time :   17ms</em></p>
+</li>
+<li><p><em>Time :   15ms</em></p>
+</li>
+</ul>
+<p><strong>8000000数据时：</strong></p>
+<ul>
+<li><p><em>Time :  1868ms</em></p>
+</li>
+<li><p><em>Time :  1824ms</em></p>
+</li>
+<li><p><em>Time :  1873ms</em></p>
+</li>
+</ul>
+</blockquote>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>希尔排序虽然只是对冒泡排序的一个小小的改进，但是看到了这个希尔排序的速度后，这肯定是要惊呆了！！什么！！！排序八百万个数据也就和插入排序法排序八万个差不多！什么！！冒泡排序法，，它。。要寻短见？ 这不能喽，程序员需要冒泡排序法！你排七八个数据难道还要写归并排序，堆排序嘛，还不是一个冒泡排序写的舒服~~</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/WechatPayQr.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2019/07/17/排序算法（三）插入排序法/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(4).jpg.webp" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(4).jpg.webp">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                排序算法（三）插入排序法</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/07/18/排序算法（四）希尔排序/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/12.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/07/18/排序算法（四）希尔排序/">
-    排序算法（四）希尔排序</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-7-18</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/07/18/排序算法（四）希尔排序/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/07/17/排序算法（三）插入排序法/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(4).jpg.webp" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/07/17/排序算法（三）插入排序法/">
-    排序算法（三）插入排序法</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-7-17</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/07/17/排序算法（三）插入排序法/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/07/17/排序算法（二）选择排序法/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(7).jpg.webp" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/07/17/排序算法（二）选择排序法/">
-    排序算法（二）选择排序法</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-7-17</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/07/17/排序算法（二）选择排序法/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/07/17/排序算法（一）冒泡排序法/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(5).jpg.webp" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/07/17/排序算法（一）冒泡排序法/">
-    排序算法(一） 冒泡排序法</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-7-17</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/07/17/排序算法（一）冒泡排序法/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/07/17/利用赫夫曼编码来压缩数据/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/18.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/07/17/利用赫夫曼编码来压缩数据/">
-    利用赫夫曼编码来压缩数据</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-7-17</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/07/17/利用赫夫曼编码来压缩数据/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/07/17/MarkDown的基本使用/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/16.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/07/17/MarkDown的基本使用/">
-    MarkDown的基本使用</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-7-17</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/07/17/MarkDown的基本使用/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2018/12/12/Hexo-Theme-Sakura/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://static.2heng.xin/wp-content/uploads//2019/02/wallhaven-672007-1-1024x576.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2018/12/12/Hexo-Theme-Sakura/">
-    Hexo-Theme-Sakura</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2018-12-12</div>
-    <p>
-    hexo-sakura主题使用教程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2018/12/12/Hexo-Theme-Sakura/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-
-      <div class="clearer">
-      </div>
-    </main>
-    <!--  -->
-    
-  </div>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="sheriby.github.io" class="profile gravatar"><img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
 
-<!-- 
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/07/18/排序算法（四）希尔排序/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/12.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/07/18/排序算法（四）希尔排序/">
-    排序算法（四）希尔排序</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-7-18</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/07/18/排序算法（四）希尔排序/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/07/17/排序算法（三）插入排序法/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(4).jpg.webp" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/07/17/排序算法（三）插入排序法/">
-    排序算法（三）插入排序法</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-7-17</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/07/17/排序算法（三）插入排序法/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/07/17/排序算法（二）选择排序法/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(7).jpg.webp" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/07/17/排序算法（二）选择排序法/">
-    排序算法（二）选择排序法</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-7-17</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/07/17/排序算法（二）选择排序法/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/07/17/排序算法（一）冒泡排序法/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(5).jpg.webp" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/07/17/排序算法（一）冒泡排序法/">
-    排序算法(一） 冒泡排序法</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-7-17</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/07/17/排序算法（一）冒泡排序法/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/07/17/利用赫夫曼编码来压缩数据/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/18.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/07/17/利用赫夫曼编码来压缩数据/">
-    利用赫夫曼编码来压缩数据</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-7-17</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/07/17/利用赫夫曼编码来压缩数据/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/07/17/MarkDown的基本使用/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/16.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/07/17/MarkDown的基本使用/">
-    MarkDown的基本使用</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-7-17</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/07/17/MarkDown的基本使用/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2018/12/12/Hexo-Theme-Sakura/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://static.2heng.xin/wp-content/uploads//2019/02/wallhaven-672007-1-1024x576.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2018/12/12/Hexo-Theme-Sakura/">
-    Hexo-Theme-Sakura</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2018-12-12</div>
-    <p>
-    hexo-sakura主题使用教程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2018/12/12/Hexo-Theme-Sakura/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
 
- -->
+
     </div>    
     <div class="ins-search">
     <div class="ins-search-mask"></div>

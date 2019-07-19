@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Sher的小博客</title>
+  <title itemprop="name">排序算法（八）堆排序 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,202 +340,271 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 0px;"></div>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/17.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/17.jpg">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      排序算法（八）堆排序</h1>
+      <p class="entry-census">
+        <span>
+          <a href="sheriby.github.io">
+            <img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true">
+          </a>
+        </span>
+        <span>
+          <a href="sheriby.github.io">Hony Sher</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2019-7-19<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
 <div id="content" class="site-content">
-  
-  <div class="notice" style="margin-top:60px">
-    <i class="iconfont icon-notification">
-    </i>
-    <div class="notice-content">Sher的小博客开启啦！</div>
-  </div>
-  
-  <div class="top-feature-row">
-  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
-  <i class="fa fa-anchor" aria-hidden="true">
-  </i>
-  START:DASH!!</h1>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/theme-sakura/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/sakura.md.png">
-        </div>
-        <div class="info">
-          <h3>Sakura</h3>
-          <p>本站 hexo 主题</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="http://space.bilibili.com/37532334" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/bilibili.jpg">
-        </div>
-        <div class="info">
-          <h3>Bilibili</h3>
-          <p>Sher的b站视频</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/wangshiwu.jpg">
-        </div>
-        <div class="info">
-          <h3>Sher的万事屋</h3>
-          <p>技术服务</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-</div>
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
-      <i class="fa fa-envira" aria-hidden="true"></i>
-      Discovery</h1>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h2 id="排序算法（八）堆排序"><a href="#排序算法（八）堆排序" class="headerlink" title="排序算法（八）堆排序"></a>排序算法（八）堆排序</h2><blockquote>
+<p>堆排序算是里面最比较难懂的算法了，因为堆排序需要二叉树的基础。不过虽然说靠的是二叉树但是实际上并没有生成一个二叉树而是利用了顺序存储二叉树，来构造大顶堆和小顶堆来实现的。</p>
+</blockquote>
+<h3 id="堆排序的基本介绍"><a href="#堆排序的基本介绍" class="headerlink" title="堆排序的基本介绍"></a>堆排序的基本介绍</h3><table>
+<thead>
+<tr>
+<th align="center">名字</th>
+<th align="center">平均时间复杂度</th>
+<th align="center">最好时间复杂度</th>
+<th align="center">最差时间复杂度</th>
+<th align="center">空间复杂度</th>
+<th align="center">是否流弊</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">堆排序</td>
+<td align="center">O(nlogn)</td>
+<td align="center">O(nlogn)</td>
+<td align="center">O(nlogn)</td>
+<td align="center">O(1)</td>
+<td align="center">是</td>
+</tr>
+</tbody></table>
+<p>我感觉这个算法牛不牛逼已经是不言而喻的了。时间复杂度是交换法的巅峰，空间复杂度还是O(1)，这个算法实在是神奇。赶紧如果是学会了这个算法就可以去装逼了。别人排个序是 好几秒，你排个序是几毫秒。关键是你们用的还是同样的内存，这谁能顶得住啊！不过，要说明的是，<strong>堆排序是一种不稳定的算法。</strong></p>
+<h3 id="堆排序的基本思路"><a href="#堆排序的基本思路" class="headerlink" title="堆排序的基本思路"></a>堆排序的基本思路</h3><hr>
+<p>上面也提到了，<strong>堆排序是用顺序存储二叉树来实现的</strong>。那什么是顺序存储二叉树呢？</p>
+<p>且看下图</p>
+<p><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563509660910&di=3a182033f7f6e5769f4b5ea6278e7200&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D261895133%2C1928421782%26fm%3D214%26gp%3D0.jpg" alt></p>
+<p>我们大多数时候所了解到的二叉树都是上面的<strong>链式结构的二叉树</strong>，直观而且容易理解和操作。但是二叉树也可以用数组来表示。可以说<strong>一个数组就对应了一个二叉树</strong>。右面的图展示的是非完全二叉树的顺序存储，这里是我们不需要的。因为<strong>堆排序的时候要构造大顶堆(<em>从小到大排序</em>)。如果要是从小到大排序的话就要构造小顶堆。</strong>大/小顶堆就是一种<strong>完全二叉树。</strong>所谓<em>完全二叉树所有的叶子节点(也就是没儿子的节点)都必须出现在最后两层，而且叶子节点在左面要连续。</em></p>
+<p><img src="https://img2018.cnblogs.com/blog/1590962/201903/1590962-20190318210706226-1501863648.png" alt></p>
+<blockquote>
+<p>按照上面的顺序存储的关系，上面的大顶堆可以转换成为一个数组来表示。</p>
+<p>观察这个数组和二叉树，我们可以得出如下的结论。<strong>arr[n]的左子结点是arr[2n+1]，右子节点是arr[2n+2]，父节点是arr[(n-1/2)]</strong></p>
+</blockquote>
+<p><img src="https://img2018.cnblogs.com/blog/1590962/201903/1590962-20190318210726142-1883287792.png" alt></p>
+<p><strong>大顶堆的每个一个节点的值都大于他的左子结点和右子节点。</strong>但是左右节点之间的大小是不用限制的。</p>
+<p>根据大顶堆的定义我们就可以知道大顶堆的<strong>根节点的值一定是所有节点当中最大的。</strong>如果我们把根节点去掉，然后利用剩下的节点再构造一个大顶堆。我们又可以找到第二大的节点，如此循环。我们就可以让数组变得有序。但是，<strong>如何构造大顶堆呢？</strong></p>
+<p><img src="https://forum.mianbaoban.cn/data/attachment/forum/201803/20/140202rklrnejx0lz4qkdx.gif" alt></p>
+<p>看到上面的动图其实是有一点儿傻眼的，这不是数组排序吗？为什么搞这个一个二叉树在这？<strong>其实我们实际上并没有构造这个一个二叉树，只是把数组想象为一个完全二叉树罢了</strong>。要想把一个二叉树变成大顶堆，首先我们要看他的非叶子节点，因为叶子节点没有子节点，对于构造大顶堆是没有意义的。对于一个顺序存储二叉树，他的叶子节点是哪几个呢？答案是从<strong>0到arr.length/2-1。</strong>蛤？为什么是这几个节点啊？如果你仔细观察的话，<strong>叶子节点的个数永远是比非叶子节点多一个的</strong>，一棵树要么是叶子节点，要么是非叶子节点，所以非叶子节点个数 arr.length/2个。而非叶子节点都是存储在数组的前面的，所以说非叶子节点的下标是0到arr.length-1。</p>
+<p>对于一个非叶子节点来说，要满足大顶堆的条件，就要使他大于他的子节点。而所有的非叶子节点都大于他们的子节点的话，这棵树就是一个二叉树了。</p>
+<h3 id="堆排序的代码实现"><a href="#堆排序的代码实现" class="headerlink" title="堆排序的代码实现"></a>堆排序的代码实现</h3><hr>
+<h4 id="将数组调整为大顶堆代码实现"><a href="#将数组调整为大顶堆代码实现" class="headerlink" title="将数组调整为大顶堆代码实现"></a>将数组调整为大顶堆代码实现</h4><pre><code class="java">    /**
+     *  将一个数组（二叉树）调整成一个大顶堆
+     * @param arr 待排序数组
+     * @param i 非叶子节点在数组中的索引
+     * @param length 数组的大小(逐渐减小的)
+     */
+    private static void adjustHeap(int[] arr, int i, int length) {
+        int temp = arr[i];
+        //：2*i+1 左子节点的索引       2*i+2 右子节点的索引
+        for (int k = 2*i+1; k &lt; length; k=2*k+1) {
+            if (k+1&lt;length &amp;&amp; arr[k] &lt; arr[k+1]) {
+                k++;
+            }
+            if (arr[k] &gt; temp) { //：子节点大于父节点， 两者交换位置
+                arr[i] = arr[k];
+                i = k; // 继续循环比较
+            }else {
+                break; //：为什么break？ 以i为父节点的下面的都已经排序过了，都是大顶堆了
+            }
+        }
+        arr[i] = temp;
+    }</code></pre>
+<blockquote>
+<p><strong>代码说明：</strong></p>
+<ol>
+<li>for循环里面的k, temp是干什么的 ?<ul>
+<li>k的初始值是给定的非叶子节点的左子结点。每次循环都要到下一个左子结点。arr[k] &lt; arr[k+1]就是比较左右子节点哪个大。<strong>k++就是定位到右子节点</strong>，因为一开始k是指向左子结点的，右子节点的下标比左子结点大1。</li>
+<li>temp保存的是给定的非叶子节点中的值。 arr[k] &gt; temp 说明左右子节点中较大的那个要比他要大，那么就把他赋给当前给定的非子节点。</li>
+</ul>
+</li>
+<li>为什么 i = k。为什么要循环比较？<ul>
+<li>非叶子节点不是只有叶子节点，他们的子节点也会有子节点。假定我们让子节点的值变成非叶子节点的那个值，而非叶子节点的值又是很小的。那么那个子节点构成的岂不是大顶堆了？所以还是要<strong>递归下去继续构造大顶堆。</strong></li>
+</ul>
+</li>
+<li>为什么else break？<ul>
+<li>其实这个问题应该在第二个问题的前面的。我们<strong>构造大顶堆其实是从下往上构造的。</strong>也就是说从arr.length/2-1到0这个顺序来构造的。也就是说我们在构造非叶子节点i的过程中就知道他的<strong>左子树和右子树其实都是大顶堆。</strong>如果我们<strong>没有进行交换也就没有破坏左子树和右子树的大顶堆结构，如果进行交换了就有可能破环了他们的大顶堆结构了。</strong>毕竟如果交换了，说明非叶子节点的值要小一点嘛。你不能确保他比子节点的子节点的值要大。</li>
+</ul>
+</li>
+<li>arr[i] = temp 是什么意思？<ul>
+<li>你或许发现了，我们<strong>始终没有说交换</strong>，这就有点像移位法的味道了。我们只是给i找到合适的位置，（<strong>第二个问题中的i = k 就是在做这个事情</strong>）当for循环退出了，意味着i的位置就找到了，这时给之前保存好的temp安上去就行了。</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<h4 id="堆排序代码"><a href="#堆排序代码" class="headerlink" title="堆排序代码"></a>堆排序代码</h4><pre><code class="java">public static void heapSort(int[] arr) {
+        int temp = 0;
+        // 将其变成大顶堆
+        for (int i = arr.length/2-1; i &gt;=0; i--) {
+            adjustHeap(arr, i, arr.length);
+        }
+
+        // ：将大顶堆上面的元素交换到末尾，然后对大顶堆最上面的元素排序
+        for (int j = arr.length-1; j &gt; 0; j--) {
+            temp = arr[j];
+            arr[j] = arr[0];
+            arr[0] = temp;
+            adjustHeap(arr, 0, j);
+        }
+    }</code></pre>
+<blockquote>
+<p><strong>代码说明：</strong></p>
+<ol>
+<li>第一个for循环?<ul>
+<li>其实第一个for循环就是我们上面说过的，<strong>大顶堆是从下往上构造的。只有这样我们才能确保要构造的非叶子节点的左子树和右子树都是大顶堆</strong>。</li>
+</ul>
+</li>
+<li>第二个for循环？<ul>
+<li>将构造好的大顶堆的根的值(arr[0])放到数组的最后面，然后把数组最后面的元素移动到根处。并且还要<strong>将要进行构造大顶堆的 length-1</strong>，因为已经最大的那个数已经不用再去构造大顶堆了，安心在数组后面躺着吧。</li>
+</ul>
+</li>
+<li>adjustHeap(arr, 0, j)，这次构造大顶堆为什么没有循环了，而一开始需要循环？<ul>
+<li>因为一开始的数组对应的二叉树的根节点的子树不是大顶堆。而此时，将一个大顶堆的根节点移走，然后取他的一个叶子节点作为新的根，<strong>这个新的二叉树虽然不再是大顶堆，但是根节点的左右子树依然是大顶堆。</strong>所以说不用再循环了。</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<h3 id="堆排序的测试"><a href="#堆排序的测试" class="headerlink" title="堆排序的测试"></a>堆排序的测试</h3><p>测试环境及工具：<em>我的电脑 Huawei MateBook 13+JDK1.8+Eclipse</em></p>
+<p>测试手段：<em>随机生成80000个和8,000,000个[0,800000）的整数的数组进行排序，观察所花费的时间</em></p>
+<p>测试代码：</p>
+<pre><code class="java">    public static void main(String[] args) {
+        int[] arr = new int[80000];
+        for (int i = 0; i &lt; arr.length; i++) {
+            arr[i] = new Random().nextInt(800000);
+        }
+//        System.out.println(Arrays.toString(arr));
+        long start_time = System.currentTimeMillis();
+        heapSort(arr);
+        long end_time = System.currentTimeMillis();
+//        System.out.println(Arrays.toString(arr));
+        System.out.println(&quot;Time :&quot;+(end_time-start_time)+&quot;ms&quot;);
+    }</code></pre>
+<blockquote>
+<p><strong>80,000数据时：</strong></p>
+<ul>
+<li><em>Time :  9ms</em></li>
+<li><em>Time :  0ms</em></li>
+<li><em>Time :  15ms</em></li>
+</ul>
+<p><strong>8,000,000数据时：</strong></p>
+<ul>
+<li><em>Time :  1686ms</em></li>
+<li><em>Time :  1703ms</em></li>
+<li><em>Time :  1672ms</em></li>
+</ul>
+</blockquote>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><hr>
+<blockquote>
+<p>什么这个0ms你是认真的吗？我测试了几次，有好几次0ms，但是全写0ms有点太高调了，所以还是让你大一点，防止你骄傲。不过说实话处理八百万个数据的时候，堆排序处理的并不快。毕竟是空间复杂度O(1)的算法，对于海量数据的处理还是略显疲软。不过这并不然掩盖这个算法的光辉之处，能想到这样的排序算法，图灵奖获得者——弗洛伊德是真的牛逼。这个人好像写了不少有名的算法。QwQ</p>
+</blockquote>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/WechatPayQr.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2019/07/18/排序算法（七）基数排序/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/11.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/11.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                排序算法（七）基数排序</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-  <div class="post-thumb">
-    <a href="/2019/07/17/第一个博客HelloWorld/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/15.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-17 13:07</div>
-      <a href="/2019/07/17/第一个博客HelloWorld/" class="post-title">
-        <h3>第一个博客 HelloWorld</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2019/07/17/第一个博客HelloWorld/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="sheriby.github.io" class="profile gravatar"><img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
+            </h3>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/17/hello-world/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/18.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-17 13:07</div>
-      <a href="/2019/07/17/hello-world/" class="post-title">
-        <h3>Hello World</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2019/07/17/hello-world/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2018/12/12/Hexo-Theme-Sakura/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://static.2heng.xin/wp-content/uploads//2019/02/wallhaven-672007-1-1024x576.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2018-12-12 22:12</div>
-      <a href="/2018/12/12/Hexo-Theme-Sakura/" class="post-title">
-        <h3>Hexo-Theme-Sakura</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/web/">web<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>hexo-sakura主题使用教程</p>
-        <div class="post-bottom">
-          <a href="/2018/12/12/Hexo-Theme-Sakura/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-
-
-    </main>
-      <!-- 首页默认取最最新文章集 -->
-    <!-- 
-      <nav class="navigator">
-        
-        <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-back"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-      </nav>
-     -->
-  </div>
-  
+        <hr>
+        <p><i class="iconfont icon-write"></i>一枚小菜鸡</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
 
     </div>    
     <div class="ins-search">

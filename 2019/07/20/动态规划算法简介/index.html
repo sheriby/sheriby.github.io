@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">MySQL基本的增删改查操作 | Sher的小博客</title>
+  <title itemprop="name">动态规划算法简介 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/25.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/25.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/26.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/26.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      MySQL基本的增删改查操作</h1>
+      动态规划算法简介</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-7-19<span class="bull">
+        2019-7-20<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,174 +376,327 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="MySQL基本的增删改查"><a href="#MySQL基本的增删改查" class="headerlink" title="MySQL基本的增删改查"></a>MySQL基本的增删改查</h1><hr>
-<h2 id="JDBC-MySQL的连接"><a href="#JDBC-MySQL的连接" class="headerlink" title="JDBC MySQL的连接"></a>JDBC MySQL的连接</h2><blockquote>
-<p>使用工具：Eclipse and Visual Studio 2019</p>
-<p>这里其实无论是使用Java还是C++，使用的都是jdBC的操作。当然这里的Java相对来说更加的正宗一点，C++中的jdBC库我用了关于string那一块还有bug，兼容性还不行。所以这里就使用eclipse Java来举例吧。至于如何连接MySQL，这个倒是简单的很，也是不必再说了。</p>
-</blockquote>
-<h3 id="Driver的初始化"><a href="#Driver的初始化" class="headerlink" title="Driver的初始化"></a>Driver的初始化</h3><pre><code class="java">try {
-    //Class.forName是把这个类加载到JVM中，加载的时候，就会执行其中的静态初始化块，完成驱动的初始化的相关工作。 
-    // 首先加载驱动包 com.mysql.cj.jdbc.Driver
-    Class.forName(&quot;com.mysql.cj.jdbc.Driver&quot;);
-} catch (ClassNotFoundException e) {
-    // TODO Auto-generated catch block
-    e.printStackTrace();
-}</code></pre>
-<pre><code class="c++">mysql::MySQL_Driver* driver;
-driver = sql::mysql::get_mysql_driver_instance();</code></pre>
-<h3 id="Connection连接数据库-初始化-Statement"><a href="#Connection连接数据库-初始化-Statement" class="headerlink" title="Connection连接数据库, 初始化 Statement"></a>Connection连接数据库, 初始化 Statement</h3><pre><code class="java">// 连接的地址 localhost就是127.0.0.1就是本机的地址 world 代表的是要使用的数据库的名字
-String url = &quot;jdbc:mysql://localhost:3306/sher?useUnicode=true&amp;characterEncoding=UTF8&amp;useSSL=false&amp;serverTimezone=UTC&quot;;
-// 建立和数据库的连接 url account password
-try {
-    con = DriverManager.getConnection(url,&quot;root&quot;,&quot;root&quot;);
-    stmt = con.createStatement();
-} catch (SQLException e) {
-    // TODO Auto-generated catch block
-    e.printStackTrace();
-}</code></pre>
-<p>其实上面的变量的声明都在类中的静态变量中，为了方便以后数据库的关闭</p>
-<pre><code class="java">static ResultSet rs = null;
-static Statement stmt = null;
-static Connection con = null;
-static PreparedStatement pstmt = null;</code></pre>
-<pre><code class="C++">Connection* con;
-Statement* state;
-ResultSet* result;
-const char* accout = &quot;root&quot;;
-const char* passwd = &quot;root&quot;;
-con = driver-&gt;connect(&quot;tcp://127.0.0.1:3306&quot;, accout, passwd);
-state = con-&gt;createStatement();</code></pre>
-<blockquote>
-<p>这里C++代码中要注意一个问题，account和passwd不能直接写driver-&gt;connect中，而且也不可以使用string类，不然会出现莫名其妙的bug，我也是求助了好长时间才知道这个地方出了问题，我也是醉了。</p>
-</blockquote>
-<h3 id="数据库的关闭"><a href="#数据库的关闭" class="headerlink" title="数据库的关闭"></a>数据库的关闭</h3><pre><code class="java">private static void close() {
-    try {
-        if (rs!=null) {
-            rs.close();
-        }
-        if (stmt!=null) {
-            stmt.close();
-        }
-        if (con!=null) {
-            con.close();
-        }
-        if (pstmt!=null) {
-            pstmt.close();
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }    
-}</code></pre>
-<p>C++代码当中没有使用异常处理的机制，而且C++代码中异常处理也不是很好，反正使用体验极差。不过C++11中对于异常机制的改良，我也没学过不知道怎么样。</p>
-<h2 id="数据库的增删改查"><a href="#数据库的增删改查" class="headerlink" title="数据库的增删改查"></a>数据库的增删改查</h2><h3 id="数据库增加数据"><a href="#数据库增加数据" class="headerlink" title="数据库增加数据"></a>数据库增加数据</h3><pre><code class="java">private static void addData(int id, String username, String passwd) throws SQLException {
-    String sql = String.format(&quot;insert into shertable(id, username, passwd) values(&#39;%d&#39;, &#39;%s&#39;, &#39;%s&#39;)&quot;, id, username,passwd);
-    stmt.execute(sql);
-}</code></pre>
-<blockquote>
-<p>上面定义的时候我们使用了两种Statement。Statement和 PreparedStatement，这两种之间有什么区别呢？其实是建议使用PreparedStatement的，<strong>Statement容易被SQL注入，是不怎么安全的</strong>，不过为了介绍这里就都使用了。</p>
-</blockquote>
-<blockquote>
-<p>stmt.execute(sql) 一般这种insert语句还有用的就是executeUpdate()。还有一个是executeQuery().这三者是有区别的</p>
-<ol>
-<li><strong>ResultSet</strong>  executeQuery(String sql); 执行SQL查询，并<strong>返回ResultSet 对象</strong>。</li>
-<li><strong>int</strong>              executeUpdate(String sql); 可执行增，删，改，<strong>返回执行受到影响的行数</strong>。</li>
-<li><strong>boolean</strong>     execute(String sql); 可执行任何SQL语句，<strong>返回一个布尔值，表示是否返回ResultSet</strong> 。</li>
+          <h1 id="动态规划算法简介"><a href="#动态规划算法简介" class="headerlink" title="动态规划算法简介"></a>动态规划算法简介</h1><h2 id="动态规划基本介绍"><a href="#动态规划基本介绍" class="headerlink" title="动态规划基本介绍"></a><a href="[https://baike.baidu.com/item/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95/15742703?fr=aladdin](https://baike.baidu.com/item/动态规划算法/15742703?fr=aladdin)">动态规划基本介绍</a></h2><p>动态规划算法的基本思想与分治法类似，也是将待求解的问题分解为若干个子问题（阶段），按顺序求解子阶段，前一子问题的解，为后一子问题的求解提供了有用的信息。在求解任一子问题时，列出各种可能的局部解，通过决策保留那些有可能达到最优的局部解，丢弃其他局部解。依次解决各子问题，最后一个子问题就是初始问题的解。</p>
+<p>由于动态规划解决的问题<strong>多数有重叠子问题</strong>这个特点，为减少重复计算，对<strong>每一个子问题只解一次</strong>，将其不同阶段的不同状态保存在一个二维数组中。</p>
+<h2 id="适用情况"><a href="#适用情况" class="headerlink" title="适用情况"></a><a href="[https://baike.baidu.com/item/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95/15742703?fr=aladdin](https://baike.baidu.com/item/动态规划算法/15742703?fr=aladdin)">适用情况</a></h2><ol>
+<li><p><strong>最优化原理</strong>：如果问题的最优解所包含的子问题的解也是最优的，就称该问题具有最优子结构，即满足最优化原理。</p>
+</li>
+<li><p><strong>无后效性</strong>：即某阶段状态一旦确定，就不受这个状态以后决策的影响。也就是说，某状态以后的过程不会影响以前的状态，只与当前状态有关。</p>
+</li>
+<li><p><strong>有重叠子问题</strong>：即子问题之间是不独立的，一个子问题在下一阶段决策中可能被多次使用到。（该性质并不是动态规划适用的必要条件，但是如果没有这条性质，动态规划算法同其他算法相比就不具备优势）</p>
+</li>
 </ol>
-<p>不过这个execute也不是万能的。</p>
-<p><strong>如果 SQL 语句中有 ? 占位符，那么在设置好占位符中的值后，必须使用 executeUpdate() 执行。</strong></p>
-<p>至于这个？占位符是PreparedStatement中使用的，等到下面再说。</p>
-</blockquote>
-<h3 id="数据库查询数据"><a href="#数据库查询数据" class="headerlink" title="数据库查询数据"></a>数据库查询数据</h3><pre><code class="java">private static void queryData(String sql) throws SQLException {
-    rs = stmt.executeQuery(sql);
-    while (rs.next()){
-        System.out.println(&quot;Id: &quot;+rs.getInt(&quot;id&quot;)+&quot; Username: &quot;+rs.getString(&quot;username&quot;)+&quot; Password: &quot;+rs.getString(&quot;passwd&quot;));
-    }
-    System.out.println();
-}</code></pre>
-<pre><code class="c++">state-&gt;execute(&quot;use world&quot;);
-// 查询
-result = state-&gt;executeQuery(&quot;select * from city order by id desc limit 10&quot;);
-// 输出查询
-    cout &lt;&lt; endl;
-    cout &lt;&lt; setw(15) &lt;&lt; &quot;&quot; &lt;&lt; &quot;======================================================================&quot; &lt;&lt; endl;
-    cout &lt;&lt; setw(15) &lt;&lt; &quot;&quot;;
-    cout &lt;&lt; left &lt;&lt; setw(15) &lt;&lt; &quot;Id&quot; &lt;&lt; setw(15) &lt;&lt; &quot;Name&quot; &lt;&lt; setw(15) &lt;&lt; &quot;CounryCode&quot;
-        &lt;&lt; setw(15) &lt;&lt; &quot;District&quot; &lt;&lt; setw(15) &lt;&lt; &quot;Population&quot; &lt;&lt; endl;
-    cout &lt;&lt; setw(15) &lt;&lt; &quot;&quot; &lt;&lt; &quot;======================================================================&quot; &lt;&lt; endl;
-    while (result-&gt;next())
-    {
-        int id = result-&gt;getInt(&quot;id&quot;);
-        // 关于getString()这一块这个写的真的是全都是bug， 不过现在好像已经可以运行了。
-        string name = result-&gt;getString(&quot;name&quot;).c_str();
-        string countrycode = result-&gt;getString(&quot;countrycode&quot;).c_str();
-        string district = result-&gt;getString(&quot;district&quot;).c_str();
-        int population = result-&gt;getInt(&quot;population&quot;);
-        cout &lt;&lt; setw(15) &lt;&lt; &quot;&quot; &lt;&lt; setw(15) &lt;&lt; id &lt;&lt; setw(15) &lt;&lt; name &lt;&lt; setw(15) &lt;&lt; countrycode
-            &lt;&lt; setw(15) &lt;&lt; district &lt;&lt; setw(15) &lt;&lt; population &lt;&lt; endl;
-    }
-    cout &lt;&lt; setw(15) &lt;&lt; &quot;&quot; &lt;&lt; &quot;======================================================================&quot; &lt;&lt; endl;
-    delete state;
-    delete con;</code></pre>
+<h2 id="求解的基本步骤"><a href="#求解的基本步骤" class="headerlink" title="求解的基本步骤"></a><a href="[https://baike.baidu.com/item/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95/15742703?fr=aladdin](https://baike.baidu.com/item/动态规划算法/15742703?fr=aladdin)">求解的基本步骤</a></h2><p>动态规划所处理的问题是一个多阶段决策问题，一般由初始状态开始，通过对中间阶段决策的选择，达到结束状态。这些决策形成了一个决策序列，同时确定了完成整个过程的一条活动路线(通常是求最优的活动路线)。如图所示。动态规划的设计都有着一定的模式，一般要经历以下几个步骤，如下图所示：</p>
 <blockquote>
-<p>看这个Java和C++中jdBC的操作基本上都是一样的。不过这里C++代码需要注意一下，我又被坑惨了。在<strong>使用result-&gt;getString()之后要加上.c_str()使其变成C风格的字符串</strong>。都说了string类在jdBC for C++中真的全是bug。C++其实也有C风格的MySQL数据库连接的库，不过那个已经不在这次介绍的范围之内了。</p>
+<p>初始状态→│决策1│→│决策2│→…→│决策n│→结束状态</p>
 </blockquote>
-<h3 id="PreparedStatement-添加数据"><a href="#PreparedStatement-添加数据" class="headerlink" title="PreparedStatement 添加数据"></a>PreparedStatement 添加数据</h3><pre><code class="java">private static void setPstmtSql(int id, String username, String passwd) throws SQLException {
-    pstmt = con.prepareStatement(&quot;insert into shertable(id, username, passwd) values(?,?,?)&quot;);
-    pstmt.setInt(1, id);
-    pstmt.setString(2, username);
-    pstmt.setString(3, passwd);
+<ol>
+<li><p>划分阶段：按照问题的时间或空间特征，把问题分为若干个阶段。在划分阶段时，注意划分后的阶段一定要是有序的或者是可排序的，否则问题就无法求解。</p>
+</li>
+<li><p>确定状态和状态变量：将问题发展到各个阶段时所处于的各种客观情况用不同的状态表示出来。当然，状态的选择要满足无后效性。</p>
+</li>
+<li><p>确定决策并写出状态转移方程：因为决策和状态转移有着天然的联系，状态转移就是根据上一阶段的状态和决策来导出本阶段的状态。所以如果确定了决策，状态转移方程也就可写出。但事实上常常是反过来做，根据相邻两个阶段的状态之间的关系来确定决策方法和状态转移方程。</p>
+</li>
+<li><p>寻找边界条件：给出的状态转移方程是一个递推式，需要一个递推的终止条件或边界条件。</p>
+</li>
+</ol>
+<p>一般，只要解决问题的阶段、状态和状态转移决策确定了，就可以写出状态转移方程（包括边界条件）。实际应用中可以按以下几个简化的步骤进行设计：</p>
+<ol>
+<li><p>分析最优解的性质，并刻画其结构特征。</p>
+</li>
+<li><p>递归的定义最优解。</p>
+</li>
+<li><p>以自底向上或自顶向下的记忆化方式（备忘录法）计算出最优值</p>
+</li>
+<li><p>根据计算最优值时得到的信息，构造问题的最优解</p>
+</li>
+</ol>
+<h2 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a><a href="[https://baike.baidu.com/item/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95/15742703?fr=aladdin](https://baike.baidu.com/item/动态规划算法/15742703?fr=aladdin)">算法实现</a></h2><p>动态规划的主要难点在于理论上的设计，也就是上面4个步骤的确定，一旦设计完成，实现部分就会非常简单。使用动态规划求解问题，最重要的就是确定动态规划三要素：</p>
+<ol>
+<li><p>问题的阶段</p>
+</li>
+<li><p>每个阶段的状态</p>
+</li>
+<li><p>从前一个阶段转化到后一个阶段之间的递推关系。</p>
+</li>
+</ol>
+<p>递推关系必须是从次小的问题开始到较大的问题之间的转化，从这个角度来说，动态规划往往可以用递归程序来实现，不过因为递推可以充分利用前面保存的子问题的解来减少重复计算，所以对于大规模问题来说，有递归不可比拟的优势，这也是动态规划算法的核心之处。</p>
+<p>确定了动态规划的这三要素，整个求解过程就可以用一个最优决策表来描述，最优决策表是一个二维表，其中行表示决策的阶段，列表示问题状态，表格需要填写的数据一般对应此问题的在某个阶段某个状态下的最优值（如最短路径，最长公共子序列，最大价值等），填表的过程就是根据递推关系，从1行1列开始，以行或者列优先的顺序，依次填写表格，最后根据整个表格的数据通过简单的取舍或者运算求得问题的最优解。</p>
+<p><strong>f(n,m)=max{f(n-1,m), f(n-1,m-w[n])+P(n,m)}</strong></p>
+<p>上面的这些内容都是从百度百科中抄来的，虽然是百度百科讲的也不是很烂，我感觉除了不是很形象，其他讲的还是不错的。现在还是直接从leetcode动态规划算法的题目开始吧！</p>
+<h2 id="leetcode-动态规划"><a href="#leetcode-动态规划" class="headerlink" title="leetcode 动态规划"></a>leetcode 动态规划</h2><h3 id="爬楼梯"><a href="#爬楼梯" class="headerlink" title="爬楼梯"></a><a href="https://leetcode-cn.com/problems/climbing-stairs/" target="_blank" rel="noopener">爬楼梯</a></h3><p>假设你正在爬楼梯。需要 <em>n</em> 阶你才能到达楼顶。</p>
+<p>每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？</p>
+<p><strong>注意：</strong>给定 <em>n</em> 是一个正整数。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入： 2
+输出： 2
+解释： 有两种方法可以爬到楼顶。
+1.  1 阶 + 1 阶
+2.  2 阶</code></pre><p><strong>示例 2：</strong></p>
+<pre><code>输入： 3
+输出： 3
+解释： 有三种方法可以爬到楼顶。
+1.  1 阶 + 1 阶 + 1 阶
+2.  1 阶 + 2 阶
+3.  2 阶 + 1 阶</code></pre><p>这个题目我之前就已经是做过了的，不过似乎是没有使用到动态规划的算法。</p>
+<pre><code class="c++">class Solution {
+public:
+    map&lt;int, int&gt; result;
+    int climbStairs(int n) {
+        if (n == 1 || n == 2) return n;
+        if (result.find(n) != result.end()) return result[n];
+        int res = climbStairs(n-1)+climbStairs(n-2);
+        result[n] = res;
+        return res;
+    }
+};</code></pre>
+<blockquote>
+<p>执行结果：通过 显示详情</p>
+<p>执行用时 : 0 ms, 在所有 C++ 提交中击败了100.00%的用户</p>
+<p>内存消耗 : 8.7 MB, 在所有 C++ 提交中击败了10.62%的用户</p>
+</blockquote>
+<p>由此可见，程序运行的速度是飞快的，但是因为使用了map进行记忆，程序消耗了太大的内存，所以说算法值得优化。这是一个典型的动态规划型的题目，和斐波那契数列有点儿相似，那么如何使用动态规划算法呢？</p>
+<p>其实我上面用的map已经是一种动态规划算法了，就是记住原来算过的结果，极大的提高了效率，不过int， int类型的map如果是使用数组的话，还是更好一些。</p>
+<pre><code class="java">class Solution {
+    public static int memo[];
+    public int climbStairs(int n) {
+        memo = new int[n+1];
+        return climbStairs(n, memo);
+    }
 
-    pstmt.executeUpdate();
+    public static int climbStairs(int n, int memo[]){
+        if (memo[n] != 0){
+            return memo[n];
+        }
+
+        if (n == 1 || n == 2){
+            memo[n] = n;
+        } else {
+            memo[n] = climbStairs(n-1, memo) + climbStairs(n-2, memo);
+        }
+
+        return memo[n];
+    }
 }</code></pre>
 <blockquote>
-<p>这里就是pstmt的代码的使用。我们先使用占位符来创建一个SQL语句，然后使用setInt()，setString()的方法，来填入占位符中的内容，这是既简便了stmt字符串连接的操作，也可以防止SQL注入，很安全~</p>
-<p>注意上面说的：</p>
-<p><strong>如果 SQL 语句中有 ? 占位符，那么在设置好占位符中的值后，必须使用 executeUpdate() 执行。</strong></p>
+<p>执行结果：通过 显示详情</p>
+<p>执行用时 :0 ms, 在所有 Java 提交中击败了100.00%的用户</p>
+<p>内存消耗 :33 MB, 在所有 Java 提交中击败了73.01%的用户</p>
 </blockquote>
-<h3 id="数据库删除数据"><a href="#数据库删除数据" class="headerlink" title="数据库删除数据"></a>数据库删除数据</h3><pre><code class="java">private static void delData(int id) throws SQLException{
-    pstmt = con.prepareStatement(&quot;delete from shertable where id=?&quot;);
-    pstmt.setInt(1, id);
+<p>内存消耗反而变大了，，这个是语言的原因，你懂得~</p>
+<p>改成C++代码</p>
+<pre><code class="c++">int climbStairs(int n){
+    int* memo = new int[n+1]{0};
+    return climbStairs(n, memo);
+}
 
-    pstmt.executeUpdate();
-}</code></pre>
-<h3 id="数据库修改数据"><a href="#数据库修改数据" class="headerlink" title="数据库修改数据"></a>数据库修改数据</h3><pre><code class="java">private static void modifyPasswd(String username, String old_passwd, String new_passwd) throws SQLException{
-    pstmt = con.prepareStatement(&quot;update shertable set passwd = ? where username = ? and passwd = ?&quot;);
-    pstmt.setString(1, new_passwd);
-    pstmt.setString(2, username);
-    pstmt.setString(3, old_passwd);
-
-    int flag = pstmt.executeUpdate();
-    if (flag!=0) {
-        System.out.println(&quot;Successfully!&quot;);
-    }else {
-        System.out.println(&quot;Unsuccessfully, please try again!&quot;);
+int climbStairs(int n, int* memo){
+    if (memo[n] != 0){
+        return memo[n];
     }
-}</code></pre>
-<h3 id="本列中其他的操作"><a href="#本列中其他的操作" class="headerlink" title="本列中其他的操作"></a>本列中其他的操作</h3><p><strong>根据名字查询</strong></p>
-<pre><code class="java">private static void queryByName(String name) throws SQLException {
-    pstmt = con.prepareStatement(&quot;select * from shertable where username = ?&quot;);
-    pstmt.setString(1, name);
-
-    rs = pstmt.executeQuery();
-    if (rs.next())
-        System.out.println(&quot;Id: &quot;+rs.getInt(&quot;id&quot;)+&quot;\nUsername: &quot;+rs.getString(&quot;username&quot;)+&quot;\nPassword: &quot;+rs.getString(&quot;passwd&quot;));
-    else
-        System.out.println(&quot;Not Found!&quot;);
-}</code></pre>
-<p><strong>登陆系统</strong></p>
-<pre><code class="java">private static void sign(String name, String passwd) throws SQLException{
-    pstmt = con.prepareStatement(&quot;select * from shertable where username = ? and passwd = ?&quot;);
-    pstmt.setString(1, name);
-    pstmt.setString(2, passwd);
-
-    rs = pstmt.executeQuery();
-    if (rs.next()) {
-        System.out.println(&quot;Sign Up Successfully!&quot;);
-    }else {
-        System.out.println(&quot;Worng UserName or Password!&quot;);
+    if (n == 1 || n == 2){
+        memo[n] = n;
+    } else {
+        memo[n] = climbStairs(n-1, memo) + climbStairs(n-2, memo);
     }
+
+    return memo[n];
 }</code></pre>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面都只是MySQL中的基础中的基础中的基础的操作，作为从来没有学过MySQL的看看基本就行了。对于MySQL中进阶一点的操作，SQL命令的更加高阶的使用可以下次写写看，现在暂时MySQL用得还是比较少滴，不急着学。</p>
+<blockquote>
+<p>执行结果：通过 显示详情</p>
+<p>执行用时 :0 ms, 在所有 C++ 提交中击败了100.00%的用户</p>
+<p>内存消耗 :8.6 MB, 在所有 C++ 提交中击败了19.38%的用户</p>
+</blockquote>
+<p>内存的消耗还是特别多，这。。。只能求助于题解了。可以不使用递归的方式，不过说实话，时间复杂度都是一样的，空间复杂度感觉也没多少改善啊。。。</p>
+<pre><code class="c++">int climbStairs(int n){
+    if (n &lt;= 2) return n;
+    int* memo = new int[n+1]{0};
+    memo[1] = 1;
+    memo[2] = 2;
+    for (int i=3; i&lt;=n; ++i){
+        memo[i] = memo[i-1] + memo[i-2];
+    }
+    return memo[n];
+}</code></pre>
+<blockquote>
+<p>执行结果：通过 显示详情</p>
+<p>执行用时 :0 ms, 在所有 C++ 提交中击败了100.00%的用户</p>
+<p>内存消耗 :8.4 MB, 在所有 C++ 提交中击败了43.73%的用户</p>
+</blockquote>
+<p>算了，不纠结这题了，这只是一个简单题罢了，请看下一题。</p>
+<h3 id="最大子序和"><a href="#最大子序和" class="headerlink" title="最大子序和"></a><a href="https://leetcode-cn.com/problems/maximum-subarray/" target="_blank" rel="noopener">最大子序和</a></h3><p>给定一个整数数组 <code>nums</code> ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
+<p><strong>示例:</strong></p>
+<pre><code>输入: [-2,1,-3,4,-1,2,1,-5,4],
+输出: 6
+解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。</code></pre><p><strong>进阶:</strong></p>
+<p>如果你已经实现复杂度为 O(<em>n</em>) 的解法，尝试使用更为精妙的分治法求解。</p>
+<pre><code class="c++">class Solution {
+public:
+    int maxSubArray(vector&lt;int&gt;&amp; nums) {
+        int sum = 0;
+        int max_sum = nums[0];
+
+        for (auto i : nums){
+            if (sum &gt; 0){
+                sum += i;
+            }else {
+                sum = i;
+            }
+            max_sum = max(sum, max_sum);
+        }
+        return max_sum;
+    }
+};</code></pre>
+<blockquote>
+<p>执行结果：通过 显示详情</p>
+<p>执行用时 :8 ms, 在所有 C++ 提交中击败了92.04%的用户</p>
+<p>内存消耗 :9.2 MB, 在所有 C++ 提交中击败了80.50%的用户</p>
+</blockquote>
+<blockquote>
+<p><strong>代码说明：</strong></p>
+<p>​        别看着这个代码好像很简单似的，但是其中动态规划的算法还是不好理解的。</p>
+<ol>
+<li><p>sum max_sum的含义是什么？</p>
+<p>sum表示的当前选定的序列的和，max_sum值的是遇到的最大的序列的和。</p>
+</li>
+<li><p>sum &gt;0 -&gt;  sum += i   ?</p>
+<p>这其实很好理解，前面的sum是正的，而且最大值已经被记录过了，加上前面正的序列对i有促进的作用，所以说新的序列就是前面的正的那一块加上当前的i.</p>
+</li>
+<li><p>else sum = i?</p>
+<p>前面的序列是负的，加上i无论i正负也好都不会有前面的序列大，所以直接从i开始一条新的序列就好了。</p>
+<p>那万一i前面的那个值是正的，为什么不从i前面的那个正数开始呢？</p>
+<p>不可能的，i前面的那个值既然被加入了序列中就说明，i前面的前面的序列的和是正数，而i前面的序列和是一个负数，这就可以肯定i前面的数是一个负数。所以从i开始新的序列的最对的。</p>
+</li>
+<li><p>max_sum = max(sum, max_sum);</p>
+<p>每次我们生成新的序列的，和都要和之前获取到的最大的数列的和进行比较以确保我们保存的的确是最大的子序列的和。</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="买卖股票的最佳时机"><a href="#买卖股票的最佳时机" class="headerlink" title="买卖股票的最佳时机"></a><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/" target="_blank" rel="noopener">买卖股票的最佳时机</a></h3><p>给定一个数组，它的第 <em>i</em> 个元素是一支给定股票第 <em>i</em> 天的价格。</p>
+<p>如果你最多只允许完成一笔交易（即买入和卖出一支股票），设计一个算法来计算你所能获取的最大利润。</p>
+<p>注意你不能在买入股票前卖出股票。</p>
+<p><strong>示例 1:</strong></p>
+<pre><code>输入: [7,1,5,3,6,4]
+输出: 5
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格。</code></pre><p><strong>示例 2:</strong></p>
+<pre><code>输入: [7,6,4,3,1]
+输出: 0
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。</code></pre><p>我一开始是这样子写的(纯暴力破解法，时间用的差不多是一千多ms吧，能AC我也是佛了)</p>
+<pre><code class="C++">int maxProfit(vector&lt;int&gt;&amp; prices) {
+    int profit = 0;
+    int size = prices.size();
+    for (int i=0; i&lt;size-1; ++i){
+        for (int j=i+1; j&lt;size; ++j){
+            if (prices.at(j) - prices.at(i) &gt; profit)
+                profit = prices.at(j) - prices.at(i);
+        }
+    }
+    return profit;
+}</code></pre>
+<p>其实这个题目一眼看过去就知道是动态规划的算法，和前面的那个题目是类似的</p>
+<pre><code class="c++">int maxProfit(vector&lt;int&gt;&amp; prices) {
+    int size = prices.size();
+    if (size &lt;= 1) return 0;
+    if (size == 2) return max(prices.at(1) - prices.at(0), 0);
+
+    vector&lt;int&gt; buy(size, 0);
+    vector&lt;int&gt; sell(size, 0);
+    buy.at(0) = -prices.at(0);
+    for (int i=1; i&lt;size; ++i){
+        buy[i] = max(buy.at(i-1), -prices.at(i));
+        sell[i] = max(sell.at(i-1), buy.at(i-1) + prices.at(i));
+    }
+
+    return *max_element(sell.begin(), sell.end());
+}</code></pre>
+<blockquote>
+<p>执行结果：通过 显示详情</p>
+<p>执行用时 :20 ms, 在所有 C++ 提交中击败了25.61%的用户</p>
+<p>内存消耗 :9.8 MB, 在所有 C++ 提交中击败了5.10%的用户</p>
+</blockquote>
+<blockquote>
+<p>这个问题的解决方案是动态规划当中比较经典的填表的方法。之前的那个百度百科中也都已经介绍了这个公式。</p>
+<p><strong>f(n,m)=max{f(n-1,m), f(n-1,m-w[n])+P(n,m)}</strong></p>
+<p>与之比较类似的还有背包问题，待会可以一并解决。</p>
+</blockquote>
+<blockquote>
+<p><strong>代码说明：</strong></p>
+<p>上面的代码主要就是两行比较重要：</p>
+<pre><code class="c++">buy[i] = max(buy.at(i-1), -prices.at(i));
+sell[i] = max(sell.at(i-1), buy.at(i-1) + prices.at(i));</code></pre>
+<p>第一个就是我在第i天买，比不比我在昨天买上算，如果今天比昨天还要贵那么我今天肯定是不买的。</p>
+<p>第二个就是我在第i天卖有没有我在第i-1天卖上算，如果昨天卖比较好那还不如昨天卖。</p>
+<p>但是光凭以上两点能解决什么问题呢？</p>
+<p>仔细看的话，你会发现，其实你每一天买的都是相对来说最优的。而每天卖的也是最好的。</p>
+<p>我们可以这样想，如何只有三天的话，我们是不是就可以获得在第三天卖的最高的价格？</p>
+<p>假如是 1 2 5 只有buy[1] = 1 sell[1] = 2</p>
+<p>第三天的价格是5，那buy[2] = 1，肯定还是延续在只有两天时的买法</p>
+<p>sell[2] = max(sell[1], -1 + 5) ，这个卖就是sell[1]肯定是只有i两天的时候最优的利润，buy[1]也是最优的买法，现在加入就在第三天的时候，我们在第三天卖一下，我们看一看这个利润有没有之前的高。然后存入数组。</p>
+<p>加上第四天的话还是这样子考虑。就这样其实sell数组里面放的就是有第n天的最大利润，sell数组后面值肯定也都是一样的。</p>
+<p>于是取得最大值就行了。</p>
+<pre><code class="c++">return *max_element(sell.begin(), sell.end());</code></pre>
+<p>注意：max_element返回的是迭代器，所以要加上*取值。</p>
+</blockquote>
+<p>leetcode给出的官方题解是这样子的</p>
+<pre><code class="java">public int maxProfit(int prices[]) {
+    int minprice = Integer.MAX_VALUE;
+    int maxprofit = 0;
+    for (int i = 0; i &lt; prices.length; i++) {
+        if (prices[i] &lt; minprice)
+            minprice = prices[i];
+        else if (prices[i] - minprice &gt; maxprofit)
+            maxprofit = prices[i] - minprice;
+    }
+    return maxprofit;
+}</code></pre>
+<blockquote>
+<p>使我们感兴趣的点是上图中的峰和谷。我们需要找到最小的谷之后的最大的峰。 我们可以维持两个变量——minprice 和 maxprofit，它们分别对应迄今为止所得到的最小的谷值和最大的利润（卖出价格与最低价格之间的最大差值）。</p>
+</blockquote>
+<p><img src="https://pic.leetcode-cn.com/cc4ef55d97cfef6f9215285c7573027c4b265c31101dd54e8555a7021c95c927-file_1555699418271" alt></p>
+<p>这两个算法的思路其实都是一样的，不过官方的题解更加的清晰明了。不过我上面的那个更像是一个动态规划算法，把一个问题拆分成他的子问题。要取得第七天的最大的利润，我们需要利用第六天的数据，这就是一步一步往后推的过程。</p>
+<h3 id="买卖股票的最佳时机-II"><a href="#买卖股票的最佳时机-II" class="headerlink" title="买卖股票的最佳时机 II"></a><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/" target="_blank" rel="noopener">买卖股票的最佳时机 II</a></h3><p>给定一个数组，它的第 <em>i</em> 个元素是一支给定股票第 <em>i</em> 天的价格。</p>
+<p>设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。</p>
+<p><strong>注意：</strong>你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。</p>
+<p><strong>示例 1:</strong></p>
+<pre><code>输入: [7,1,5,3,6,4]
+输出: 7
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。</code></pre><p><strong>示例 2:</strong></p>
+<pre><code>输入: [1,2,3,4,5]
+输出: 4
+解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
+     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。</code></pre><p><strong>示例 3:</strong></p>
+<pre><code>输入: [7,6,4,3,1]
+输出: 0
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。</code></pre><p>额~这个好像有点儿复杂，不过如果想到转换的话，一步头就完事了。</p>
+<pre><code class="c++">class Solution {
+public:
+    int maxProfit(vector&lt;int&gt;&amp; prices) {
+        int size = prices.size();
+        if (size == 1 || size == 0){
+            return 0;
+        }
+        int profit = 0;
+        for (int i= 1; i&lt;size; ++i){
+            if (prices[i] &gt; prices[i-1]){
+                profit += prices[i] - prices[i-1];
+            }
+        }
+
+        return profit;
+    }
+};</code></pre>
+<blockquote>
+<p>执行结果：通过 显示详情</p>
+<p>执行用时 :8 ms, 在所有 C++ 提交中击败了89.37%的用户</p>
+<p>内存消耗 :9.5 MB, 在所有 C++ 提交中击败了48.29%的用户</p>
+</blockquote>
+<p>感觉这个和动态规划已经扯不上边了，算了叭说了，反正我也不会。。。。</p>
+<p>转载两篇文章，这个动态规划有点儿难，我特喵现在也有点儿懵逼了，算了不研究了，下次研究透彻了再说吧。</p>
+<h3 id="文章阅读"><a href="#文章阅读" class="headerlink" title="文章阅读"></a>文章阅读</h3><p><a href="https://blog.csdn.net/baidu_28312631/article/details/47418773" target="_blank" rel="noopener"><strong>教你彻底学会动态规划——入门篇</strong></a></p>
+<p><a href="https://blog.csdn.net/u013309870/article/details/75193592" target="_blank" rel="noopener">算法-动态规划 Dynamic Programming–从菜鸟到老鸟</a></p>
 
         </div>
         <!-- .entry-content -->
@@ -571,36 +724,19 @@ result = state-&gt;executeQuery(&quot;select * from city order by id desc limit 
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/07/20/动态规划算法简介/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/26.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/26.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                动态规划算法简介</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/07/19/0.1+0.2 == 0.3 浅谈计算机中的浮点数/" rel="next">
+            <a href="/2019/07/19/MySQL基本增删改查/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="http://www.005.tv/uploads/allimg/190610/63-1Z610154314E1.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="http://www.005.tv/uploads/allimg/190610/63-1Z610154314E1.jpg">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/25.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/25.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                0.1+0.2 == 0.3? 浅谈计算机中的浮点数</h3>
+                MySQL基本的增删改查操作</h3>
                 <hr>
               </div>
             </a>

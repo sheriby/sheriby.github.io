@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">排序算法（七）基数排序 | Sher的小博客</title>
+  <title itemprop="name">KMP算法简介 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/11.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/11.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/27.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/27.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      排序算法（七）基数排序</h1>
+      KMP算法简介</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-7-18<span class="bull">
+        2019-7-22<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,126 +376,234 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h2 id="排序算法（七）基数排序"><a href="#排序算法（七）基数排序" class="headerlink" title="排序算法（七）基数排序"></a>排序算法（七）基数排序</h2><blockquote>
-<p>这里说的是基数排序(<em>Radix Sort</em>)而不是计数排序(<em>Counting Sort</em>)，计数排序也是另外的一种比较高效的排序算法，但是这个算法不在我近阶段要讲的算法之列。说起和基数排序类似的算法，桶排序(Bucket Sort)其实就是和基数排序是有点儿相似的，不过桶排序也不在近阶段介绍之列，蛤蛤蛤~~(⊙o⊙)…</p>
+          <h1 id="KMP-算法"><a href="#KMP-算法" class="headerlink" title="KMP 算法"></a>KMP 算法</h1><hr>
+<blockquote>
+<p>KMP算法是关于字符串匹配的一个算法。</p>
+<p>比如说有一个字符串是 “acbabcdabdbacdd”</p>
+<p>我们要在这个字符串中寻找是否有子串 “acbdacd”，有就返回下标，没有就返回-1</p>
 </blockquote>
-<h3 id="基数排序的的基本介绍"><a href="#基数排序的的基本介绍" class="headerlink" title="基数排序的的基本介绍"></a>基数排序的的基本介绍</h3><hr>
+<h2 id="暴力匹配"><a href="#暴力匹配" class="headerlink" title="暴力匹配"></a>暴力匹配</h2><h3 id="暴力匹配的思路"><a href="#暴力匹配的思路" class="headerlink" title="暴力匹配的思路"></a>暴力匹配的思路</h3><p>这个题目我们的思路其实是非常明确的。那就是<strong>暴力匹配</strong>呗。</p>
+<p>如果匹配了我们就返回，如果不匹配我们就重新开始匹配下一个字符。</p>
+<p>上面的那个题目，匹配到第四个个字符不匹配了，那么我们把子串往后移后一位，用a和c再比较。。。</p>
+<p>这个暴力匹配就是<strong>一旦遇到了不匹配的字符，就把子串移后一位，</strong>如果都到了主串的末尾了还没有匹配成功，那么就说明这个主串中没有子串，返回-1即可。</p>
+<p>代码实现的其实也蛮简单的。</p>
+<h3 id="暴力匹配代码实现"><a href="#暴力匹配代码实现" class="headerlink" title="暴力匹配代码实现"></a>暴力匹配代码实现</h3><pre><code class="c++">#include &lt;iostream&gt;
+#include &lt;string&gt;
+using std::cout;
+using std::endl;
+using std::string;
+
+/**
+ * 使用暴力算法，就是这么的暴力！！
+ */
+int KMP(string str, string sub) {
+    // 使用i来指向主串，使用j来指向子串
+    int i = 0, j = 0;
+    // 主串还没有被比较结束
+    while (i &lt; str.length()) {
+        // 匹配了 继续比较下一位
+        while (str[i] == sub[j]) {
+            i++;
+            j++;
+            // 匹配成功，在主串中发现了子串
+            if (j == sub.length()) {
+                return i - j;
+            }
+        }
+        // 匹配失败，将i移动到本次匹配的后一位
+        i = i - j + 1;
+        // 重置子串， j重新指向子串的开头
+        j = 0;
+    }
+
+    return -1;
+}
+
+int main(int argc, char const *argv[]) {
+    string str = &quot;BBC ABCDAB ABCDABCDABDE&quot;;
+
+    string sub = &quot;ABCDABCDE&quot;;
+
+    int index = KMP(str, sub);
+    if (index == -1) {
+        cout &lt;&lt; &quot;Not Found!&quot; &lt;&lt; endl;
+    } else {
+        cout &lt;&lt; &quot;Found!\nT/F: &quot;
+             &lt;&lt; (str.substr(index, sub.length()) == sub ? &quot;True&quot; : &quot;False&quot;)
+             &lt;&lt; endl;
+    }
+
+    system(&quot;pause&quot;);
+    return 0;
+}</code></pre>
+<p>这个暴力匹配的算法，就算是个小学生也能一眼看懂吧，不需要做什么代码说明了，重点戏是后面的KMP算法。</p>
+<p>暴力匹配：时间复杂度是O(mn) 其中m是子串的长度，n是主串的长度.</p>
+<h2 id="KMP-算法-1"><a href="#KMP-算法-1" class="headerlink" title="KMP 算法"></a>KMP 算法</h2><h3 id="关于暴力匹配的思考及KMP的思路"><a href="#关于暴力匹配的思考及KMP的思路" class="headerlink" title="关于暴力匹配的思考及KMP的思路"></a>关于暴力匹配的思考及KMP的思路</h3><p>暴力匹配的算法每次都是后移一位。比如下面</p>
+<pre><code>主串: abcdxxxx
+子串: abcde</code></pre><p>我们发现第五位不匹配，暴力匹配的思路是这样子的，移动到下一位</p>
+<pre><code>主串：abcdxxxx
+子串： abcde</code></pre><p>但是这个不是很脑残的行为吗？既然第五位是不匹配的，那么主串和子串的前四位不就都是相等的吗？我们再次观察这个子串的前面的四位都是不相同的字符，那么我们完全没有必要让子串a再次和后面bcd比了。我们完全可以直接跳到这一步</p>
+<pre><code>主串: abcdxxxx
+子串:     abcde</code></pre><p>i直接往前跳了四步，极大的节省了时间。</p>
+<p>但是问题就在，你是怎么知道前面的四位都是不相等的?</p>
+<pre><code>主串: ababxxxx
+子串: ababe</code></pre><p>这次也是第五位不匹配的，这次我们还是跳四位？？？</p>
+<p>这时有人要抢答了：同学，这里有两个相同的字符，这傻子都可以看出来是跳两位啊！！</p>
+<p>那么这个也是跳两位？</p>
+<pre><code>主串: abbaxxxx
+子串: abbae</code></pre><p>很明显这个是跳三位。我们看起来非常的容易，一看就知道跳几位，但是如何用逻辑描述这个到底应该跳几位了？</p>
+<p>我们到第5位不匹配要跳几位，其实和第五位没有关系，这完全取决与前面的四位。我们来观察一下：</p>
+<pre><code>abcd -&gt; 4 = 4-0
+abab -&gt; 2 = 4-2
+abba -&gt; 3 = 4-1</code></pre><p>或许也许可能观察不出来什么，不过观察一下他们的前缀和后缀。</p>
+<p>比如 impossible 前缀就有im 后缀就有ible 但是他们的前缀和后缀不能是他们的本身</p>
 <table>
 <thead>
 <tr>
-<th align="center">名字</th>
-<th align="center">平均时间复杂度</th>
-<th align="center">最好时间复杂度</th>
-<th align="center">最差时间复杂度</th>
-<th align="center">空间复杂度</th>
-<th align="center">是否流弊</th>
+<th align="center">字符串</th>
+<th align="center">前缀</th>
+<th align="center">后缀</th>
+<th align="center">前缀后缀共有字符串的最大长度</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="center">基数排序</td>
-<td align="center">O(n*k)</td>
-<td align="center">O(n*k)</td>
-<td align="center">O(n*k)</td>
-<td align="center">O(n+k)</td>
-<td align="center">一般</td>
+<td align="center">abcd</td>
+<td align="center">a, ab, abc</td>
+<td align="center">d, cd, bcd</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">abab</td>
+<td align="center">a, <strong>ab</strong>, aba</td>
+<td align="center">b, <strong>ab</strong>, bab</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">abba</td>
+<td align="center"><strong>a</strong>, ab, abb</td>
+<td align="center"><strong>a</strong>, ba, bba</td>
+<td align="center">1</td>
 </tr>
 </tbody></table>
-<p>我们发现这个基数排序的时间复杂度似乎是比O(nlogn)要低的，但是这个<strong>O(nlogn)是比较类的排序算法的下限</strong>，基数排序是一种典型的使用空间来换取时间的算法，不属于比较类排序算法。另外要说的是，<strong>基数排序是一个稳定的算法。</strong></p>
-<h3 id="基数排序的基本思路"><a href="#基数排序的基本思路" class="headerlink" title="基数排序的基本思路"></a>基数排序的基本思路</h3><hr>
-<p>基数排序的基本思路是准备十个桶。从0号桶到9号桶。第一次我们使用个位数进行排序，然后把数据从桶中依次取出来。第二次使用百位数进行排序。。。以此类推就这样这个数组就是有序的了。这个思路还是比较容易理解的。</p>
-<p>下面直接上图吧。</p>
-<p><img src="https://forum.mianbaoban.cn/data/attachment/forum/201803/20/140204ezq2fmi0pm2o9bb9.gif" alt></p>
-<p>再来一个图片看一下子</p>
-<p><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563470819567&di=aec837f8b6dfb398c8b1ba62d0c36508&imgtype=0&src=http%3A%2F%2Fimg2018.cnblogs.com%2Fblog%2F1333139%2F201810%2F1333139-20181016151854809-911543672.jpg" alt></p>
-<p><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563470928918&di=acd7e35b886b29990d393c49f901d25c&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D2305609023%2C714594111%26fm%3D214%26gp%3D0.jpg" alt></p>
-<p>这个算法算是一般流弊算法吧。因为特别容易理解，没啥需要理解的，搞得我都不知道要说什么啦。。。</p>
-<p>直接来上代码看代码的实现吧。</p>
-<h3 id="基数排序的代码实现"><a href="#基数排序的代码实现" class="headerlink" title="基数排序的代码实现"></a>基数排序的代码实现</h3><pre><code class="java">    public static void radixSort(int[] arr) {
-        int[][] backet = new int[10][arr.length];
-        int[] backetElementsCounts = new int[10];
+<p>这样就明白了吧，我们往后移动的多少取决于前缀后缀共有字符串的最大的长度。</p>
+<p>我们可以来验证一下</p>
+<pre><code>主串: BBC ABCDAB ABCDABCDABDE
+子串: ABCDABD</code></pre><p>第一步：（找到第一个匹配的位置）</p>
+<pre><code>主串: BBC ABCDAB ABCDABCDABDE
+子串:     ABCDABD</code></pre><p>第二步：(C和空格不匹配)</p>
+<p>ABCDAB的前缀后缀的共有字符串是2，那么应该向后移动6-2=4位</p>
+<pre><code>主串: BBC ABCDAB ABCDABCDABDE
+子串:                ABCDABD</code></pre><p>发现找到了</p>
+<p>我们可以发现KMP的思路其实还是蛮清晰的。就是这个简答，利用匹配失败已经前面匹配成功的字符的前缀后缀共有字符串的最大的长度来尽可能多的往后移动位置，反观暴力破解，每次就只是往后面移动一位d，效率低下。</p>
+<p>KMP寻找的时候的时间复杂度是O(n)</p>
+<h3 id="构造部分匹配表"><a href="#构造部分匹配表" class="headerlink" title="构造部分匹配表"></a>构造部分匹配表</h3><p>上面的那个由前几位前缀后缀共有字符串的最大长度构成的表被称为部分匹配表。那么如果用代码去构造这个部分匹配表呢？</p>
+<p>比如如下的字符串，部分匹配表如下(第三行)，但是如何去构造呢</p>
+<pre><code> 0 1 2 3 4 5 6 ---(序号)
+ a b c d a b d ---(字符串)
+ 0 0 0 0 1 2 0 ---(部分匹配表)
+ 1 1 2 3 4 4 4 ---(到这一位不匹配的时候向后移动的位数)</code></pre><h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><pre><code>  a b c d a b d
+1 j i          -&gt;0    
+2 j   i        -&gt;0
+3 j     i      -&gt;0
+4 j       i    -&gt;1
+5   j       i  -&gt;2    
+6     j       i
 
-        int max = arr[0];
-        for (int i = 1; i &lt; arr.length; i++) {
-            if (arr[i] &gt; max) {
-                max = arr[i];
-            }
+这个第六步发现i位和j位不相等，那么i是肯定不能动的，动的肯定是j那么j怎么变？j变成0？？？
+此时j-1的字符肯定是等于i-1处的字符的。此时我们想要知道是否j还有别的值的前一位是等于i-1的然后跳到这个j
+这个例子中没有下面再举一个例子
+   a b c d a b d
+ a b c d a b d
+ ...
+         a b c d a d b
+ a b c d a b d
+ 0 0 0 0 1 2 
+ 此时我们发现d和c不匹配，我们想从a b中找到可能和b相等的值
+ d处的最大前缀后缀共有的最大长度有可能超过2吗？不可能
+ 假如如下的字符串
+ x y d x y c z z z z x y d x y d
+           j                    i   -&gt; [i-1] == [j-1]
+ x y d x y c z z z z x y d x y d
+     j                         i   -&gt; [i-1] == [j-1]
+     此时又回到了j前面的值和i前面的值再次都相等的情况，再次比较,如果不相等回到
+x y d x y c z z z z x y d x y d
+j                             i  -&gt; x y这个串的前后缀最大已经是0了</code></pre><p>上面或许讲的有点乱，因为当时我也是有点乱，但是现在我明白了</p>
+<p>我们发现当<strong>部分匹配表没有1这个值，没有前缀也没有后缀，就给它一个0吧</strong></p>
+<pre><code class="c++">int* calNext(string sub){
+    int length = sub.length();
+    int* next = new int[length];
+    next[0] = 0;
+    int i=1, j=0;
+    while(i &lt; sub.length){
+        if (j &gt; 0 &amp;&amp; sub[i] != sub[j]){
+            j = next[j-1];
         }
-
-        // 下面两种方法都可以选择 转为字符串求数字的长度
-        int maxLength = (max+&quot;&quot;).length();
-//        int maxLength = Integer.toString(max).length();
-
-        for (int i = 0, t=1; i &lt; maxLength; i++, t*=10) {
-            // 数据放入桶中
-            for (int j = 0; j &lt; arr.length; j++) {
-                int which_backet = arr[j]/t%10;
-                backet[which_backet][backetElementsCounts[which_backet]++] = arr[j];
-            }
-
-            // 把数据从桶中取出
-            for (int j = 0, k=0, m=0; j &lt; 10; j++) {
-                while (backetElementsCounts[j] != 0) {
-                    arr[k] = backet[j][m];
-                    backetElementsCounts[j]--;
-                    k++;
-                    m++;
-                }
-                m=0;
-            }
-
+        if (sub[i] == sub[j]){
+            j++;
         }
-    }</code></pre>
-<blockquote>
-<p><strong>代码说明：</strong></p>
-<ol>
-<li><p>第三行代表的含义是什么？</p>
-<p>第二行代码其实就是在造桶子，十个桶子，每个桶子的大小的都是arr.length，因为万一所有的数的某一位都是相同的，那个桶子不就爆了喵？？而第三行的数组是存放每个桶子中的元素的个数。因为下面还是要取出元素的，不知道放了几个元素，怎么取，玩蛇皮的嘛。</p>
-</li>
-<li><p>为什么要求最大的数字的长度？</p>
-<p>这个把<strong>数字转为字符串来求长度</strong>还是非常的妙的。不过你问为啥要求最大的数字的长度？？因为后面我们要从个位数开始根据每个位置开始排序啊。</p>
-</li>
-<li><p>t的作用是什么？</p>
-<p>第一次取到个位数就是 num/1%10。取百位数就是 num/10%10。我们通过每次t /= t就可以依次取到各个位数了。每次放入一个元素之后，对应的用来计数的数组中的值也要增加1.</p>
-</li>
-<li><p>如何取出数据的？</p>
-<p>这恐怕是更容易理解的。找到桶里有数据的桶，看看桶中有几个数据取出来放到原来的数组中不就完事了。</p>
-<p>唉~，这个算法是实在简单，搞得我是真的没话说了。我也是醉了吖。。。</p>
-</li>
-</ol>
-</blockquote>
-<h3 id="基数排序的测试"><a href="#基数排序的测试" class="headerlink" title="基数排序的测试"></a>基数排序的测试</h3><hr>
-<p>测试环境及工具：<em>我的电脑 Huawei MateBook 13+JDK1.8+Eclipse</em></p>
-<p>测试手段：<em>随机生成80000个和8,000,000个[0,800000）的整数的数组进行排序，观察所花费的时间</em></p>
-<p>测试代码：</p>
-<pre><code class="java">public static void main(String[] args) {
-        int[] arr = new int[80000];
-        for (int i = 0; i &lt; arr.length; i++) {
-//            arr[i] = (int) (Math.random()*800000);
-            arr[i] = new Random().nextInt(800000);
-        }
-//        System.out.println(Arrays.toString(arr));
-        long start_time = System.currentTimeMillis();
-        radixSort(arr);
-        long end_time = System.currentTimeMillis();
-//        System.out.println(Arrays.toString(arr));
-        System.out.println(&quot;Time :&quot;+(end_time-start_time)+&quot;ms&quot;);
+        next[i++] = j;
+    }
 }</code></pre>
 <blockquote>
-<p><strong>80,000数据时：</strong></p>
-<ul>
-<li><em>Time :  12ms</em></li>
-<li><em>Time :  16ms</em></li>
-<li><em>Time :  17ms</em></li>
-</ul>
-<p><strong>8,000,000数据时：</strong></p>
-<ul>
-<li><em>Time :  423ms</em></li>
-<li><em>Time :  397ms</em></li>
-<li><em>Time :  404ms</em></li>
-</ul>
+<p><strong>代码说明：</strong></p>
+<p>这里面最难以理解的估计就是那一句话，就是<strong>j = next[j-1]到底是什么含义</strong></p>
+<p>比如</p>
+<pre><code> 0 1 2 3 4
+ a b a b c
+     j   i
+ 0 0 1 2 0</code></pre><p>j = next[j-1]之后就是 j =0;</p>
+<p><strong>j = next[j-1]的含义就是回到上一个时刻 sub[j-1] == sub[i-1]不仅如此，他们前面的值都是相等的！</strong></p>
+<p>这个例子中这样的数不存在</p>
+<pre><code>x d x y x d x d
+      j       i
+这时 j = next[j-1]
+x d x y x d x d
+  j           i
+此时j前面的数和d前面的数又都是相等的了，再次进行比较！如果还是不相等 j = next[j-1]</code></pre><p>这样应该很好理解了吧。</p>
 </blockquote>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><hr>
-<p>可以清楚的看到排八万个这种小数据的时候，几种高效的算法几乎没有区别。不过排八百万个数据的时候，基数排序就发挥出了他的优势。快啊！不过要说明的是，<strong>基数排序极其占用内存，如果是排序八千万个数耗费的就是4个G左右的内存</strong>，所以说在内存不足的情况下，这个算法是不适合考虑的。</p>
+<p>这样我们的next数组也就构造好了，KMP算法也就好实现了</p>
+<h3 id="KMP-代码"><a href="#KMP-代码" class="headerlink" title="KMP 代码"></a>KMP 代码</h3><pre><code class="c++">int KMPsearch(string str, string sub, int* next){
+    int strLength = str.length();
+    int subLength = sub.length();
+
+    int i=0, j=0;
+    while (i &lt; strLength &amp;&amp; j &lt; subLength){
+        // KMP核心，不匹配向后移动
+        if (j &gt; 0 &amp;&amp; str[i] != str[j]){
+            j = next[j-1];
+        }
+        if (str[i] == sub[j]){
+            i++;
+            j++;
+        }
+        if (j == 0 &amp;&amp; str[i] != str[j]){
+            i++;
+        }
+    }
+    // 找到了子串
+    if (j == subLength){
+        return i-j;
+    }else {
+        return -1;
+    }
+}</code></pre>
+<blockquote>
+<p><strong>代码说明：</strong></p>
+<p>其实需要说明的就只是KMP的核心那一块代码。我们一直说什么往后移动，其实这也不是往后移动啊？</p>
+<p>其实这只是我们想象中的往后移动，实际上是这样子的</p>
+<pre><code>abcdabcde
+abcde       -&gt; 上面的a匹配失败
+-&gt;
+abcdabcde
+    abcde   -&gt; 让下面a和上面a进行比较</code></pre><p>当匹配到第五位的时候，<strong>i其实没有变</strong>，<strong>变的只是j</strong>而已我们直接<strong>让sub[next[j-1]]和str[i]进行比较</strong></p>
+<p>上面那个next[j-1]就是a</p>
+<pre><code>abacabab
+abab     -&gt; 上面的c匹配失败
+-&gt;
+abacabab
+  abab   -&gt; 让下面b和上面c进行比较</code></pre><p><strong>再次重申一下，i没有变，变的只是j而已。</strong></p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>写到了这儿KMP算法基本上就写完了，写完了之后我对KMP算法的理解算是有涨了一个层次，至少能基本理解这个算法该如何用了而不是单纯的被代码。其实网上关于KMP算法的博客特别多，每个人使用的方法都是不一样的，我看了很多人的next[0] = -1，还有构造了其他各种各样的数组，我基本上都没怎么看，我看的不是代码是怎么写的，主要是KMP的思路是如何的，理解了这个思路之后，什么样的实现KMP算法的代码基本上都能看懂了。</p>
 
         </div>
         <!-- .entry-content -->
@@ -526,15 +634,15 @@
           
             <div class="post-nepre half previous">
           
-            <a href="/2019/07/19/排序算法（八）堆排序/" rel="prev">
+            <a href="/2019/07/22/-1大于0x7fffffff/" rel="prev">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/17.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/17.jpg">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/28.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/28.png">
               </div>
               <span class="label">
               Previous Post</span>
               <div class="info">
                 <h3>
-                排序算法（八）堆排序</h3>
+                -1&gt;0x7fffffff???(黑人问号脸)</h3>
                 <hr>
               </div>
             </a>
@@ -544,15 +652,15 @@
           
             <div class="post-nepre half next">
           
-            <a href="/2019/07/18/排序算法（六）归并排序/" rel="next">
+            <a href="/2019/07/20/动态规划算法简介/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/19.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/19.jpg">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/26.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/26.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                排序算法（六）归并排序</h3>
+                动态规划算法简介</h3>
                 <hr>
               </div>
             </a>

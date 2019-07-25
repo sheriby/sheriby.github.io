@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">排序算法（七）基数排序 | Sher的小博客</title>
+  <title itemprop="name">设计模式（一）单例模式 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/11.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/11.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/34.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/34.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      排序算法（七）基数排序</h1>
+      设计模式（一）单例模式</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-7-18<span class="bull">
+        2019-7-25<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,126 +376,339 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h2 id="排序算法（七）基数排序"><a href="#排序算法（七）基数排序" class="headerlink" title="排序算法（七）基数排序"></a>排序算法（七）基数排序</h2><blockquote>
-<p>这里说的是基数排序(<em>Radix Sort</em>)而不是计数排序(<em>Counting Sort</em>)，计数排序也是另外的一种比较高效的排序算法，但是这个算法不在我近阶段要讲的算法之列。说起和基数排序类似的算法，桶排序(Bucket Sort)其实就是和基数排序是有点儿相似的，不过桶排序也不在近阶段介绍之列，蛤蛤蛤~~(⊙o⊙)…</p>
+          <h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><hr>
+<h2 id="单例模式基本介绍"><a href="#单例模式基本介绍" class="headerlink" title="单例模式基本介绍"></a>单例模式基本介绍</h2><p><strong>单例模式</strong>，也叫<strong>单子模式</strong>，是一种常用的<a href="https://g.zmirrordemo.com/extdomains/zh.wikipedia.org/wiki/软件设计模式" target="_blank" rel="noopener">软件设计模式</a>。在应用这个模式时，<strong>单例对象的<a href="https://g.zmirrordemo.com/wiki/类_(计算机科学)" target="_blank" rel="noopener">类</a>必须保证只有一个实例存在</strong>。许多时候整个系统只需要拥有一个的全局<a href="https://g.zmirrordemo.com/extdomains/zh.wikipedia.org/wiki/对象" target="_blank" rel="noopener">对象</a>，这样有利于我们协调系统整体的行为。比如在某个<a href="https://g.zmirrordemo.com/extdomains/zh.wikipedia.org/wiki/服务器" target="_blank" rel="noopener">服务器</a>程序中，该服务器的配置信息存放在一个<a href="https://g.zmirrordemo.com/extdomains/zh.wikipedia.org/wiki/文件" target="_blank" rel="noopener">文件</a>中，这些配置数据由一个单例对象统一读取，然后服务<a href="https://g.zmirrordemo.com/extdomains/zh.wikipedia.org/wiki/进程" target="_blank" rel="noopener">进程</a>中的其他对象再通过这个单例对象获取这些配置信息。这种方式简化了在复杂环境下的配置管理。</p>
+<h2 id="单例模式的基本思路"><a href="#单例模式的基本思路" class="headerlink" title="单例模式的基本思路"></a>单例模式的基本思路</h2><p>实现单例模式的思路是：一个类能返回对象一个引用(永远是同一个)和一个获得该实例的方法（必须是<strong>静态方法</strong>，通常使用getInstance这个名称）；当我们调用这个方法时，如果类持有的引用不为空就返回这个引用，如果类保持的引用为空就创建该类的实例并将实例的引用赋予该类保持的引用；同时我们还将<strong>该类的<a href="https://g.zmirrordemo.com/extdomains/zh.wikipedia.org/wiki/构造函数" target="_blank" rel="noopener">构造函数</a>定义为私有方法</strong>，这样其他处的代码就无法通过调用该类的构造函数来实例化该类的对象，<strong>只有通过该类提供的静态方法来得到该类的唯一实例。</strong></p>
+<p><strong>单例模式在<a href="https://g.zmirrordemo.com/extdomains/zh.wikipedia.org/wiki/线程" target="_blank" rel="noopener">多线程</a>的应用场合下必须小心使用。</strong>如果当唯一实例尚未创建时，有两个线程同时调用创建方法，那么它们同时没有检测到唯一实例的存在，从而同时各自创建了一个实例，这样就有两个实例被构造出来，从而违反了单例模式中实例唯一的原则。 解决这个问题的办法是为指示类是否已经实例化的变量<strong>提供一个互斥锁</strong>(虽然这样会降低效率)。</p>
+<h2 id="单例模式的实现"><a href="#单例模式的实现" class="headerlink" title="单例模式的实现"></a>单例模式的实现</h2><h3 id="饿汉式"><a href="#饿汉式" class="headerlink" title="饿汉式"></a>饿汉式</h3><pre><code class="java">public class SingletonTest01{
+    public static void main(String[] args) {
+//        Singleton01 singleton01 = new SingletonTest01();
+        Singleton01 singleton1 = Singleton01.getInstance();
+        Singleton01 singleton2 = Singleton01.getInstance();
+        System.out.println(&quot;singleton1:&quot;+singleton1.hashCode());
+        System.out.println(&quot;singleton2:&quot;+singleton2.hashCode());
+    }
+}
+
+
+class Singleton01 {
+    // 静态变存储唯一的实例化对象
+    private static final Singleton01 INSTANCE = new Singleton01();
+    // 构造器私有化
+    private Singleton01() {}
+    // 提供唯一的实例化对象
+    public static Singleton01 getInstance() {
+        return INSTANCE;
+    }
+}
+</code></pre>
+<blockquote>
+<p>像这样子实现单例模式，似乎是已经足够了。但是这样子做的效率不是非常高，因为当我们创建这个类的时候，无论有没有使用到这个类的实例都会产生这个对象，所以说这样子的单例模式的代码不具有懒加载性，需要改进。不过值得鼓励的是，这样的代码在多线程的模式下，不会产生任何的混乱，这也算是他的一个优点吧。</p>
 </blockquote>
-<h3 id="基数排序的的基本介绍"><a href="#基数排序的的基本介绍" class="headerlink" title="基数排序的的基本介绍"></a>基数排序的的基本介绍</h3><hr>
-<table>
-<thead>
-<tr>
-<th align="center">名字</th>
-<th align="center">平均时间复杂度</th>
-<th align="center">最好时间复杂度</th>
-<th align="center">最差时间复杂度</th>
-<th align="center">空间复杂度</th>
-<th align="center">是否流弊</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">基数排序</td>
-<td align="center">O(n*k)</td>
-<td align="center">O(n*k)</td>
-<td align="center">O(n*k)</td>
-<td align="center">O(n+k)</td>
-<td align="center">一般</td>
-</tr>
-</tbody></table>
-<p>我们发现这个基数排序的时间复杂度似乎是比O(nlogn)要低的，但是这个<strong>O(nlogn)是比较类的排序算法的下限</strong>，基数排序是一种典型的使用空间来换取时间的算法，不属于比较类排序算法。另外要说的是，<strong>基数排序是一个稳定的算法。</strong></p>
-<h3 id="基数排序的基本思路"><a href="#基数排序的基本思路" class="headerlink" title="基数排序的基本思路"></a>基数排序的基本思路</h3><hr>
-<p>基数排序的基本思路是准备十个桶。从0号桶到9号桶。第一次我们使用个位数进行排序，然后把数据从桶中依次取出来。第二次使用百位数进行排序。。。以此类推就这样这个数组就是有序的了。这个思路还是比较容易理解的。</p>
-<p>下面直接上图吧。</p>
-<p><img src="https://forum.mianbaoban.cn/data/attachment/forum/201803/20/140204ezq2fmi0pm2o9bb9.gif" alt></p>
-<p>再来一个图片看一下子</p>
-<p><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563470819567&di=aec837f8b6dfb398c8b1ba62d0c36508&imgtype=0&src=http%3A%2F%2Fimg2018.cnblogs.com%2Fblog%2F1333139%2F201810%2F1333139-20181016151854809-911543672.jpg" alt></p>
-<p><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563470928918&di=acd7e35b886b29990d393c49f901d25c&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D2305609023%2C714594111%26fm%3D214%26gp%3D0.jpg" alt></p>
-<p>这个算法算是一般流弊算法吧。因为特别容易理解，没啥需要理解的，搞得我都不知道要说什么啦。。。</p>
-<p>直接来上代码看代码的实现吧。</p>
-<h3 id="基数排序的代码实现"><a href="#基数排序的代码实现" class="headerlink" title="基数排序的代码实现"></a>基数排序的代码实现</h3><pre><code class="java">    public static void radixSort(int[] arr) {
-        int[][] backet = new int[10][arr.length];
-        int[] backetElementsCounts = new int[10];
+<blockquote>
+<p><strong>输出结果：</strong></p>
+<p>singleton1:1534030866<br>singleton2:1534030866</p>
+</blockquote>
+<h3 id="懒汉式"><a href="#懒汉式" class="headerlink" title="懒汉式"></a>懒汉式</h3><pre><code class="java">public class SingletonTest02 {
+    public static void main(String[] args) {
+        Singleton02 singleton1 = Singleton02.getInstance();
+        Singleton02 singleton2 = Singleton02.getInstance();
+        System.out.println(&quot;singleton1:&quot; + singleton1.hashCode());
+        System.out.println(&quot;singleton2:&quot; + singleton2.hashCode());
+    }
+}
 
-        int max = arr[0];
-        for (int i = 1; i &lt; arr.length; i++) {
-            if (arr[i] &gt; max) {
-                max = arr[i];
-            }
-        }
+class Singleton02{
+    private static volatile Singleton02 INSTANCE;
 
-        // 下面两种方法都可以选择 转为字符串求数字的长度
-        int maxLength = (max+&quot;&quot;).length();
-//        int maxLength = Integer.toString(max).length();
+    private Singleton02() {
+    }
 
-        for (int i = 0, t=1; i &lt; maxLength; i++, t*=10) {
-            // 数据放入桶中
-            for (int j = 0; j &lt; arr.length; j++) {
-                int which_backet = arr[j]/t%10;
-                backet[which_backet][backetElementsCounts[which_backet]++] = arr[j];
-            }
-
-            // 把数据从桶中取出
-            for (int j = 0, k=0, m=0; j &lt; 10; j++) {
-                while (backetElementsCounts[j] != 0) {
-                    arr[k] = backet[j][m];
-                    backetElementsCounts[j]--;
-                    k++;
-                    m++;
+    public static Singleton02 getInstance() {
+        if (INSTANCE == null) {
+            // 给以下的代码快加上线程锁，只有一个线程可以进入到这个代码块
+            synchronized (Singleton02.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new Singleton02();
                 }
-                m=0;
             }
-
         }
-    }</code></pre>
+        return INSTANCE;
+    }
+}</code></pre>
 <blockquote>
 <p><strong>代码说明：</strong></p>
 <ol>
-<li><p>第三行代表的含义是什么？</p>
-<p>第二行代码其实就是在造桶子，十个桶子，每个桶子的大小的都是arr.length，因为万一所有的数的某一位都是相同的，那个桶子不就爆了喵？？而第三行的数组是存放每个桶子中的元素的个数。因为下面还是要取出元素的，不知道放了几个元素，怎么取，玩蛇皮的嘛。</p>
+<li><p>volatile关键词？</p>
+<p>这个关键词C++中也有使用，但是也是非常的少见，基本上没有人用。</p>
+<p>被volatile修饰的共享变量，就具有了以下两点特性：</p>
+<ul>
+<li>1.保证了不同线程对该变量操作的内存可见性;</li>
+<li>2.禁止指令重排序</li>
+</ul>
+<p>volatile这个东西基本上都和多线程有关系，这里就不作深究了。</p>
 </li>
-<li><p>为什么要求最大的数字的长度？</p>
-<p>这个把<strong>数字转为字符串来求长度</strong>还是非常的妙的。不过你问为啥要求最大的数字的长度？？因为后面我们要从个位数开始根据每个位置开始排序啊。</p>
-</li>
-<li><p>t的作用是什么？</p>
-<p>第一次取到个位数就是 num/1%10。取百位数就是 num/10%10。我们通过每次t /= t就可以依次取到各个位数了。每次放入一个元素之后，对应的用来计数的数组中的值也要增加1.</p>
-</li>
-<li><p>如何取出数据的？</p>
-<p>这恐怕是更容易理解的。找到桶里有数据的桶，看看桶中有几个数据取出来放到原来的数组中不就完事了。</p>
-<p>唉~，这个算法是实在简单，搞得我是真的没话说了。我也是醉了吖。。。</p>
+<li><p>两个if判断和synchronized(Singleton02.class)</p>
+<p>为了实现懒加载，我们要做的是在调用getInstance这个方法的时候才去构建这个对象，不过考虑到多线程的情况下。如果直接是这样子写的话</p>
+<pre><code class="java">public static Singleton02 getInstance(){
+    if (INSTANCE == null){
+        INSTANCE = new Singleton02();
+    }
+    return INSTANCE;
+}</code></pre>
+<p>这个代码在单线程的情况下是一点问题都没有的。但如果是多线程的环境下，有多个线程同时进入了if语句就会构建许多的对象，这就不是单例模式了，所以说这样的代码不能够使用。</p>
+<p><strong>那是不是加个锁就行了呢？</strong></p>
+<pre><code class="java">public static synchronized Singleton02 getInstance(){
+    if (INSTANCE == null){
+        INSTANCE = new Singleton02();
+    }
+    return INSTANCE;
+}</code></pre>
+<p>确实是这样子代码确实就能用了，但是又不出现了一个新的问题。线程的同步是要花很多时间的。你一个线程调用这个函数其他的线程都要等你这个线程，这显然是<strong>效率太低了</strong>。</p>
+<p>那行，咋继续改，<strong>不给方法加锁，只是给new语句加锁不就完事了嘛。**</strong></p>
+<pre><code class="java">public static Singleton02 getInstance(){
+    if (INSTANCE == null){
+        synchronized(Singleton02.class){
+           INSTANCE = new Singleton02(); 
+        }
+    }
+    return INSTANCE;
+}</code></pre>
+<p>给整个if语句加锁就相当于是给整个方法加锁，所以说是没有用的。这里给new语句加锁。不能说是效率低的问题了，是直接错误的。事实上，完全有可以<strong>多个线程同时进入了if语句内</strong>，虽然new加锁了，那几个进入if语句的线程都会执行new语句，破坏了单例模式。</p>
+<p>那怎么改呢？这就到了我们代码中的那个<strong>双重检查锁</strong>了。</p>
+<pre><code class="java">public static Singleton02 getInstance() {
+    if (INSTANCE == null) {
+        // 给以下的代码快加上线程锁，只有一个线程可以进入到这个代码块
+        synchronized (Singleton02.class) {
+            if (INSTANCE == null) {
+                INSTANCE = new Singleton02();
+            }
+        }
+    }
+    return INSTANCE;
+}</code></pre>
+<p>这时虽然也会有多个线程进入if语句，但是里面还有一个带锁的if，这时第一个线程进入创建对象之后，后面的线程因为if的判断就无法创建对象了，实现了单例模式。</p>
+<p>要非常注意的是，<strong>前面的INSTANCE要声明为volatile</strong>（JDK5以后的版本），不然这个模式使用的失败的。</p>
 </li>
 </ol>
 </blockquote>
-<h3 id="基数排序的测试"><a href="#基数排序的测试" class="headerlink" title="基数排序的测试"></a>基数排序的测试</h3><hr>
-<p>测试环境及工具：<em>我的电脑 Huawei MateBook 13+JDK1.8+Eclipse</em></p>
-<p>测试手段：<em>随机生成80000个和8,000,000个[0,800000）的整数的数组进行排序，观察所花费的时间</em></p>
-<p>测试代码：</p>
-<pre><code class="java">public static void main(String[] args) {
-        int[] arr = new int[80000];
-        for (int i = 0; i &lt; arr.length; i++) {
-//            arr[i] = (int) (Math.random()*800000);
-            arr[i] = new Random().nextInt(800000);
-        }
-//        System.out.println(Arrays.toString(arr));
-        long start_time = System.currentTimeMillis();
-        radixSort(arr);
-        long end_time = System.currentTimeMillis();
-//        System.out.println(Arrays.toString(arr));
-        System.out.println(&quot;Time :&quot;+(end_time-start_time)+&quot;ms&quot;);
+<blockquote>
+<p><strong>输出结果：</strong></p>
+<p>singleton1:1534030866<br>singleton2:1534030866</p>
+</blockquote>
+<h3 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h3><p>使用静态内部类的性质来实现线程的同步。静态内部类中的静态数据只有被类第一次被使用到的时候创建，而且这个还是线程安全的，这都是由JVM来保证的。所以说这种方法也是非常好滴。代码也很易懂，不用做什么说明了。</p>
+<pre><code class="java">public class SingletonTest03 {
+    public static void main(String[] args) {
+
+        Singleton03 singleton1 = Singleton03.getInstance();
+        Singleton03 singleton2 = Singleton03.getInstance();
+        System.out.println(&quot;singleton1:&quot; + singleton1.hashCode());
+        System.out.println(&quot;singleton2:&quot; + singleton2.hashCode());
+    }
+}
+
+class Singleton03{
+    private Singleton03() {}
+
+    // 使用静态内部类
+    private static class SingletonInstance {
+        private static final Singleton03 INSTANCE = new Singleton03();
+    }
+
+    public static Singleton03 getInstance() {
+        return SingletonInstance.INSTANCE;
+    }
 }</code></pre>
 <blockquote>
-<p><strong>80,000数据时：</strong></p>
-<ul>
-<li><em>Time :  12ms</em></li>
-<li><em>Time :  16ms</em></li>
-<li><em>Time :  17ms</em></li>
-</ul>
-<p><strong>8,000,000数据时：</strong></p>
-<ul>
-<li><em>Time :  423ms</em></li>
-<li><em>Time :  397ms</em></li>
-<li><em>Time :  404ms</em></li>
-</ul>
+<p><strong>输出结果：</strong></p>
+<p>singleton1:664223387<br>singleton2:664223387</p>
 </blockquote>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><hr>
-<p>可以清楚的看到排八万个这种小数据的时候，几种高效的算法几乎没有区别。不过排八百万个数据的时候，基数排序就发挥出了他的优势。快啊！不过要说明的是，<strong>基数排序极其占用内存，如果是排序八千万个数耗费的就是4个G左右的内存</strong>，所以说在内存不足的情况下，这个算法是不适合考虑的。</p>
+<h3 id="枚举式"><a href="#枚举式" class="headerlink" title="枚举式"></a>枚举式</h3><p>使用了JDK1.5中添加的枚举来实现单例模式。不仅以及避免多线程同步的问题，而且还可以防止反序列化创建新的对象。而且这种方法也是《Effective Java》中推荐的方法。</p>
+<pre><code class="java">public class SingletonTest04 {
+    public static void main(String[] args) {
+        Singleton04 singleton1 = Singleton04.INSTANCE;
+        Singleton04 singleton2 = Singleton04.INSTANCE;
+
+        System.out.println(&quot;singleton1:&quot; + singleton1.hashCode());
+        System.out.println(&quot;singleton2:&quot; + singleton2.hashCode());
+    }
+}
+
+enum Singleton04 {
+    INSTANCE;
+}</code></pre>
+<blockquote>
+<p>这个方法可谓是简单而又粗暴，而且枚举类也是类，里面也可以有各种方法，也可以有private数据等。这里就不展开对Java中enum的说明了。</p>
+</blockquote>
+<blockquote>
+<p><strong>输出结果：</strong></p>
+<p>singleton1:1534030866<br>singleton2:1534030866</p>
+</blockquote>
+<h3 id="C-中的单例模式"><a href="#C-中的单例模式" class="headerlink" title="C++中的单例模式"></a>C++中的单例模式</h3><pre><code class="c++">// ...
+
+class lock
+{
+    public:
+        lock();
+        lock(lock const &amp; l);
+        ~lock();
+        lock &amp; operator =(lock const &amp; l);
+        void request();
+        void release();
+    // ...
+};
+
+lock::lock()
+{
+    // ...
+}
+
+// ...
+
+lock::~lock()
+{
+    // ...
+}
+
+// ...
+
+void lock::request()
+{
+    // ...
+}
+
+void lock::release()
+{
+    // ...
+}
+
+// ...
+
+// assumes _DATA_TYPE_ has a default constructor
+template&lt;typename _DATA_TYPE_&gt;
+class singleton
+{
+    public:
+        static _DATA_TYPE_ * request();
+        static void release();
+
+    private:
+        singleton();
+        singleton(singleton&lt;_DATA_TYPE_&gt; const &amp; s);
+        ~singleton();
+        singleton&lt;_DATA_TYPE_&gt; &amp; operator =(singleton&lt;_DATA_TYPE_&gt; const &amp; s);
+        static _DATA_TYPE_ * pointer;
+        static lock mutex;
+    // ...
+};
+
+template&lt;typename _DATA_TYPE_&gt;
+_DATA_TYPE_ * singleton&lt;_DATA_TYPE_&gt;::pointer = nullptr;
+
+template&lt;typename _DATA_TYPE_&gt;
+lock singleton&lt;_DATA_TYPE_&gt;::mutex;
+
+template&lt;typename _DATA_TYPE_&gt;
+_DATA_TYPE_ * singleton&lt;_DATA_TYPE_&gt;::request()
+{
+    if(singleton&lt;_DATA_TYPE_&gt;::pointer == nullptr)
+    {
+        singleton&lt;_DATA_TYPE_&gt;::mutex.request();
+
+        if(singleton&lt;_DATA_TYPE_&gt;::pointer == nullptr)
+        {
+            singleton&lt;_DATA_TYPE_&gt;::pointer = new _DATA_TYPE_;
+        }
+
+        singleton&lt;_DATA_TYPE_&gt;::mutex.release();
+    }
+
+    return singleton&lt;_DATA_TYPE_&gt;::pointer;
+}
+
+template&lt;typename _DATA_TYPE_&gt;
+void singleton&lt;_DATA_TYPE_&gt;::release()
+{
+    if(singleton&lt;_DATA_TYPE_&gt;::pointer != nullptr)
+    {
+        singleton&lt;_DATA_TYPE_&gt;::mutex.request();
+
+        if(singleton&lt;_DATA_TYPE_&gt;::pointer != nullptr)
+        {
+            delete singleton&lt;_DATA_TYPE_&gt;::pointer;
+
+            singleton&lt;_DATA_TYPE_&gt;::pointer = nullptr;
+        }
+
+        singleton&lt;_DATA_TYPE_&gt;::mutex.release();
+    }
+}
+
+template&lt;typename _DATA_TYPE_&gt;
+singleton&lt;_DATA_TYPE_&gt;::singleton()
+{
+    // ...
+}
+
+// ...
+
+int main()
+{
+    int * s;
+
+    s = singleton&lt;int&gt;::request();
+
+    // ...
+
+    singleton&lt;int&gt;::release();
+
+    return 0;
+}</code></pre>
+<blockquote>
+<p>这个代码着实有点儿难懂，而且我现在还没有接触到C++中的多线程。所以说，代码先放在这儿吧。C++真的是一门高深莫测的语言！</p>
+</blockquote>
+<h3 id="Java库中的单例模式"><a href="#Java库中的单例模式" class="headerlink" title="Java库中的单例模式"></a>Java库中的单例模式</h3><p>Java.lang.Runtime</p>
+<pre><code class="java">/**
+ * Every Java application has a single instance of class
+ * {@code Runtime} that allows the application to interface with
+ * the environment in which the application is running. The current
+ * runtime can be obtained from the {@code getRuntime} method.
+ * &lt;p&gt;
+ * An application cannot create its own instance of this class.
+ *
+ * @author  unascribed
+ * @see     java.lang.Runtime#getRuntime()
+ * @since   1.0
+ */
+
+public class Runtime {
+    private static final Runtime currentRuntime = new Runtime();
+
+    private static Version version;
+
+    /**
+     * Returns the runtime object associated with the current Java application.
+     * Most of the methods of class {@code Runtime} are instance
+     * methods and must be invoked with respect to the current runtime object.
+     *
+     * @return  the {@code Runtime} object associated with the current
+     *          Java application.
+     */
+    public static Runtime getRuntime() {
+        return currentRuntime;
+    }
+
+    /** Don&#39;t let anyone else instantiate this class */
+    private Runtime() {}
+
+    //.....
+}</code></pre>
+<p>可以看到这个使用的第一个，典型的饿汉式的单例模式。因为这个类不需要多线程，所以也没有必要使用懒汉式，这个饿汉式就是perfect的啦~~</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>单例模式保证了系统内存中该类<strong>只存在一个对象</strong>，节省了系统资源，对于一些需要频繁创建销毁的对象，使用单例模式可以提高系统性能。</li>
+<li>当想实例化一个单例类的时候，必须要记住使用<strong>对应的获取对象的方法</strong>，而不是使用new。</li>
+<li>单例模式使用的场景：需要<strong>频繁的进行创建和销毁的对象</strong>、创建对象时耗时过多或者耗费资源过多（即：<strong>重量级对象</strong>），但又经常用到的对象，<strong>工具类对象</strong>、频繁访问数据库或文件的对象（比如<strong>数据源</strong>，<strong>session工厂</strong>等）。</li>
+</ul>
 
         </div>
         <!-- .entry-content -->
@@ -523,36 +736,19 @@
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/07/19/排序算法（八）堆排序/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/17.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/17.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                排序算法（八）堆排序</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/07/18/排序算法（六）归并排序/" rel="next">
+            <a href="/2019/07/25/AVL-Tree/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/19.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/19.jpg">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/33.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/33.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                排序算法（六）归并排序</h3>
+                AVL Tree</h3>
                 <hr>
               </div>
             </a>

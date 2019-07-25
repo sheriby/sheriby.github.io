@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Sunday字符串匹配算法 | Sher的小博客</title>
+  <title itemprop="name">AVL Tree | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/32.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/32.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/33.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/33.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Sunday字符串匹配算法</h1>
+      AVL Tree</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -376,92 +376,483 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Sunday字符串匹配算法"><a href="#Sunday字符串匹配算法" class="headerlink" title="Sunday字符串匹配算法"></a>Sunday字符串匹配算法</h1><h2 id="Sunday算法的基本介绍"><a href="#Sunday算法的基本介绍" class="headerlink" title="Sunday算法的基本介绍"></a>Sunday算法的基本介绍</h2><p>字符串匹配的算法其实之前就已经说过一个KMP算法了，不过现在我还是有点儿不理解KMP算法中next数组中的精髓。其实关于字符串匹配的算法基本有以下的四种。<strong>BF算法</strong>，这个就是我们在说KMP算法中的那个暴力匹配的那个算法。其次就是<strong>KMP算法</strong>，也就一种比较难以理解的算法。然后是<strong>BM算法</strong>，据说是KMP算法的优化，不过实在是恐怖，我看着也十分的复杂，根本没有看的兴趣。最后一个就是<strong>Sunday算法</strong>，且不论这个算法到底怎么样，就凭这个算法的名字也要努力学习吖。Sunday~多暖的名字吖。关键是我听说<strong>Sunday算法简单高效易理解</strong>！！！</p>
-<h2 id="Sunday算法的基本思路"><a href="#Sunday算法的基本思路" class="headerlink" title="Sunday算法的基本思路"></a>Sunday算法的基本思路</h2><p>Sunday算法和BM算法稍有不同的是，Sunday算法是从前往后匹配，在<strong>匹配失败时关注的是主串中参加匹配的最末位字符的下一位字符。</strong></p>
-<ul>
-<li>如果该字符<strong>没有在模式串中出现</strong>则直接跳过，即<strong>移动位数 = 模式串长度 + 1</strong>；</li>
-<li>否则，其<strong>移动位数 = 模式串长度 - 该字符最右出现的位置(以0开始) = 模式串中该字符最右出现的位置到尾部的距离 + 1</strong>。</li>
-</ul>
-<p>可以说这个思路是非常的亲民了。</p>
-<p>下面举个例子来了解一下Sunday算法:       </p>
-<p>参考文章：<a href="https://www.jianshu.com/p/2e6eb7386cd3" target="_blank" rel="noopener">字符串匹配之Sunday算法</a></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/3143462-d7c23eba350b304c?imageMogr2/auto-orient/strip%7CimageView2/2/w/862/format/webp" alt></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/3143462-7dda30c22b86b967?imageMogr2/auto-orient/strip%7CimageView2/2/w/842/format/webp" alt></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/3143462-ded37f913464c19c?imageMogr2/auto-orient/strip%7CimageView2/2/w/842/format/webp" alt></p>
-<p>由此可见在这个例子中，Sunday算法的效率还是非常高的，不过也可以看出来，Sunday算法也是有一点儿不稳定的。如果每次都发现后面的那个元素和最后一个相同，那么这个就变成了BF暴力匹配的算法了。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>这里博主使用的是Java，那我就不使用Java，用C++吧，我还是喜欢我的vscode。。。蛤蛤蛤</p>
-<pre><code class="c++">/**
- * Sunday字符串匹配算法
- */
+          <h1 id="AVL-Tree"><a href="#AVL-Tree" class="headerlink" title="AVL Tree"></a>AVL Tree</h1><h2 id="AVL-Tree的基本介绍"><a href="#AVL-Tree的基本介绍" class="headerlink" title="AVL Tree的基本介绍"></a>AVL Tree的基本介绍</h2><p>AVL tree is a self-balancing Binary Search Tree (BST) where the difference between heights of left and right subtrees cannot be more than one for all nodes.来自：<a href="https://www.geeksforgeeks.org/avl-tree-set-1-insertion/" target="_blank" rel="noopener">GeeksforGeeks</a></p>
+<p>在<a href="https://zh.wikipedia.org/wiki/计算机科学" target="_blank" rel="noopener">计算机科学</a>中，<strong>AVL树</strong>是最早被发明的<a href="https://zh.wikipedia.org/wiki/自平衡二叉查找树" target="_blank" rel="noopener">自平衡二叉查找树</a>。在AVL树中，任一节点对应的两棵子树的最大高度差为1，因此它也被称为<strong>高度平衡树</strong>。查找、插入和删除在平均和最坏情况下的<a href="https://zh.wikipedia.org/wiki/时间复杂度" target="_blank" rel="noopener">时间复杂度</a>都是<img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/653ab6d6fd99537d220f179d2591955ff4f37b99" alt="O(\log{n})">。增加和删除元素的操作则可能需要借由一次或多次<a href="https://zh.wikipedia.org/wiki/树旋转" target="_blank" rel="noopener">树旋转</a>，以实现树的重新平衡。AVL树得名于它的发明者<a href="https://zh.wikipedia.org/wiki/格奥尔吉·阿杰尔松-韦利斯基" target="_blank" rel="noopener">G. M. Adelson-Velsky</a>和<a href="https://zh.wikipedia.org/w/index.php?title=Evgenii_Landis&action=edit&redlink=1" target="_blank" rel="noopener">Evgenii Landis</a>，他们在1962年的论文《An algorithm for the organization of information》中公开了这一数据结构。</p>
+<p>节点的<strong>平衡因子</strong>是它的左子树的高度减去它的右子树的高度（有时相反）。带有平衡因子1、0或 -1的节点被认为是平衡的。带有平衡因子 -2或2的节点被认为是不平衡的，并需要重新平衡这个树。平衡因子可以直接存储在每个节点中，或从可能存储在节点中的子树高度计算出来。来自：<a href="[https://zh.wikipedia.org/wiki/AVL%E6%A0%91](https://zh.wikipedia.org/wiki/AVL树)">Wikipedia</a></p>
+<p>现在我们看AVL数的中文，自平衡二叉查找树，这个平衡我们从定义中看出来了：<strong>任一节点对应的两棵子树的最大高度差为1</strong>，那么二叉查找树的概念呢？似乎没有说明，其实二叉查找树(BST)也是一种独立的树结构。那么我们就先来了解一下BST</p>
+<h2 id="BST的基本介绍"><a href="#BST的基本介绍" class="headerlink" title="BST的基本介绍"></a>BST的基本介绍</h2><p><strong>二叉查找树</strong>（英语：Binary Search Tree），也称为<strong>二叉搜索树</strong>、<strong>有序二叉树</strong>（ordered binary tree）或<strong>排序二叉树</strong>（sorted binary tree），是指一棵空树或者具有下列性质的<a href="https://zh.wikipedia.org/wiki/二叉树" target="_blank" rel="noopener">二叉树</a>：</p>
+<ol>
+<li>若任意节点的左子树不空，则左子树上所有节点的值均<strong>小于</strong>它的根节点的值；</li>
+<li>若任意节点的右子树不空，则右子树上所有节点的值均<strong>大于</strong>它的根节点的值；</li>
+<li><strong>任意节点的左、右子树也分别为二叉查找树；</strong></li>
+<li><strong>没有键值相等的节点。</strong></li>
+</ol>
+<p><img src="https://media.geeksforgeeks.org/wp-content/uploads/BSTSearch.png" alt></p>
+<p>比如说上面的这棵树就是一个二叉查找树。</p>
+<h2 id="构造BST"><a href="#构造BST" class="headerlink" title="构造BST"></a>构造BST</h2><p>那么我们该如何构造一颗BST呢？添加节点的时候，当树为空的时候就直接插入节点作为根节点。不然当小于节点且左子树不为空的递归加入左子树，大于节点且右子树不为空的时候加入右子树。左右子树为空的时候就直接插入作为左右子树。</p>
+<p>这个思路还是特别的简单的直接按照BST的规则来就完事了。</p>
+<h3 id="节点代码实现"><a href="#节点代码实现" class="headerlink" title="节点代码实现"></a>节点代码实现</h3><pre><code class="java">class Node{
+    private int value;
+    private Node left;
+    private Node right;
 
-#include &lt;iostream&gt;
-#include &lt;string&gt;
-using std::cout;
-using std::endl;
-using std::string;
-
-const int ASCII_SIZE = 128;
-
-int sunday(string str, string sub) {
-
-    int strLength = str.size();
-    int subLength = sub.size();
-
-    int move[ASCII_SIZE]{0};
-
-    for (size_t i = 0; i &lt; ASCII_SIZE; i++) {
-        move[i] = subLength + 1;
+    public Node(int value) {
+        this.value = value;
     }
 
-    for (size_t i = 0; i &lt; subLength; i++) {
-        move[sub[i]] = subLength - i;
+    @Override
+    public String toString() {
+        return &quot;Node [value=&quot; + value + &quot;]&quot;;
     }
 
-    int i = 0;
-    int j = 0;
-    while (i &lt;= strLength - subLength) {
-        j = 0;
-        while (str[i + j] == sub[j]) {
-            j++;
-            if (j &gt;= subLength) {
-                return i;
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public Node getLeft() {
+        return left;
+    }
+
+    public void setLeft(Node left) {
+        this.left = left;
+    }
+
+    public Node getRight() {
+        return right;
+    }
+
+    public void setRight(Node right) {
+        this.right = right;
+    }
+
+    public void add(Node node) {
+        if (node.value &lt; this.value) {
+            if (this.left == null) {
+                this.left = node;
+                return;
+            }else {
+                this.left.add(node);
+            }
+        }else {
+            if (this.right == null) {
+                this.right = node;
+                return;
+            }else {
+                this.right.add(node);
             }
         }
-        i += move[str[i + subLength]];
     }
-    return -1;
-}
 
-int main(int argc, char const *argv[]) {
-    string str = &quot;BBC ABCDAB ABCDABCDABDE&quot;;
-    string sub = &quot;ABCDABDE&quot;;
+    //：用于后面的AVT平衡二叉树的操作
+    public int height() {
+        return Math.max(left == null?0:left.height(), right == null?0:right.height()) +1;
+    }
 
-    int index = sunday(str, sub);
-    // cout &lt;&lt; sub &lt;&lt; endl;
-    // cout &lt;&lt; str.substr(index, sub.length()) &lt;&lt; endl;
-    cout &lt;&lt; (sub == str.substr(index, sub.length()) ? &quot;True&quot; : &quot;False&quot;) &lt;&lt; endl;
+    public int leftHeight() {
+        if (left == null) {
+            return 0;
+        }
+        return left.height();
+    }
 
-    system(&quot;pause&quot;);
-    return 0;
+    public int rightHeight() {
+        if (right == null) {
+            return 0;
+        }
+        return right.height();
+    }
+
+    public void infixOrder() {
+        if (this.left != null) {
+            this.left.infixOrder();
+        }
+        System.out.println(this);
+        if (this.right != null) {
+            this.right.infixOrder();
+        }
+    }
+
+    public Node search(int value) {
+        if (this.value == value) {
+            return this;
+        }
+        if (value &lt; this.value) {
+            return this.left.search(value);
+        }else {
+            return this.right.search(value);
+        }
+    }
+
+    public Node searchParent(int value) {
+        if (this.left != null &amp;&amp; this.left.value == value) {
+            return this;
+        }
+        if (this.right != null &amp;&amp; this.right.value == value) {
+            return this;
+        }
+
+        if (value &lt; this.value) {
+            return this.left.searchParent(value);
+        }else {
+            return this.right.searchParent(value);
+        }
+    }
+
+    /**
+     * 找到左子树上最大的节点的父节点
+     * @return 左子树上最大的节点的父节点 没有左子树就返回null
+     */
+    public Node findLeftMaxParentNode() {
+        if (this.left == null) {
+            return null;
+        }
+        Node temp = this.left;
+        if (temp.getRight() == null) {
+            return this;
+        }
+
+        if (temp.getRight() != null &amp;&amp; temp.getRight().getRight() != null) {
+            temp = temp.getRight();
+        }
+
+        return temp;
+    }
+
+    /**
+     * 找到右子树上最小的节点的父节点
+     * @return 右子树上最小的节点的父节点， 没有右子树就返回null
+     */
+    public Node findRightMinParentNode() {
+        if (this.right == null) {
+            return null;
+        }
+        Node temp = this.right;
+        if (temp.getLeft() == null) {
+            return this;
+        }
+
+        if (temp.getLeft() != null &amp;&amp; temp.getLeft().getLeft() != null) {
+            temp = temp.getLeft();
+        }
+
+        return temp;
+    }
+
 }</code></pre>
 <blockquote>
-<p><strong>代码说明：</strong></p>
-<ol>
-<li><p>ACSII_SIZE和move是什么意思？</p>
-<p>ACSII_SIZE常用的字符有128个（键盘上可以找得到的），还有另外的128个是找不到的，所以这里我们只使用128而不是256。说到Sunday算法规则的时候我们也提到了。每次匹配失败往后移动多少位完全是取决于匹配失败时子串对应的后一个字符。（可以看上面的图进行理解），所以说<strong>每个字母都对应了一个移动的位数。我们可以用一个数组来存储移动的位数</strong>。比如说字母a要移动六位就是——<strong>move[‘a’] = 6 也就是 move[97] = 6</strong>（a对应的ascii值是97）</p>
-</li>
-<li><p>第一个for循环？</p>
-<p>当字母没有出现的时候，<strong>移动位数 = 模式串长度 + 1</strong></p>
-</li>
-<li><p>第二个for循环</p>
-<p>当字母出现的时候， <strong>移动位数 = 模式串长度 - 该字符最右出现的位置(以0开始) = 模式串中该字符最右出现的位置到尾部的距离 + 1</strong>。不过上面说的是最右出现的位置，这里没有考虑啊。此言差矣，其实考虑了，i是从左到右进行覆盖的，如果出现了重复的字符，move数组里面存放的肯定是最右面的那个字符对应的移动位数。</p>
-</li>
-<li><p>i, j与while循环</p>
-<p>i表示的指向主串的开始的位置。j表示的指向字符正在匹配的字符的位置。<strong>注意：这里i并不是指向当前正在比较的字符的位置。当前主串中正在匹配的字符的位置是i+j</strong>。每次匹配失败的时候，i向后面移动相对应的位置。j重置为0重新进行比较。</p>
-</li>
-</ol>
+<p>可见由一个数组构造一个BST还是非常容易的。</p>
 </blockquote>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>不得不说，这个Sunday算法真的简单易理解，关键代码还很好写，效率也非常高。这特喵的谁还看那个什么KMP算法啊。那个啥BM算法反向比较致敬韦神我是更不可能去看的了。不管了，反正Sunday算法赛高就完事了。</p>
+<h3 id="BST代码实现"><a href="#BST代码实现" class="headerlink" title="BST代码实现"></a>BST代码实现</h3><pre><code class="java">class BinarySearchTree {
+    private Node root = null;
+
+    public BinarySearchTree(Node root) {
+        this.root = root;
+    }
+
+    public BinarySearchTree() {
+        this.root = null;
+    }
+
+    public Node getRoot() {
+        return root;
+    }
+
+    public void setRoot(Node root) {
+        this.root = root;
+    }
+
+    public void add(Node node) {
+        if (root == null) {
+            root = node;
+            return;
+        }
+        this.root.add(node);
+    }
+
+    public int height() {
+        return this.root.height();
+    }
+
+    public int leftHeight() {
+        return this.root.leftHeight();
+    }
+
+    public int rightHeight() {
+        return this.root.rightHeight();
+    }
+
+    public void infixOrder() {
+        if (root == null) {
+            return;
+        }
+        this.root.infixOrder();
+    }
+
+    /**
+     * 搜索节点 缺点是重复的值会出现问题，值不能重复
+     * @param value 要查询的值
+     * @return 返回找到值的当前节点 找不到就返回null
+     */
+    public Node search(int value) {
+        if (root == null) {
+            return null;
+        }
+        return this.root.search(value);
+    }
+
+    /**
+     * 搜索父节点 缺点是值不能重复
+     * @param value
+     * @return 返回找到值的父节点， 找不到就返回null
+     */
+    public Node searchParent(int value) {
+        if (root == null) {
+            return null;
+        }
+        if (root.getValue() == value) {
+            return null;
+        }
+        return this.root.searchParent(value);
+    }
+
+
+    public Node findLeftMaxParentNode() {
+        return root.findLeftMaxParentNode();
+    }
+
+    public Node findRightMinParentNode() {
+        return root.findRightMinParentNode();
+    }
+    /**
+     * 删除节点
+     * @param value
+     * @return
+     */
+    public boolean delNode(int value) {
+        Node node = search(value);
+        Node parent = searchParent(value);
+        if (node == null) {
+            return false;
+        }
+
+        if (parent == null) {
+            if (root == null) {
+                return true;
+            }else { //：要删除的节点就是根节点
+                Node leftMaxParentNode = findLeftMaxParentNode();
+//                System.out.println(leftMaxParentNode.getRight().getValue());
+                if (leftMaxParentNode == null) {
+                    root = root.getRight();
+                    return true;
+                }else {
+                    if (leftMaxParentNode == root) {
+                        this.root.setValue(this.root.getLeft().getValue());
+                        this.root.setLeft(null);
+                        return true;
+                    }else {
+                        this.root.setValue(leftMaxParentNode.getRight().getValue());
+                        leftMaxParentNode.setRight(leftMaxParentNode.getRight().getLeft());
+                        return true;
+                    }
+                }
+            }
+        }
+        // 是一个叶子节点
+        if (node.getLeft() == null &amp;&amp; node.getRight() == null) {
+            if (parent.getLeft() == node) {
+                parent.setLeft(null);
+            }else {
+                parent.setRight(null);
+            }
+            return true;
+        }
+
+        // 只有一个右子节点
+        if (node.getLeft() == null) {
+            if (parent.getRight() ==node) {
+                parent.setRight(node.getRight());
+                return true;
+            }else {
+                parent.setLeft(node.getRight());
+                return true;
+            }
+        }
+
+        if (node.getRight() == null) {
+            if (parent.getRight() == node) {
+                parent.setRight(node.getLeft());
+                return true;
+            }else {
+                parent.setLeft(node.getLeft());
+                return true;
+            }
+        }
+
+        // 有两个节点的
+        Node leftMaxParentNode = node.findLeftMaxParentNode();
+        if (leftMaxParentNode == node) {
+            node.setValue(node.getLeft().getValue());
+            node.setLeft(null);
+            return true;
+        }else {
+            node.setValue(leftMaxParentNode.getRight().getValue());
+            leftMaxParentNode.setRight(leftMaxParentNode.getRight().getLeft());
+            return true;
+        }
+    }
+}</code></pre>
+<blockquote>
+<p>可以看到上面的代码还是特别的多的，因为这个代码都是我学习的时候写的，这里就直接复制过来了。里面很多的方法都是为了AVL来写的。其实里面有几个函数还是比较难写的，比如那个删除节点的那个函数我就写了不少的时间，不过，这里这个问题都不是重点了。我们主要说的是AVL树。</p>
+</blockquote>
+<h2 id="从BST到AVL"><a href="#从BST到AVL" class="headerlink" title="从BST到AVL"></a>从BST到AVL</h2><p>虽然说BST是蛮好的，中序遍历一个BST我们就能得到一个有序的数组，这个是多么的方便。但是BST也存在了一些问题。比如说我给定的数组是<code>1 2 3 4 5 6</code>使用这个数组构造BST的时候，我们发现构造出来一个非常奇怪的树。</p>
+<pre><code>1
+  2
+    3
+      4
+        5
+           6</code></pre><p>一个如同单链表的BST，但是效率比单链表还要低。有些人会说，我们可以使用中位数作为节点来构造二叉树，但是这个依然是有问题的。</p>
+<pre><code>    4
+   3  5
+ 2      6
+1         7</code></pre><p>这棵树是效率高的吗？童谣也不是，效率和单链表其实也差不多。</p>
+<p>是什么导致这些BST的效率很低的？因为这些树不平衡，这就可以联系到上面的AVL中关于平衡的定义了。左右子树的高度差不大于1。而且是所有的子树的左右子树的高度差都不大于1。所以说上面的两棵树都不是AVL。</p>
+<p><strong>An Example Tree that is an AVL Tree</strong></p>
+<p><img src="https://media.geeksforgeeks.org/wp-content/cdn-uploads/AVL-Tree1.jpg" alt></p>
+<p><strong>The above tree is AVL because differences between heights of left and right subtrees for every node is less than or equal to 1.</strong></p>
+<p><strong>An Example Tree that is NOT an AVL Tree</strong></p>
+<p><img src="https://media.geeksforgeeks.org/wp-content/cdn-uploads/Not-AVL1.jpg" alt></p>
+<p><strong>The above tree is not AVL because differences between heights of left and right subtrees for 8 and 18 is greater than 1.</strong></p>
+<p><strong>Insertion Examples:</strong></p>
+<p><img src="https://media.geeksforgeeks.org/wp-content/uploads/AVL-Insertion-1.jpg" alt></p>
+<h3 id="AVL代码实现"><a href="#AVL代码实现" class="headerlink" title="AVL代码实现"></a>AVL代码实现</h3><pre><code class="java">class AVLTree extends BinarySearchTree {
+
+    public AVLTree() {
+        this.setRoot(null);
+    }
+
+    public AVLTree(Node rootNode) {
+        this.setRoot(rootNode);
+    }
+    public void createAVLTree() {
+        while ((leftHeight() - rightHeight() !=1 &amp;&amp; leftHeight() -rightHeight() !=0) &amp;&amp; 
+                (rightHeight() - leftHeight() != 1 &amp;&amp; rightHeight() - leftHeight() !=0)) {
+            createAVLTreeOneTime();
+        }
+    }
+    //：左旋转， 当左子树的高度小于右子树的高度时候可以降低两者之间的差值，使之成为平衡树
+    public void createAVLTreeOneTime() {
+        if (leftHeight() - rightHeight() &gt; 1) {
+            //：进行双旋转， 如果这个左子树的右节点的高度大于右子树先对左子树进行左旋转
+            if (this.getRoot().getLeft().leftHeight() &lt;
+                    this.getRoot().getLeft().rightHeight()) {
+                new AVLTree(this.getRoot().getLeft()).leftRotate();
+            }
+            this.rightRotate();
+
+        } else if (rightHeight() - leftHeight() &gt;1) {
+            if (this.getRoot().getRight().rightHeight() &lt;
+                    this.getRoot().getRight().leftHeight()) {
+                new AVLTree(this.getRoot().getRight()).rightRotate();
+            }
+            this.leftRotate();
+
+        } else return;
+    }
+
+    public void leftRotate() {
+        Node newNode = new Node(this.getRoot().getValue());
+        newNode.setLeft(this.getRoot().getLeft());
+        newNode.setRight(this.getRoot().getRight().getLeft());
+        this.getRoot().setLeft(newNode);
+        this.getRoot().setValue(this.getRoot().getRight().getValue());
+        this.getRoot().setRight(this.getRoot().getRight().getRight());
+    }
+
+    //：右旋转 与上面的左旋转是类似的  旋转不一定是有用的我发现，，，这个1 3 变成了 3 1 可见单旋转并不能将所有的树转换成平衡二叉树
+    public void rightRotate() {
+        Node newNode = new Node(this.getRoot().getValue());
+        newNode.setRight(this.getRoot().getRight());
+        newNode.setLeft(this.getRoot().getLeft().getRight());
+        this.getRoot().setValue(this.getRoot().getLeft().getValue());
+        this.getRoot().setRight(newNode);
+        this.getRoot().setLeft(this.getRoot().getLeft().getLeft());
+    }
+}</code></pre>
+<h3 id="旋转-由BST到AVL"><a href="#旋转-由BST到AVL" class="headerlink" title="旋转 由BST到AVL"></a>旋转 由BST到AVL</h3><h4 id="左旋转"><a href="#左旋转" class="headerlink" title="左旋转"></a>左旋转</h4><pre><code class="java">public void leftRotate() {
+    Node newNode = new Node(this.getRoot().getValue());
+    newNode.setLeft(this.getRoot().getLeft());
+    newNode.setRight(this.getRoot().getRight().getLeft());
+    this.getRoot().setLeft(newNode);
+    this.getRoot().setValue(this.getRoot().getRight().getValue());
+    this.getRoot().setRight(this.getRoot().getRight().getRight());
+}</code></pre>
+<blockquote>
+<p>左旋转是非常的形象的。当右子树的高度大于左子树的高度的时候，我们将树进行左旋转这样就可以平衡左右子树之间的高度之差。</p>
+<p>如何左旋转：</p>
+<ol>
+<li>以当前节点（根节点）值构造一个新的节点。</li>
+<li>新节点的左指针指向根节点的左子树</li>
+<li>新节点的右指针指向根节点的右子树的左子树。</li>
+<li>根节点的左子树指向新节点。</li>
+<li>将根节点的右子树的值赋给根节点</li>
+<li>根节点的右指针指向根节点的右子树的右子树</li>
+</ol>
+<p>这个看起来可能很懵逼，不过看着下面的图基本上就可以理解了。理解之后你也会发现这个这个左旋转会存在一些问题。</p>
+</blockquote>
+<h4 id="右旋转"><a href="#右旋转" class="headerlink" title="右旋转"></a>右旋转</h4><pre><code class="java">//：右旋转 与上面的左旋转是类似的  旋转不一定是有用的我发现，，，这个1 3 变成了 3 1 可见单旋转并不能将所有的树转换成平衡二叉树
+public void rightRotate() {
+    Node newNode = new Node(this.getRoot().getValue());
+    newNode.setRight(this.getRoot().getRight());
+    newNode.setLeft(this.getRoot().getLeft().getRight());
+    this.getRoot().setValue(this.getRoot().getLeft().getValue());
+    this.getRoot().setRight(newNode);
+    this.getRoot().setLeft(this.getRoot().getLeft().getLeft());
+}</code></pre>
+<blockquote>
+<p>右旋转与左旋转类似，这里不再赘述、</p>
+</blockquote>
+<p>恐怕你已经发现了问题，就是原本是1 3的树经过左旋转之后会变成 3 1。</p>
+<p>这是如果再使用右旋转又会变成1 3。这个是非常有问题的。那么问题出在了那么了呢？</p>
+<p>我当我们进行右旋转的时候，们将根节点的右子树树指向的是新的节点，新节点的左子树指向的是根节点的左子树的右子树，那么如果根节点的左子树的左子树的高度小于其左子树的右子树的高度上呢？这时就会引发这个问题。此时我们虽然是想右选择的。但是右子树上的新的节点的左子树连接这那个比较大的根节点的左子树的右子树，这时旋转之后右子树就会变得高，不会形成一个AVL。此时需要平衡一下根节点的左子树，使左子树先来一次左旋转</p>
+<p>左旋转也是类似的道理。因此需要将左右旋转结合起来写一个新的函数。</p>
+<h4 id="左右旋转结合"><a href="#左右旋转结合" class="headerlink" title="左右旋转结合"></a>左右旋转结合</h4><pre><code class="java">public void createAVLTreeOneTime() {
+    if (leftHeight() - rightHeight() &gt; 1) {
+        //：进行双旋转， 如果这个左子树的右节点的高度大于右子树先对左子树进行左旋转
+        if (this.getRoot().getLeft().leftHeight() &lt;
+            this.getRoot().getLeft().rightHeight()) {
+            new AVLTree(this.getRoot().getLeft()).leftRotate();
+        }
+        this.rightRotate();
+
+    } else if (rightHeight() - leftHeight() &gt;1) {
+        if (this.getRoot().getRight().rightHeight() &lt;
+            this.getRoot().getRight().leftHeight()) {
+            new AVLTree(this.getRoot().getRight()).rightRotate();
+        }
+        this.leftRotate();
+
+    } else return;
+}
+
+public void createAVLTree() {
+    while ((leftHeight() - rightHeight() !=1 &amp;&amp; leftHeight() -rightHeight() !=0) &amp;&amp; 
+           (rightHeight() - leftHeight() != 1 &amp;&amp; rightHeight() - leftHeight() !=0)) {
+        createAVLTreeOneTime();
+    }
+}</code></pre>
+<blockquote>
+<p>这样我们的AVL就完成了，上面的代码都已经做了说明，不想说了。而且这种二叉树的问题，说明是真的难说，还是自己拿一个笔多画一画就完事了，画着画着就可以理解其中的大智慧了。</p>
+</blockquote>
+<p><img src="https://media.geeksforgeeks.org/wp-content/uploads/AVL-Insertion1-1.jpg" alt></p>
+<p><img src="https://media.geeksforgeeks.org/wp-content/uploads/AVL_INSERTION2-1.jpg" alt></p>
+<p><img src="https://media.geeksforgeeks.org/wp-content/uploads/AVL_Insertion_3-1.jpg" alt></p>
+<p><img src="https://media.geeksforgeeks.org/wp-content/uploads/AVL_Tree_4-1.jpg" alt></p>
+<p>上面的图可能看起来有点儿懵逼，不过我感觉画的特别的形象。主要讲了旋转的事情。要结合上面的代码一起进行消化理解吸收。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个讲的稍微的敷衍，不过也没有办法，我主要想说的就是AVL的旋转而已，但是又是用语言难以理解的，于是上外网盗了一些图片过来辅助理解，不知道下次这些图片会不会么得了，嘤嘤嘤~~</p>
 
         </div>
         <!-- .entry-content -->
@@ -489,36 +880,19 @@ int main(int argc, char const *argv[]) {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/07/25/AVL-Tree/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/33.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/33.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                AVL Tree</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/07/24/递归与回溯/" rel="next">
+            <a href="/2019/07/25/Sunday字符串匹配算法/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/31.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/31.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/32.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/32.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                递归与回溯</h3>
+                Sunday字符串匹配算法</h3>
                 <hr>
               </div>
             </a>

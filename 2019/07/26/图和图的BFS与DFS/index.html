@@ -377,12 +377,12 @@
         
         <div class="entry-content">
           <h1 id="图和图的BFS与DFS"><a href="#图和图的BFS与DFS" class="headerlink" title="图和图的BFS与DFS"></a>图和图的BFS与DFS</h1><h2 id="图的基本介绍"><a href="#图的基本介绍" class="headerlink" title="图的基本介绍"></a>图的基本介绍</h2><p>图和树一样，也是一种数据结构，不过这种数据结构恐怕是来得复杂了那么一点点。图一般由<code>节点(Vertex)</code> 与 <code>边（Edge）</code>来组成，</p>
-<p><img src="https://ws1.sinaimg.cn/large/007bNMiYly1g5d5dshrmej30m80dzqc5.jpg" alt></p>
+<p><img src="https://segmentfault.com/img/bVTNFS?w=1300&h=818" alt></p>
 <p>其中边是否是有方向的又将图分为有向图和无向图。有时边还是带有权值的，这时图被称为带权图。</p>
 <p>图的表示的方式也有很多样，这里我们采用的是最简单的<strong>邻接矩阵</strong>来表示图。不要看到矩阵就嗷嗷嗷的~其实这里就是一个二维的数组而已，和线代没关系的，不要慌嘛。</p>
-<p><img src="https://ws1.sinaimg.cn/large/007bNMiYly1g5d8odp96yj30m809qdhn.jpg" alt></p>
-<p><img src="https://ws1.sinaimg.cn/large/007bNMiYly1g5d8p7lnirj30m80b741x.jpg" alt></p>
-<p><img src="https://ws1.sinaimg.cn/large/007bNMiYly1g5d8qde7ufj305m0503yq.jpg" alt></p>
+<p><img src="https://segmentfault.com/img/bVTNKF?w=1406&h=616" alt></p>
+<p><img src="https://segmentfault.com/img/bVTNKN?w=1276&h=643" alt></p>
+<p><img src="https://segmentfault.com/img/bVTrCv?w=202&h=180" alt></p>
 <h2 id="图的创建"><a href="#图的创建" class="headerlink" title="图的创建"></a>图的创建</h2><p>看其实图和树还是有一点儿像的，但如果使用树的方式去构建图的话，效率就会变得特别的低下，所以我们要考虑其他的表示图的方案。</p>
 <h3 id="表示顶点"><a href="#表示顶点" class="headerlink" title="表示顶点"></a>表示顶点</h3><p>创建图类的第一步是要创建一个Vertex类保存顶点和边。这个类的作用与链表和二叉搜索树的Node类一样。Vertex类有两个数据成员： 一个用于标识顶点，另一个是表示这个顶点是否被访问过的布尔值。分别命名为label 和 wasVisited.这个类只需要一个函数，那就是为顶点的数据成员设定值的构造函数。</p>
 <pre><code class="java">class Vertex&lt;E&gt;{
@@ -410,7 +410,7 @@
 </code></pre>
 <h3 id="表示边"><a href="#表示边" class="headerlink" title="表示边"></a>表示边</h3><p>图的实际信息都保存在边上，因为它们描述了图的结构。我们容易像之前提到的那样用二叉树的方式去表示图，这是不对的。二叉树的表现形式相当固定，一个父节点只能有两个子节点，而图结构却要灵活的多，一个顶点既可以有一条边，也可以有多条边与它相连。</p>
 <p>我们是用邻接矩阵的方式来表示顶点是否是相邻的，如果是相邻的权值又是多少。</p>
-<p><img src="https://ws1.sinaimg.cn/large/007bNMiYly1g5d930ynnej308302ea9z.jpg" alt></p>
+<p><img src="https://segmentfault.com/img/bVTrFU?w=291&h=86" alt></p>
 <p>上图就是一个邻接矩阵，可以看到这个是一个实对称矩阵（求出对应的二次型的标准型，并判断是否正定，跑偏了，和线性代数没有关系的）。第一行的那个2就表示第一个节点和第二个节点是相连的，而且权值为2，这个又是一个无向图，所以一定是对称的。</p>
 <h3 id="表示图"><a href="#表示图" class="headerlink" title="表示图"></a>表示图</h3><p>根据上面的思路就可以轻松的写出图的结构，还有一些简单的函数。</p>
 <p>使用集合来存放节点，是用二维数组来存放邻接矩阵。so easy</p>
@@ -485,7 +485,7 @@
 </blockquote>
 <p>到此为止，一个图就已经创建完成了。下面我们开始研究图的遍历的问题。</p>
 <h2 id="图的遍历"><a href="#图的遍历" class="headerlink" title="图的遍历"></a>图的遍历</h2><p>图的遍历和树的遍历一样，也有两种。一个广度优先遍历，一个是深度优先遍历。之前在将树的遍历的时候就讲了这个是如何实现的了。不过图的遍历和树的遍历又是不一样的了，图中是没有指针来连接各个节点的。所以说只是遍历的思路是一样的，算法还是完全不同的。树的遍历用到了队列和栈，不过图是不需要的。</p>
-<h3 id="深度优先遍历"><a href="#深度优先遍历" class="headerlink" title="深度优先遍历"></a>深度优先遍历</h3><p><img src="https://ws1.sinaimg.cn/large/007bNMiYly1g5d9mel07rj30go0820v5.jpg" alt></p>
+<h3 id="深度优先遍历"><a href="#深度优先遍历" class="headerlink" title="深度优先遍历"></a>深度优先遍历</h3><p><img src="https://segmentfault.com/img/bVTChX?w=600&h=290" alt></p>
 <h4 id="深度优先遍历的思路"><a href="#深度优先遍历的思路" class="headerlink" title="深度优先遍历的思路"></a>深度优先遍历的思路</h4><blockquote>
 <p>深度优先搜索DFS遍历类似于树的前序遍历。其基本思路是：</p>
 <ol>
@@ -500,7 +500,7 @@
 <p><strong>简单的来说，深度优先搜索包括从一条路径的起始点开始追溯，直到到达最后一个顶点，然后回溯，继续追溯下一条路径，直到到达最后的顶点，如此往复，直到没有路径为止</strong></p>
 <p><code>这不是在搜索特定的路径，而是通过搜索来查看在图中有哪些路径可以选择。</code></p>
 <p>如图所示：</p>
-<p><img src="https://ws1.sinaimg.cn/large/007bNMiYly1g5d9pnx6bsj308o07nmy8.jpg" alt></p>
+<p><img src="https://segmentfault.com/img/bVTuM1?w=312&h=275" alt></p>
 <p><strong>深度优先搜索的算法比较简单： 访问一个没有访问过的顶点，将它标记为已访问，再递归地去访问在起始点的邻接表中其他没有访问过的顶点。</strong></p>
 <p><img src="https://segmentfault.com/img/bVTvbn?w=600&h=450" alt></p>
 <h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><p>首先我们要写找到临近节点的函数</p>
@@ -563,7 +563,7 @@ public void initVisit() {
 <p><strong>输出结果：</strong></p>
 <p>[0, 1, 1, 0, 0]<br>[1, 0, 1, 1, 1]<br>[1, 1, 0, 0, 0]<br>[0, 1, 0, 0, 0]<br>[0, 1, 0, 0, 0]<br>A-&gt;B-&gt;C-&gt;D-&gt;E-&gt;</p>
 </blockquote>
-<h3 id="广度优先遍历"><a href="#广度优先遍历" class="headerlink" title="广度优先遍历"></a>广度优先遍历</h3><p><img src="https://ws1.sinaimg.cn/large/007bNMiYly1g5dadyx30cj30go084die.jpg" alt></p>
+<h3 id="广度优先遍历"><a href="#广度优先遍历" class="headerlink" title="广度优先遍历"></a>广度优先遍历</h3><p><img src="https://segmentfault.com/img/bVTCh7?w=600&h=292" alt></p>
 <h4 id="广度优先遍历的思路"><a href="#广度优先遍历的思路" class="headerlink" title="广度优先遍历的思路"></a>广度优先遍历的思路</h4><blockquote>
 <p>广度优先搜索遍历BFS类似于树的按层次遍历。其基本思路是：</p>
 <ol>
@@ -576,7 +576,7 @@ public void initVisit() {
 </ol>
 </blockquote>
 <p>如图所示：</p>
-<p><img src="https://ws1.sinaimg.cn/large/007bNMiYly1g5dag7s8aej30cn09wq5n.jpg" alt></p>
+<p><img src="https://segmentfault.com/img/bVTwBW?w=455&h=356" alt></p>
 <p><strong>简单的来说，广度优先搜索从一个顶点开始，尝试访问尽可能靠近它的顶点。本质上这种搜索在图上是逐层移动的，首先检查最靠近第一个顶点的层，再逐渐向下移动到离起始顶点最远的层</strong></p>
 <blockquote>
 <p>广度优先搜索算法使用了抽象的队列而不是数组来对已经访问过的顶点进行排序。算法工作原理如下：</p>
@@ -639,7 +639,7 @@ public void broadFirstSearch() {
 </blockquote>
 <p>和深度优先遍历输出的结果竟然是一样的，不过这个例子是纯属巧合而已</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面我表示图是用的邻接矩阵的方式，还可以使用邻接表的方式来表示这个图结构，而且效率也是有点儿小高。不过这里我就不瞎掰了，就先介绍一个邻接矩阵就完事了。感觉图的 BFS和DFS比树的真的是差不多，至少理解其实都不是很难。</p>
-
+<h4 id="参考文章：数据结构与算法：图和图算法-一"><a href="#参考文章：数据结构与算法：图和图算法-一" class="headerlink" title="参考文章：数据结构与算法：图和图算法(一)"></a><strong>参考文章：</strong><a href="https://segmentfault.com/a/1190000010794621" target="_blank" rel="noopener">数据结构与算法：图和图算法(一)</a></h4><h4 id="扩展文章：数据结构与算法-图论"><a href="#扩展文章：数据结构与算法-图论" class="headerlink" title="扩展文章：数据结构与算法 - 图论"></a><strong>扩展文章：</strong><a href="https://zhuanlan.zhihu.com/p/25498681" target="_blank" rel="noopener">数据结构与算法 - 图论</a></h4>
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
@@ -666,9 +666,26 @@ public void broadFirstSearch() {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2019/07/26/设计模式（二）工厂模式/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                设计模式（二）工厂模式</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
         
           
-            <div class="post-nepre full next">
+            <div class="post-nepre half next">
           
             <a href="/2019/07/25/设计模式（一）单例模式/" rel="next">
               <div class="background">

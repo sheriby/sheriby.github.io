@@ -488,7 +488,7 @@ class Singleton02{
     return INSTANCE;
 }</code></pre>
 <p>这时虽然也会有多个线程进入if语句，但是里面还有一个带锁的if，这时第一个线程进入创建对象之后，后面的线程因为if的判断就无法创建对象了，实现了单例模式。</p>
-<p>要非常注意的是，<strong>前面的INSTANCE要声明为volatile</strong>（JDK5以后的版本），不然这个模式使用的失败的。</p>
+<p>要非常注意的是，<strong>前面的INSTANCE要声明为volatile</strong>（JDK5以后的版本），不然这个模式使用的失败的。<br>这里我去看了极客班的C++的设计模式的教程，如果没有volatile关键词的话，这个是错误的是不能够使用的。为什么呢？在<code>INSTANCE = new Singleton02()</code>这个语句中，正常我们会想这个应该会先分配内存，然后开始构造函数，再然后把地址赋给INSTANCE。但是由于编译器的优化以及各种其他的情况下，任何语言可能都不是这样子的。大多数情况下，可能是先分配内存，然后直接赋地址，最后再构造函数，也可以是先赋地址，然后再怎么怎么样的。这种情况被称为reorder。这是如果有一个线程进入第一个if，发现你已经赋给地址了，已经不是空了，所以直接就返回，但是构造函数还没有开始启动，这是会发生什么错误是不用说了。加上了volatile之后就是告诉编译器，别给我优化，别给我整这些reorder。<br>C++11当中也引入了这个问题的解决方案，不过确实是有点儿复杂，这里就不多说什么了。</p>
 </li>
 </ol>
 </blockquote>
@@ -667,7 +667,7 @@ int main()
 <blockquote>
 <p>这个代码着实有点儿难懂，而且我现在还没有接触到C++中的多线程。所以说，代码先放在这儿吧。C++真的是一门高深莫测的语言！</p>
 </blockquote>
-<h3 id="Java库中的单例模式"><a href="#Java库中的单例模式" class="headerlink" title="Java库中的单例模式"></a>Java库中的单例模式</h3><p>Java.lang.Runtime</p>
+<h3 id="Java库中的单例模式"><a href="#Java库中的单例模式" class="headerlink" title="Java库中的单例模式"></a>Java库中的单例模式</h3><p><strong>Java.lang.Runtime</strong></p>
 <pre><code class="java">/**
  * Every Java application has a single instance of class
  * {@code Runtime} that allows the application to interface with

@@ -344,6 +344,30 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
 <div class="pattern-center-blank"></div>
 
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/36.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/36.png">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      设计模式（二）工厂模式</h1>
+      <p class="entry-census">
+        <span>
+          <a href="sheriby.github.io">
+            <img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true">
+          </a>
+        </span>
+        <span>
+          <a href="sheriby.github.io">Hony Sher</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2019-7-26<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
@@ -351,15 +375,413 @@
         <div class="toc"></div>
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
-          <header class="entry-header">
-            <h1 class="entry-title">设计模式（二）工厂模式</h1>
-            <p class="entry-census">Hony Sher&nbsp;·&nbsp;2019-7-26&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
-
-            <hr>
-          </header>
-        
         <div class="entry-content">
-          
+          <h2 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h2><p>大名鼎鼎的GOF对工厂模式的定义是这样子的。</p>
+<blockquote>
+<p>“Define an interface for creating an object, but let subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.”(<strong>在基类中定义创建对象的一个接口，让子类决定实例化哪个类。工厂方法让一个类的实例化延迟到子类中进行。</strong>)</p>
+</blockquote>
+<h3 id="工厂模式的分类"><a href="#工厂模式的分类" class="headerlink" title="工厂模式的分类"></a>工厂模式的分类</h3><ol>
+<li><p><strong>简单工厂</strong>（Simple Factory）模式，又称静态工厂方法模式（Static Factory Method Pattern）。</p>
+</li>
+<li><p><strong>工厂方法</strong>（Factory Method）模式，又称多态性工厂（Polymorphic Factory）模式或虚拟构造子（Virtual Constructor）模式；</p>
+</li>
+<li><p><strong>抽象工厂</strong>（Abstract Factory）模式，又称工具箱（Kit 或Toolkit）模式。</p>
+</li>
+</ol>
+<h3 id="为什么要使用工厂模式"><a href="#为什么要使用工厂模式" class="headerlink" title="为什么要使用工厂模式"></a>为什么要使用工厂模式</h3><ol>
+<li><p><strong>解耦</strong> ：把对象的创建和使用的过程分开</p>
+</li>
+<li><p><strong>降低代码重复:</strong> 如果创建某个对象的过程都很复杂，需要一定的代码量，而且很多地方都要用到，那么就会有很多的重复代码。</p>
+</li>
+<li><p><strong>降低维护成本</strong> ：由于创建过程都由工厂统一管理，所以发生业务逻辑变化，不需要找到所有需要创建对象B的地方去逐个修正，只需要在工厂里修改即可，降低维护成本。</p>
+</li>
+</ol>
+<p>下面将分这三种模式来简单的介绍一下工厂模式。</p>
+<h2 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h2><h3 id="简单工厂的基本介绍"><a href="#简单工厂的基本介绍" class="headerlink" title="简单工厂的基本介绍"></a>简单工厂的基本介绍</h3><p>严格的说，简单工厂模式并不是23种常用的设计模式之一，它只算工厂模式的一个特殊实现。简单工厂模式在实际中的应用相对于其他2个工厂模式用的还是相对少得多，因为它只适应很多简单的情况。</p>
+<p>最重要的是它违背了我们在概述中说的 <strong>开放-封闭原则</strong> （虽然可以通过反射的机制来避免，后面我们会介绍到） 。因为每次你要新添加一个功能，都需要在生switch-case 语句（或者if-else 语句）中去修改代码，添加分支条件。</p>
+<h3 id="简单工厂的适用场景"><a href="#简单工厂的适用场景" class="headerlink" title="简单工厂的适用场景"></a>简单工厂的适用场景</h3><ol>
+<li><p>需要创建的<strong>对象较少。</strong></p>
+</li>
+<li><p>客户端<strong>不关心对象的创建过程。</strong></p>
+</li>
+</ol>
+<h3 id="简单工厂模式角色分配"><a href="#简单工厂模式角色分配" class="headerlink" title="简单工厂模式角色分配"></a>简单工厂模式角色分配</h3><ol>
+<li><strong>工厂(Factory)角色</strong> :简单工厂模式的核心，它负责实现创建所有实例的内部逻辑。工厂类可以被外界直接调用，创建所需的产品对象。</li>
+<li><strong>抽象产品(Product)角色</strong> :简单工厂模式所创建的所有对象的父类，它负责描述所有实例所共有的公共接口。</li>
+<li><strong>具体产品(Concrete Product)角色</strong>:简单工厂模式的创建目标，所有创建的对象都是充当这个角色的某个具体类的实例。</li>
+</ol>
+<h3 id="简单工厂实例"><a href="#简单工厂实例" class="headerlink" title="简单工厂实例"></a>简单工厂实例</h3><pre><code class="java">public interface IProduct {
+    void print(); // 这是要暴露的方法
+}
+
+public abstract class AbstractProduct implements IProduct {
+    protected void printBefore(){
+        System.out.println(&quot;before print&quot;); // 这里所公共的实现
+    }
+}
+
+public class AProduct extends AbstractProduct {
+    private String name;
+    public AProduct(String name){ 
+        this.name = name;
+    }
+    @Override
+    public void print() {
+        this.printBefore();
+        System.out.println(&quot;print A &gt;&gt;&gt;&quot;+name);
+    }
+}
+
+public class BProduct extends AbstractProduct {
+    private String name;
+    public BProduct(String name){ 
+        this.name = name;
+    }
+    @Override
+    public void print() {
+        this.printBefore();
+        System.out.println(&quot;print B &gt;&gt;&gt;&quot;+name);
+    }
+}
+
+public class SimpleFactory{
+    public static AProduct sellAProduct(){
+        return new AProduct();
+    }
+
+    public static BProduct sellBProduct(){
+        return new BProduct;
+    }
+}</code></pre>
+<blockquote>
+<p>这里我们有两个产品分为是产品A和产品B。还有一个卖产品的简单工厂，里面有卖A产品和卖B产品的地方。现在我们加入这个设计是合理的。现在多了一个C产品，我们要写一个C产品，让他继承那个抽象的产品，然后还有在工厂当中加入买C产品的函数。这显然有点儿烦了。我们可以将工厂进一步的抽象。</p>
+</blockquote>
+<pre><code class="java">public class SimpleFactory {
+    public static IProduct getProduct(String name){
+        if(&quot;A&quot;.equals(name)){
+            return new AProduct(name);
+        }else if(&quot;B&quot;.equals(name)){
+            return new BProduct(name);
+        }else if(&quot;C&quot;.equals(name)){
+            return new CProduct(name);
+        }else {
+            throw new IllegalArgumentException();
+        }
+    }
+}</code></pre>
+<blockquote>
+<p>这样我们就可以只用一个方法就可以完成所有的产品的制作了。但是这个简单工厂并不符合设计模式。每次增加产品的时候都要修改工厂类的方法。我们做产品的一个主要的思路就是尽量不要依赖具体，尽量不要修改而是增加。</p>
+</blockquote>
+<blockquote>
+<p>为什么要使用工厂模式？</p>
+<p>如果这里要要多了店要来买我们的产品，如果没有工厂的话，所有的店都要依赖我们的产品类。一旦产品有什么修改，比如说增加了什么产品，或者修改了什么产品，所有的店家都要修改代码。所以说这样非常的不好。有了工厂之后，店不用直接依赖什么具体的类，不用使用new来产生产品，而是依赖工厂，通过工厂来获取产品。只是产品有了修改，在简单工厂模式里面来说，只是修改了工厂类而已，店家的类的代码没有必要去修改。</p>
+</blockquote>
+<p>再来一个例子</p>
+<p>创建一个可以绘制不同形状的绘图工具，可以绘制圆形，正方形，三角形，每个图形都会有一个draw()方法用于绘图.</p>
+<p><strong>（1）创建Shape接口</strong></p>
+<pre><code class="java">public interface Shape {
+    void draw();
+}</code></pre>
+<p><strong>（2）创建实现该接口的具体图形类</strong></p>
+<p>圆形</p>
+<pre><code class="java">public class Circle implements Shape {
+    public Circle() {
+        System.out.println(&quot;Circle&quot;);
+    }
+    @Override
+    public void draw() {
+        System.out.println(&quot;Draw Circle&quot;);
+    }
+}</code></pre>
+<p>长方形</p>
+<pre><code class="java">public class Rectangle implements Shape {
+    public Rectangle() {
+        System.out.println(&quot;Rectangle&quot;);
+    }
+    @Override
+    public void draw() {
+        System.out.println(&quot;Draw Rectangle&quot;);
+    }
+}</code></pre>
+<p>正方形</p>
+<pre><code class="java">public class Square implements Shape {
+    public Square() {
+        System.out.println(&quot;Square&quot;);
+    }
+
+    @Override
+    public void draw() {
+        System.out.println(&quot;Draw Square&quot;);
+    }
+}</code></pre>
+<p><strong>（3）创建工厂类：</strong></p>
+<pre><code class="java">public class ShapeFactory {
+
+    // 使用 getShape 方法获取形状类型的对象
+    public static Shape getShape(String shapeType) {
+        if (shapeType == null) {
+            return null;
+        }
+        if (shapeType.equalsIgnoreCase(&quot;CIRCLE&quot;)) {
+            return new Circle();
+        } else if (shapeType.equalsIgnoreCase(&quot;RECTANGLE&quot;)) {
+            return new Rectangle();
+        } else if (shapeType.equalsIgnoreCase(&quot;SQUARE&quot;)) {
+            return new Square();
+        }
+        return null;
+    }
+}</code></pre>
+<p><strong>（4）测试方法：</strong></p>
+<pre><code class="java">public class Test {
+
+    public static void main(String[] args) {
+
+        // 获取 Circle 的对象，并调用它的 draw 方法
+        Shape circle = ShapeFactory.getShape(&quot;CIRCLE&quot;);
+        circle.draw();
+
+        // 获取 Rectangle 的对象，并调用它的 draw 方法
+        Shape rectangle = ShapeFactory.getShape(&quot;RECTANGLE&quot;);
+        rectangle.draw();
+
+        // 获取 Square 的对象，并调用它的 draw 方法
+        Shape square = ShapeFactory.getShape(&quot;SQUARE&quot;);
+        square.draw();
+    }
+}</code></pre>
+<p><strong>输出结果：</strong></p>
+<pre><code>Circle
+Draw Circle
+Rectangle
+Draw Rectangle
+Square
+Draw Square</code></pre><p>这样的实现有个问题，如果我们新增产品类的话，就需要修改工厂类中的getShape（）方法，这很明显不符合 <strong>开放-封闭原则</strong> 。</p>
+<p>所以说简单工厂模式需要进行改进。</p>
+<h2 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h2><p>先来说说上面的AB产品的例子。</p>
+<pre><code class="java">public interface IFactory {
+    IProduct getProduct();
+}
+
+public class AFactory implements IFactory {
+    @Override
+    public IProduct getProduct() {
+        return new AProduct(AProduct.class.getName());
+    }
+}
+
+public class BFactory implements IFactory {
+    @Override
+    public IProduct getProduct() {
+        return new BProduct(BProduct.class.getName());
+    }
+}</code></pre>
+<blockquote>
+<p>这一次我们让客户端不再依赖具体的工厂类，而是依赖一个抽象的工厂类。然后让各个生产对应的产品的工厂继承抽象工厂，实现抽象工厂的方法。这时，我们就满足依赖倒置原则了。我们的客户端不再依赖具体，而是一览抽象。当我们有了一个C产品的时候，我们只有添加C类，和CFactory就行了，我们这时只是增加了代码，没有修改之前的代码，符合设计模式的规则。</p>
+</blockquote>
+<p>突然发现有些糟糕了，因为代码变得很多了，因为功能类似的产品我们进行 3 层抽象，针对每个产品我们还抽象出了 2 层的工厂类。但是我们在某个具体的业务场景中，不单单是只实例化一个类啊。举一个例子，在游戏中，我们要一个战士配装备，首先我们需要配一把枪械（枪械有很多，步枪，狙击枪等，使用问题 1 进行抽象），但是配了枪械之后，我们还需要配子弹啊（继续使用问题 1 的方法进行抽象），好了，现在可以抽象出 2 层的工厂类了，针对现在的情况我们是不是可以让一个工厂既生产枪械，又生产子弹呢？ 这就是<strong>抽象工厂模式</strong>。简单来说，<strong>可以把有一些有联系或者相近的产品，放到一个工厂去生产，没有必要单独再开一个工厂了</strong>。</p>
+<p>图形的工厂方法的介绍</p>
+<p>上面简单工厂例子中的图形接口以及相关图像实现类不变。我们只需要增加一个工厂接口以及实现这个接口的工厂类即可。</p>
+<p><strong>(1)增加一个工厂接口：</strong></p>
+<pre><code>public interface Factory {
+    public Shape getShape();
+}</code></pre><p><strong>（2）增加相关工厂类:</strong></p>
+<p>圆形工厂类</p>
+<pre><code>public class CircleFactory implements Factory {
+
+    @Override
+    public Shape getShape() {
+        // TODO Auto-generated method stub
+        return new Circle();
+    }
+
+}</code></pre><p>长方形工厂类</p>
+<pre><code>public class RectangleFactory implements Factory{
+
+    @Override
+    public Shape getShape() {
+        // TODO Auto-generated method stub
+        return new Rectangle();
+    }
+
+}</code></pre><p>圆形工厂类</p>
+<pre><code>public class SquareFactory implements Factory{
+
+    @Override
+    public Shape getShape() {
+        // TODO Auto-generated method stub
+        return new Square();
+    }
+
+}</code></pre><p><strong>（3）测试：</strong></p>
+<pre><code>public class Test {
+
+    public static void main(String[] args) {
+        Factory circlefactory = new CircleFactory();
+        Shape circle = circlefactory.getShape();
+        circle.draw();
+    }
+}</code></pre><p><strong>输出结果：</strong></p>
+<pre><code>Circle
+Draw Circle</code></pre><h3 id="工厂方法的一些应用"><a href="#工厂方法的一些应用" class="headerlink" title="工厂方法的一些应用"></a>工厂方法的一些应用</h3><p>我们都知道 Java 的泛型是采用类型擦除来实现的（在 javac 编译过程的中把泛型去掉，加上强制类型转换）。所以我们不能直接 new T()来实例化一个对象。其实可以采用<strong>工厂方法模式</strong>设计模式来解决。</p>
+<p>假设我们有一个类，里面要用到了泛型的实例化。</p>
+<pre><code class="java">public class Foo&lt;T&gt;(){
+    private T t;
+    public Foo(){
+        t = new T(); // 这个代码是有问题的，我们使用工厂设计模式进行改进
+    }
+}</code></pre>
+<p>我们给出工厂接口如下：</p>
+<pre><code class="java">public interface IFactory&lt;T&gt;(){
+   T create();
+}</code></pre>
+<p>进而我们可以采用如下的方法进行改进</p>
+<pre><code class="java">public class Foo&lt;T&gt;(){
+    private T t;
+    public &lt;F extends IFactory&lt;T&gt;&gt; Foo(F factory){
+        // t = new T(); 
+        return factory.create();       
+    }
+}</code></pre>
+<p>这个时候，我们可以采用如下的方式实例化 Foo</p>
+<pre><code class="java">    new Foo(new Ifactory&lt;Integer&gt;(){
+        Integer create(){
+            return new Integer(0);
+        }
+    });
+
+    new Foo(new Ifactory&lt;String&gt;(){
+        String create(){
+            return &quot;Hello&quot;;
+        }
+    });</code></pre>
+<h2 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h2><h3 id="抽象工厂的基本介绍"><a href="#抽象工厂的基本介绍" class="headerlink" title="抽象工厂的基本介绍"></a>抽象工厂的基本介绍</h3><p>在工厂方法模式中，其实我们有一个潜在意识的意识。那就是我们生产的都是同一类产品。抽象工厂模式是工厂方法的仅一步深化，在这个模式中的工厂类不单单可以创建一种产品，而是可以创建一组产品。</p>
+<p>抽象工厂应该是比较最难理解的一个工厂模式了。</p>
+<h3 id="抽象工厂的适用场景"><a href="#抽象工厂的适用场景" class="headerlink" title="抽象工厂的适用场景"></a>抽象工厂的适用场景</h3><ul>
+<li>和工厂方法一样客户端不需要知道它所创建的对象的类。</li>
+<li>需要一组对象共同完成某种功能时，并且可能存在多组对象完成不同功能的情况。（同属于同一个产品族的产品）</li>
+<li>系统结构稳定，不会频繁的增加对象。（因为一旦增加就需要修改原有代码，不符合开闭原则）</li>
+</ul>
+<h3 id="抽象工厂方法模式角色分配"><a href="#抽象工厂方法模式角色分配" class="headerlink" title="抽象工厂方法模式角色分配"></a>抽象工厂方法模式角色分配</h3><ol>
+<li><strong>抽象工厂（AbstractFactory）角色</strong> ：是工厂方法模式的核心，与应用程序无关。任何在模式中创建的对象的工厂类必须实现这个接口。</li>
+<li><strong>具体工厂类（ConreteFactory）角色</strong> ：这是实现抽象工厂接口的具体工厂类，包含与应用程序密切相关的逻辑，并且受到应用程序调用以创建某一种产品对象。</li>
+<li><strong>抽象产品（Abstract Product）角色</strong> ：工厂方法模式所创建的对象的超类型，也就是产品对象的共同父类或共同拥有的接口。</li>
+<li><strong>具体产品（Concrete Product）角色</strong> ：抽象工厂模式所创建的任何产品对象都是某一个具体产品类的实例。在抽象工厂中创建的产品属于同一产品族，这不同于工厂模式中的工厂只创建单一产品，我后面也会详解介绍到。</li>
+</ol>
+<p><strong>抽象工厂是生产一整套有产品的（至少要生产两个产品)，这些产品必须相互是有关系或有依赖的，而工厂方法中的工厂是生产单一产品的工厂。</strong></p>
+<p>不知道大家玩过穿越火线或者吃鸡这类游戏了吗，游戏中存在各种枪。我们假设现在存在AK、M4A1两类枪，每一种枪对应一种子弹。我们现在这样考虑生产AK的工厂可以顺便生产AK使用的子弹，生产M4A1的工厂可以顺便生产M4A1使用的子弹。（AK工厂生产AK系列产品包括子弹啊，AK枪的类型啊这些，M4A1工厂同理）</p>
+<p><strong>（1）创建相关接口：</strong></p>
+<p>枪</p>
+<pre><code class="java">public interface Gun {
+    public void shooting();
+}</code></pre>
+<p>子弹</p>
+<pre><code class="java">public interface Bullet {
+    public void load();
+}</code></pre>
+<p><strong>（2）创建接口对应实现类：</strong></p>
+<p>AK类</p>
+<pre><code class="java">public class AK implements Gun{
+
+    @Override
+    public void shooting() {
+        System.out.println(&quot;shooting with AK&quot;);
+
+    }
+
+}</code></pre>
+<p>M4A1类</p>
+<pre><code class="java">public class M4A1 implements Gun {
+
+    @Override
+    public void shooting() {
+        System.out.println(&quot;shooting with M4A1&quot;);
+    }
+}</code></pre>
+<p>AK子弹类</p>
+<pre><code class="java">public class AK_Bullet implements Bullet {
+
+    @Override
+    public void load() {
+        System.out.println(&quot;Load bullets with AK&quot;);
+    }
+
+}</code></pre>
+<p>M4A1子弹类</p>
+<pre><code class="java">public class M4A1_Bullet implements Bullet {
+
+    @Override
+    public void load() {
+        System.out.println(&quot;Load bullets with M4A1&quot;);
+    }
+
+}</code></pre>
+<p><strong>（3）创建工厂接口</strong></p>
+<pre><code class="java">public interface Factory {
+    public Gun produceGun();
+    public Bullet produceBullet();
+}</code></pre>
+<p><strong>（4）创建具体工厂</strong></p>
+<p>生产AK和AK子弹的工厂</p>
+<pre><code class="java">public class AK_Factory implements Factory{
+
+    @Override
+    public Gun produceGun() {
+        return new AK();
+    }
+
+    @Override
+    public Bullet produceBullet() {
+        return new AK_Bullet();
+    }
+
+}</code></pre>
+<p>生产M4A1和M4A1子弹的工厂</p>
+<pre><code class="java">public class M4A1_Factory implements Factory{
+
+    @Override
+    public Gun produceGun() {
+        return new M4A1();
+    }
+
+    @Override
+    public Bullet produceBullet() {
+        return new M4A1_Bullet();
+    }
+
+}</code></pre>
+<p><strong>（5）测试</strong></p>
+<pre><code class="java">public class Test {
+
+    public static void main(String[] args) {  
+
+     Factory factory;
+     Gun gun;
+     Bullet bullet;
+
+     factory =new AK_Factory();
+     bullet=factory.produceBullet();
+     bullet.load();
+     gun=factory.produceGun();
+     gun.shooting(); 
+
+    }
+
+}</code></pre>
+<p><strong>输出结果：</strong></p>
+<pre><code>Load bullets with AK
+shooting with AK</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>意图：</strong>定义一个创建对象的接口，让其子类自己决定实例化哪一个工厂类，工厂模式使其创建过程延迟到子类进行。</p>
+<p><strong>主要解决：</strong>主要解决接口选择的问题。</p>
+<p><strong>何时使用：</strong>我们明确地计划不同条件下创建不同实例时。</p>
+<p><strong>如何解决：</strong>让其子类实现工厂接口，返回的也是一个抽象的产品。</p>
+<p><strong>关键代码：</strong>创建过程在其子类执行。</p>
+<p><strong>应用实例：</strong> 1、您需要一辆汽车，可以直接从工厂里面提货，而不用去管这辆汽车是怎么做出来的，以及这个汽车里面的具体实现。 2、Hibernate 换数据库只需换方言和驱动就可以。</p>
+<p><strong>优点：</strong> 1、一个调用者想创建一个对象，只要知道其名称就可以了。 2、扩展性高，如果想增加一个产品，只要扩展一个工厂类就可以。 3、屏蔽产品的具体实现，调用者只关心产品的接口。</p>
+<p><strong>缺点：</strong>每次增加一个产品时，都需要增加一个具体类和对象实现工厂，使得系统中类的个数成倍增加，在一定程度上增加了系统的复杂度，同时也增加了系统具体类的依赖。这并不是什么好事。</p>
+<p><strong>使用场景：</strong> 1、日志记录器：记录可能记录到本地硬盘、系统事件、远程服务器等，用户可以选择记录日志到什么地方。 2、数据库访问，当用户不知道最后系统采用哪一类数据库，以及数据库可能有变化时。 3、设计一个连接服务器的框架，需要三个协议，”POP3”、”IMAP”、”HTTP”，可以把这三个作为产品类，共同实现一个接口。</p>
+<p><strong>注意事项：</strong>作为一种创建类模式，在任何需要生成复杂对象的地方，都可以使用工厂方法模式。有一点需要注意的地方就是复杂对象适合使用工厂模式，而简单对象，特别是只需要通过 new 就可以完成创建的对象，无需使用工厂模式。如果使用工厂模式，就需要引入一个工厂类，会增加系统的复杂度。</p>
+<p>参考：<a href="https://segmentfault.com/a/1190000015050674" target="_blank" rel="noopener">深入理解工厂模式</a>  <a href="https://www.zhihu.com/question/24843188/answer/110361396" target="_blank" rel="noopener">知乎回答</a>  <a href="https://www.runoob.com/design-pattern/factory-pattern.html" target="_blank" rel="noopener">工厂模式|菜鸟教程</a></p>
+
         </div>
         <!-- .entry-content -->
         <div class="single-reward">

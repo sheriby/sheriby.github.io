@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">排序算法（七）基数排序 | Sher的小博客</title>
+  <title itemprop="name">archive_a: 2019/8 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,258 +340,458 @@
   </div>
 </header>
 
-      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
-<div class="pattern-center-blank"></div>
-
-  <div class="pattern-center single-center">
-    <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/11.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/11.jpg">
-    </div>
-    <header class="pattern-header single-header">
-      <h1 class="entry-title">
-      排序算法（七）基数排序</h1>
-      <p class="entry-census">
-        <span>
-          <a href="sheriby.github.io">
-            <img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true">
-          </a>
-        </span>
-        <span>
-          <a href="sheriby.github.io">Hony Sher</a>
-        </span>
-        <span class="bull">
-        ·</span>
-        2019-7-18<span class="bull">
-        ·</span>
-      <span id="busuanzi_value_page_pv"></span>次阅读</p>
-    </header>
-  </div>
-
+      <div class="blank" style="padding-top: 75px;">
+</div>
 <div id="content" class="site-content">
-  <div id="primary" class="content-area">
-    <main id="main" class="site-main" role="main">
-      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
-        <div class="toc"></div>
-        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
-        
-        <div class="entry-content">
-          <h2 id="排序算法（七）基数排序"><a href="#排序算法（七）基数排序" class="headerlink" title="排序算法（七）基数排序"></a>排序算法（七）基数排序</h2><blockquote>
-<p>这里说的是基数排序(<em>Radix Sort</em>)而不是计数排序(<em>Counting Sort</em>)，计数排序也是另外的一种比较高效的排序算法，但是这个算法不在我近阶段要讲的算法之列。说起和基数排序类似的算法，桶排序(Bucket Sort)其实就是和基数排序是有点儿相似的，不过桶排序也不在近阶段介绍之列，蛤蛤蛤~~(⊙o⊙)…</p>
-</blockquote>
-<h3 id="基数排序的的基本介绍"><a href="#基数排序的的基本介绍" class="headerlink" title="基数排序的的基本介绍"></a>基数排序的的基本介绍</h3><hr>
-<table>
-<thead>
-<tr>
-<th align="center">名字</th>
-<th align="center">平均时间复杂度</th>
-<th align="center">最好时间复杂度</th>
-<th align="center">最差时间复杂度</th>
-<th align="center">空间复杂度</th>
-<th align="center">是否流弊</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">基数排序</td>
-<td align="center">O(n*k)</td>
-<td align="center">O(n*k)</td>
-<td align="center">O(n*k)</td>
-<td align="center">O(n+k)</td>
-<td align="center">一般</td>
-</tr>
-</tbody></table>
-<p>我们发现这个基数排序的时间复杂度似乎是比O(nlogn)要低的，但是这个<strong>O(nlogn)是比较类的排序算法的下限</strong>，基数排序是一种典型的使用空间来换取时间的算法，不属于比较类排序算法。另外要说的是，<strong>基数排序是一个稳定的算法。</strong></p>
-<h3 id="基数排序的基本思路"><a href="#基数排序的基本思路" class="headerlink" title="基数排序的基本思路"></a>基数排序的基本思路</h3><hr>
-<p>基数排序的基本思路是准备十个桶。从0号桶到9号桶。第一次我们使用个位数进行排序，然后把数据从桶中依次取出来。第二次使用百位数进行排序。。。以此类推就这样这个数组就是有序的了。这个思路还是比较容易理解的。</p>
-<p>下面直接上图吧。</p>
-<p><img src="https://forum.mianbaoban.cn/data/attachment/forum/201803/20/140204ezq2fmi0pm2o9bb9.gif" alt></p>
-<p>再来一个图片看一下子</p>
-<p><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563470819567&di=aec837f8b6dfb398c8b1ba62d0c36508&imgtype=0&src=http%3A%2F%2Fimg2018.cnblogs.com%2Fblog%2F1333139%2F201810%2F1333139-20181016151854809-911543672.jpg" alt></p>
-<p><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563470928918&di=acd7e35b886b29990d393c49f901d25c&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D2305609023%2C714594111%26fm%3D214%26gp%3D0.jpg" alt></p>
-<p>这个算法算是一般流弊算法吧。因为特别容易理解，没啥需要理解的，搞得我都不知道要说什么啦。。。</p>
-<p>直接来上代码看代码的实现吧。</p>
-<h3 id="基数排序的代码实现"><a href="#基数排序的代码实现" class="headerlink" title="基数排序的代码实现"></a>基数排序的代码实现</h3><pre><code class="java">    public static void radixSort(int[] arr) {
-        int[][] backet = new int[10][arr.length];
-        int[] backetElementsCounts = new int[10];
-
-        int max = arr[0];
-        for (int i = 1; i &lt; arr.length; i++) {
-            if (arr[i] &gt; max) {
-                max = arr[i];
-            }
-        }
-
-        // 下面两种方法都可以选择 转为字符串求数字的长度
-        int maxLength = (max+&quot;&quot;).length();
-//        int maxLength = Integer.toString(max).length();
-
-        for (int i = 0, t=1; i &lt; maxLength; i++, t*=10) {
-            // 数据放入桶中
-            for (int j = 0; j &lt; arr.length; j++) {
-                int which_backet = arr[j]/t%10;
-                backet[which_backet][backetElementsCounts[which_backet]++] = arr[j];
-            }
-
-            // 把数据从桶中取出
-            for (int j = 0, k=0, m=0; j &lt; 10; j++) {
-                while (backetElementsCounts[j] != 0) {
-                    arr[k] = backet[j][m];
-                    backetElementsCounts[j]--;
-                    k++;
-                    m++;
-                }
-                m=0;
-            }
-
-        }
-    }</code></pre>
-<blockquote>
-<p><strong>代码说明：</strong></p>
-<ol>
-<li><p>第三行代表的含义是什么？</p>
-<p>第二行代码其实就是在造桶子，十个桶子，每个桶子的大小的都是arr.length，因为万一所有的数的某一位都是相同的，那个桶子不就爆了喵？？而第三行的数组是存放每个桶子中的元素的个数。因为下面还是要取出元素的，不知道放了几个元素，怎么取，玩蛇皮的嘛。</p>
-</li>
-<li><p>为什么要求最大的数字的长度？</p>
-<p>这个把<strong>数字转为字符串来求长度</strong>还是非常的妙的。不过你问为啥要求最大的数字的长度？？因为后面我们要从个位数开始根据每个位置开始排序啊。</p>
-</li>
-<li><p>t的作用是什么？</p>
-<p>第一次取到个位数就是 num/1%10。取百位数就是 num/10%10。我们通过每次t /= t就可以依次取到各个位数了。每次放入一个元素之后，对应的用来计数的数组中的值也要增加1.</p>
-</li>
-<li><p>如何取出数据的？</p>
-<p>这恐怕是更容易理解的。找到桶里有数据的桶，看看桶中有几个数据取出来放到原来的数组中不就完事了。</p>
-<p>唉~，这个算法是实在简单，搞得我是真的没话说了。我也是醉了吖。。。</p>
-</li>
-</ol>
-</blockquote>
-<h3 id="基数排序的测试"><a href="#基数排序的测试" class="headerlink" title="基数排序的测试"></a>基数排序的测试</h3><hr>
-<p>测试环境及工具：<em>我的电脑 Huawei MateBook 13+JDK1.8+Eclipse</em></p>
-<p>测试手段：<em>随机生成80000个和8,000,000个[0,800000）的整数的数组进行排序，观察所花费的时间</em></p>
-<p>测试代码：</p>
-<pre><code class="java">public static void main(String[] args) {
-        int[] arr = new int[80000];
-        for (int i = 0; i &lt; arr.length; i++) {
-//            arr[i] = (int) (Math.random()*800000);
-            arr[i] = new Random().nextInt(800000);
-        }
-//        System.out.println(Arrays.toString(arr));
-        long start_time = System.currentTimeMillis();
-        radixSort(arr);
-        long end_time = System.currentTimeMillis();
-//        System.out.println(Arrays.toString(arr));
-        System.out.println(&quot;Time :&quot;+(end_time-start_time)+&quot;ms&quot;);
-}</code></pre>
-<blockquote>
-<p><strong>80,000数据时：</strong></p>
-<ul>
-<li><em>Time :  12ms</em></li>
-<li><em>Time :  16ms</em></li>
-<li><em>Time :  17ms</em></li>
-</ul>
-<p><strong>8,000,000数据时：</strong></p>
-<ul>
-<li><em>Time :  423ms</em></li>
-<li><em>Time :  397ms</em></li>
-<li><em>Time :  404ms</em></li>
-</ul>
-</blockquote>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><hr>
-<p>可以清楚的看到排八万个这种小数据的时候，几种高效的算法几乎没有区别。不过排八百万个数据的时候，基数排序就发挥出了他的优势。快啊！不过要说明的是，<strong>基数排序极其占用内存，如果是排序八千万个数耗费的就是4个G左右的内存</strong>，所以说在内存不足的情况下，这个算法是不适合考虑的。</p>
-
-        </div>
-        <!-- .entry-content -->
-        <div class="single-reward">
-          <div class="reward-open">赏<div class="reward-main">
-              <ul class="reward-row">
-                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/AliPayQR.jpg"></li>
-                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/WechatPayQr.png"></li>
-              </ul>
+  <div id="main">
+    <header class="page-header">
+      <h1 class="cat-title">
+      归档</h1>
+      <span class="cat-des">
+        <p>
+        Archives</p>
+      </span>
+    </header>
+    <div id="main-part">
+      <article class="art">
+        <div class="art-main">
+          <div class="art-content">
+            <div id="archives">
+              <p style="text-align:right;">
+                [<span id="al_expand_collapse" style="cursor: s-resize;">
+                全部展开/收缩</span>
+              ]</p>
+              
+              
+              
+              
+              
+                
+                <h3 class="al_year">2019年</h3>
+              
+              
+                
+                <ul class="al_mon_list">
+                  <li class="al_li">
+                    <span class="al_mon" style="cursor: s-resize;">
+                      08月(<span id="post-num">
+                      3</span>
+                    篇文章)</span>
+                    <ul class="al_post_list" style="">
+              
+                      <li>
+                        <a href="/2019/08/02/再谈动态规划/">
+                          <span style="color:#0bf;">
+                          02日07:21:47</span>
+                          再谈动态规划
+                        </a>
+                      </li>
+                      
+                    </ul>
+                  </li>
+                </ul>
+              
+              
+              
+              
+              
+              
+                
+                <ul class="al_mon_list">
+                  <li class="al_li">
+                    <span class="al_mon" style="cursor: s-resize;">
+                      07月(<span id="post-num">
+                      3</span>
+                    篇文章)</span>
+                    <ul class="al_post_list" style="">
+              
+                      <li>
+                        <a href="/2019/07/31/最长回文子串问题/">
+                          <span style="color:#0bf;">
+                          31日09:54:15</span>
+                          最长回文子串问题
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/26/设计模式（二）工厂模式/">
+                          <span style="color:#0bf;">
+                          26日16:39:10</span>
+                          设计模式（二）工厂模式
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/26/图和图的BFS与DFS/">
+                          <span style="color:#0bf;">
+                          26日12:14:41</span>
+                          图和图的BFS与DFS
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/25/设计模式（一）单例模式/">
+                          <span style="color:#0bf;">
+                          25日19:29:18</span>
+                          设计模式（一）单例模式
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/25/AVL-Tree/">
+                          <span style="color:#0bf;">
+                          25日13:15:06</span>
+                          AVL Tree
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/25/Sunday字符串匹配算法/">
+                          <span style="color:#0bf;">
+                          25日12:04:45</span>
+                          Sunday字符串匹配算法
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/24/递归与回溯/">
+                          <span style="color:#0bf;">
+                          24日09:12:11</span>
+                          递归与回溯
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/23/二叉树的广度优先和深度优先遍历/">
+                          <span style="color:#0bf;">
+                          23日19:20:34</span>
+                          二叉树的广度优先和深度优先遍历
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/23/贪心算法简介/">
+                          <span style="color:#0bf;">
+                          23日13:44:35</span>
+                          贪心算法简介
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/22/-1大于0x7fffffff/">
+                          <span style="color:#0bf;">
+                          22日21:59:06</span>
+                          -1&gt;0x7fffffff???(黑人问号脸)
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/22/KMP算法简介/">
+                          <span style="color:#0bf;">
+                          22日11:20:16</span>
+                          KMP算法简介
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/20/动态规划算法简介/">
+                          <span style="color:#0bf;">
+                          20日09:04:00</span>
+                          动态规划算法简介
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/19/MySQL基本增删改查/">
+                          <span style="color:#0bf;">
+                          19日20:36:20</span>
+                          MySQL基本的增删改查操作
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/19/0.1+0.2 == 0.3 浅谈计算机中的浮点数/">
+                          <span style="color:#0bf;">
+                          19日15:52:57</span>
+                          0.1+0.2 == 0.3? 浅谈计算机中的浮点数
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/19/浅谈Java中的equals与==陷阱/">
+                          <span style="color:#0bf;">
+                          19日13:18:39</span>
+                          浅谈Java中的equals与==陷阱
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/19/排序算法（八）堆排序/">
+                          <span style="color:#0bf;">
+                          19日09:11:16</span>
+                          排序算法（八）堆排序
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/18/排序算法（七）基数排序/">
+                          <span style="color:#0bf;">
+                          18日21:57:57</span>
+                          排序算法（七）基数排序
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/18/排序算法（六）归并排序/">
+                          <span style="color:#0bf;">
+                          18日16:47:12</span>
+                          排序算法（六）归并排序
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/18/排序算法（五）快速排序/">
+                          <span style="color:#0bf;">
+                          18日13:45:44</span>
+                          排序算法（五）快速排序
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/18/排序算法（四）希尔排序/">
+                          <span style="color:#0bf;">
+                          18日09:45:41</span>
+                          排序算法（四）希尔排序
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/17/排序算法（三）插入排序法/">
+                          <span style="color:#0bf;">
+                          17日22:12:07</span>
+                          排序算法（三）插入排序法
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/17/排序算法（二）选择排序法/">
+                          <span style="color:#0bf;">
+                          17日20:02:39</span>
+                          排序算法（二）选择排序法
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/17/排序算法（一）冒泡排序法/">
+                          <span style="color:#0bf;">
+                          17日19:11:36</span>
+                          排序算法(一） 冒泡排序法
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/17/利用赫夫曼编码来压缩数据/">
+                          <span style="color:#0bf;">
+                          17日16:36:39</span>
+                          利用赫夫曼编码来压缩数据
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/17/MarkDown的基本使用/">
+                          <span style="color:#0bf;">
+                          17日14:49:04</span>
+                          MarkDown的基本使用
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/17/第一个博客HelloWorld/">
+                          <span style="color:#0bf;">
+                          17日13:27:20</span>
+                          第一个博客 HelloWorld
+                        </a>
+                      </li>
+                      
+              
+              
+              
+              
+              
+                      <li>
+                        <a href="/2019/07/17/hello-world/">
+                          <span style="color:#0bf;">
+                          17日13:14:50</span>
+                          Hello World
+                        </a>
+                      </li>
+                      
+                    </ul>
+                  </li>
+                </ul>
+              
+              
+              
+              
+              
+                
+                <h3 class="al_year">2018年</h3>
+              
+              
+                
+                <ul class="al_mon_list">
+                  <li class="al_li">
+                    <span class="al_mon" style="cursor: s-resize;">
+                      12月(<span id="post-num">
+                      3</span>
+                    篇文章)</span>
+                    <ul class="al_post_list" style="">
+              
+                      <li>
+                        <a href="/2018/12/12/Hexo-Theme-Sakura/">
+                          <span style="color:#0bf;">
+                          12日22:16:01</span>
+                          Hexo-Theme-Sakura
+                        </a>
+                      </li>
+                      
+                    </ul>
+                  </li>
+                </ul>
+              
+              
             </div>
           </div>
         </div>
-        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
-        <footer class="post-footer">
-          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
-          <div class="post-tags">
-          </div>
-          <div class="post-share">
-            <div class="social-share sharehidden share-component"></div>
-            <i class="iconfont show-share icon-forward"></i>
-          </div>
-        </footer><!-- .entry-footer -->
       </article>
-      <!-- #post-## -->
-      <div class="toc" style="background: none;"></div>
-      <section class="post-squares nextprev">
-        
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/07/19/排序算法（八）堆排序/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/17.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/17.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                排序算法（八）堆排序</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-        
-          
-            <div class="post-nepre half next">
-          
-            <a href="/2019/07/18/排序算法（六）归并排序/" rel="next">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/19.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/19.jpg">
-              </div>
-              <span class="label">
-              Next Post</span>
-              <div class="info">
-                <h3>
-                排序算法（六）归并排序</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-      </section>
-      
-<div id="vcomments"></div>
-<script>
-  window.onload = function(){
-      var valine = new Valine();
-      valine.init({
-        el: '#vcomments',
-        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
-        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
-        path: window.location.pathname,
-        placeholder: "你是我一生只会遇见一次的惊喜 ..."
-      })
-  }
-</script>
-
-      <section class="author-profile">
-        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <a href="sheriby.github.io" class="profile gravatar"><img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
-          <div class="meta">
-            <span class="title">Author</span>
-            <h3 itemprop="name">
-            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
-            </h3>
-          </div>
-        </div>
-        <hr>
-        <p><i class="iconfont icon-write"></i>一枚小菜鸡</p>
-      </section>
-    </main><!-- #main -->
-  </div><!-- #primary -->
+    </div>
+  </div>
 </div>
-
-
 
     </div>    
     <div class="ins-search">

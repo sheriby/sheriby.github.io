@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">排序算法（七）基数排序 | Sher的小博客</title>
+  <title itemprop="name">再谈动态规划 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/11.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/11.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/39.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/39.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      排序算法（七）基数排序</h1>
+      再谈动态规划</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-7-18<span class="bull">
+        2019-8-2<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,126 +376,270 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h2 id="排序算法（七）基数排序"><a href="#排序算法（七）基数排序" class="headerlink" title="排序算法（七）基数排序"></a>排序算法（七）基数排序</h2><blockquote>
-<p>这里说的是基数排序(<em>Radix Sort</em>)而不是计数排序(<em>Counting Sort</em>)，计数排序也是另外的一种比较高效的排序算法，但是这个算法不在我近阶段要讲的算法之列。说起和基数排序类似的算法，桶排序(Bucket Sort)其实就是和基数排序是有点儿相似的，不过桶排序也不在近阶段介绍之列，蛤蛤蛤~~(⊙o⊙)…</p>
-</blockquote>
-<h3 id="基数排序的的基本介绍"><a href="#基数排序的的基本介绍" class="headerlink" title="基数排序的的基本介绍"></a>基数排序的的基本介绍</h3><hr>
-<table>
-<thead>
-<tr>
-<th align="center">名字</th>
-<th align="center">平均时间复杂度</th>
-<th align="center">最好时间复杂度</th>
-<th align="center">最差时间复杂度</th>
-<th align="center">空间复杂度</th>
-<th align="center">是否流弊</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">基数排序</td>
-<td align="center">O(n*k)</td>
-<td align="center">O(n*k)</td>
-<td align="center">O(n*k)</td>
-<td align="center">O(n+k)</td>
-<td align="center">一般</td>
-</tr>
-</tbody></table>
-<p>我们发现这个基数排序的时间复杂度似乎是比O(nlogn)要低的，但是这个<strong>O(nlogn)是比较类的排序算法的下限</strong>，基数排序是一种典型的使用空间来换取时间的算法，不属于比较类排序算法。另外要说的是，<strong>基数排序是一个稳定的算法。</strong></p>
-<h3 id="基数排序的基本思路"><a href="#基数排序的基本思路" class="headerlink" title="基数排序的基本思路"></a>基数排序的基本思路</h3><hr>
-<p>基数排序的基本思路是准备十个桶。从0号桶到9号桶。第一次我们使用个位数进行排序，然后把数据从桶中依次取出来。第二次使用百位数进行排序。。。以此类推就这样这个数组就是有序的了。这个思路还是比较容易理解的。</p>
-<p>下面直接上图吧。</p>
-<p><img src="https://forum.mianbaoban.cn/data/attachment/forum/201803/20/140204ezq2fmi0pm2o9bb9.gif" alt></p>
-<p>再来一个图片看一下子</p>
-<p><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563470819567&di=aec837f8b6dfb398c8b1ba62d0c36508&imgtype=0&src=http%3A%2F%2Fimg2018.cnblogs.com%2Fblog%2F1333139%2F201810%2F1333139-20181016151854809-911543672.jpg" alt></p>
-<p><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563470928918&di=acd7e35b886b29990d393c49f901d25c&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D2305609023%2C714594111%26fm%3D214%26gp%3D0.jpg" alt></p>
-<p>这个算法算是一般流弊算法吧。因为特别容易理解，没啥需要理解的，搞得我都不知道要说什么啦。。。</p>
-<p>直接来上代码看代码的实现吧。</p>
-<h3 id="基数排序的代码实现"><a href="#基数排序的代码实现" class="headerlink" title="基数排序的代码实现"></a>基数排序的代码实现</h3><pre><code class="java">    public static void radixSort(int[] arr) {
-        int[][] backet = new int[10][arr.length];
-        int[] backetElementsCounts = new int[10];
+          <h1 id="再谈动态规划"><a href="#再谈动态规划" class="headerlink" title="再谈动态规划"></a>再谈动态规划</h1><hr>
+<p>动态规划算法是很常见的，但是上次讲的那啥动态规划讲的几个例子都不是非常的经典，不过他们依旧都是动态规划。可以很清楚的看到他们都是利用了一个类似递归的表达式（状态转换式），从一个子问题的解到另一个子问题的解。如何能一眼看出这个使用的是动态规划算法，如何一眼看出状态转换式，这个可以说是非常困难的，需要对动态规划算法非常的熟悉才行。现在就来举几个之前写好了的例子来看看动态规划算法吧。</p>
+<h2 id="动态规划题目"><a href="#动态规划题目" class="headerlink" title="动态规划题目"></a>动态规划题目</h2><h3 id="最大路径和"><a href="#最大路径和" class="headerlink" title="最大路径和"></a>最大路径和</h3><pre><code>这道题口头叙述起来比较困难，直接图形化描述吧。
+  1
+ 3 2
+2 4 7
+上面有一个三角形形状的数阵。我们从第一层开始走到最后一层，每次到下一层只能选择向左或者向右，请问如何走才能使得最终走的路径上的数字之后是最大的。</code></pre><h4 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h4><p>这个也是动态规划算法吗？这个当然是。先想想这个问题的子问题到底是什么？我们要知道走到第三层路径的最大的和，假如我们已经知道第二层的最大路径的和呢？</p>
+<p>这有啥用，我们也不知道其他的位置怎么样，比如上面的那个第二层的最大路径和是4，但是要找到三层的最大路径要走旁边的那个2，所以说我们知道最大路径和是没用的。</p>
+<p>但是我们可以考虑到每一层的每一个点的最大路径的值，最终的结果也就是最后一层的值的最大值。</p>
+<pre><code> 4 3
+2 3 7</code></pre><p>这是我们已经知道了第二层的每个点的最大路径值，那么第三层和第二层之间有什么联系呢？</p>
+<p>比如第一个2，他只能和4加，那就是6,。</p>
+<p>3可以选择和4或3加，去最大值就是7。</p>
+<p>7只可以和3加，那就是10</p>
+<pre><code>6 7 10</code></pre><p>最后我们找到最后一层的最大值，也就是10。这就是最大路径和。</p>
+<p>那么状态转移式该如何写呢？</p>
+<p><code>f(i, j) = max(f(i-1, j-1), f(i-1, j)) + f(i, j)；</code></p>
+<p>当然这里的i,j都是有条件的。<strong>i的含义是第几层，j的含义的第几个。</strong>这样我们就可以使用二维数组来表示这个了</p>
+<pre><code>1 
+3 2 
+2 4 7</code></pre><p>但是这样是否最优呢？我们可以轻易的发现，每次我们只是使用了一层的数据。比如找第三层的我们只需要第二层，找第四层我们只需要第三层，那么我们可不可以只使用一个一维数组来表示呢？</p>
+<p>我们现在有个思路就是<strong>从最后一层开始算</strong>，为什么呢？因为到点是固定的。<strong>第一层只有一个值，最终得到的最大路径肯定是一维数组的第一个数，而且也不用考虑左右的问题了。</strong></p>
+<pre><code>2 3 7
+4 3
+1
+这是一个二维数组
+找一个一维数组将最后一排赋给它
+2 3 7
+和第二排比较
+——————
+2 3 7
+3 2   -&gt; 6 9 7 只是变了第一个数和第二个数
+和第一层比较
+----
+6 9 7
+1     -&gt; 10 9 7 这是变了第一个数，而这个第一个数就是最大路径</code></pre><p>这个想法确实是蛮巧妙的。我感觉牛逼！！</p>
+<p>这是状态转移方程就改变了</p>
+<p><code>maxNum(j) = max( maxNum(j), maxNum(j+1) ) + f(i)(j)</code></p>
+<p>这里的maxNum就是之前的那个一维数组。到最后这个数组的第一个数肯定就是最大路径和。</p>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><pre><code class="c++">#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define MAX 10
+int n = 0;
+int maxSum[MAX] = {0};
+int num[MAX][MAX] = {0};
 
-        int max = arr[0];
-        for (int i = 1; i &lt; arr.length; i++) {
-            if (arr[i] &gt; max) {
-                max = arr[i];
-            }
+int main(){
+    cout&lt;&lt;&quot;Please input n:&quot;;
+    cin &gt;&gt; n;
+    for (int i=0; i&lt;n ;i++){
+        for (int j=0; j&lt;=i; j++){
+            cin &gt;&gt; num[i][j];
         }
+    }
 
-        // 下面两种方法都可以选择 转为字符串求数字的长度
-        int maxLength = (max+&quot;&quot;).length();
-//        int maxLength = Integer.toString(max).length();
+    // 把最后一排赋给那个一维数组
+    for (int i=0; i&lt;n; i++){
+        maxSum[i] = num[n-1][i];
+    }
 
-        for (int i = 0, t=1; i &lt; maxLength; i++, t*=10) {
-            // 数据放入桶中
-            for (int j = 0; j &lt; arr.length; j++) {
-                int which_backet = arr[j]/t%10;
-                backet[which_backet][backetElementsCounts[which_backet]++] = arr[j];
-            }
-
-            // 把数据从桶中取出
-            for (int j = 0, k=0, m=0; j &lt; 10; j++) {
-                while (backetElementsCounts[j] != 0) {
-                    arr[k] = backet[j][m];
-                    backetElementsCounts[j]--;
-                    k++;
-                    m++;
-                }
-                m=0;
-            }
-
+    for (int i = n-2; i&gt;=0; --i){
+        for (int j=0; j &lt;=i; ++j){
+            maxSum[j] = max(maxSum[j], maxSum[j+1]) + num[i][j];
         }
-    }</code></pre>
+    }
+    cout&lt;&lt;maxSum[0];
+    return 0;
+}
+</code></pre>
 <blockquote>
 <p><strong>代码说明：</strong></p>
+<p>其实思路分析那一块，我做的说明已经足够多了，这里就稍微说一点吧。其实也就只有for循环那一块了吧。</p>
+<p>第一个for循环指的是从倒数第二行开始，一直比到第一行(上面我们也是这么说的，倒着来比较)</p>
+<p>第二个for循环是计算一位数组里的值，下面也用到了我们说的状态转移方程。</p>
+</blockquote>
+<h3 id="线性模型-过桥"><a href="#线性模型-过桥" class="headerlink" title="线性模型  过桥"></a>线性模型  过桥</h3><hr>
+<pre><code class="c++">/*  动态规划算法的线性模型
+ * 【例题1】在一个夜黑风高的晚上，有n（n &lt;= 50）个小朋友在桥的这边，现在他们需要过桥，但是由于桥很窄，
+ * 每次只允许不大于两人通过，他们只有一个手电筒，所以每次过桥的两个人需要把手电筒带回来，
+ * i号小朋友过桥的时间为T[i]，两个人过桥的总时间为二者中时间长者。问所有小朋友过桥的总时间最短是多少。
+ */</code></pre>
+<h4 id="思路分析-1"><a href="#思路分析-1" class="headerlink" title="思路分析"></a>思路分析</h4><p>这个题目其实蛮难的，说实话不容易想到。不过要说这个是动态规划的话，我们就要找子问题。第n个人过河，和第n-1个人过河到底有没有联系？好像并没有什么联系,每个人过桥的 时间都是乱的。但是假如我们把每个人过桥的时间给从大到小排个序呢？</p>
+<p>这时候加了一个时间最大的人，该如何选择过河方案？</p>
+<p>首先我们得让那<strong>n-1个人过河，然后派时间最少的人去河对面接那个后来的人。</strong>但是这样子的时间是不是最短的呢？肯定是的，就算你让后来的那个人代替倒数第二个人也是时间最短，因为他们始终只是过河过了一次，他们时间慢的人是不可以回头去接对面的人过来的。所以我们就得到了状态转移方程</p>
+<p><code>f(i) = f(i-1) + 2*time[0] + time[i]</code></p>
+<p>但是还有一个问题，这也就是这个问题难的地方。我难道不可以<strong>让n-2个人先过河，然后再让2个人过河。</strong></p>
+<p>这样的时间又如何呢？易得他们的状态转移方程</p>
+<p><code>f(i) = f(i-2) + time[0] + time[i] + 2*time[1]</code></p>
+<p>这个状态转移方程也是要说明一点的。首先我们要让<strong>最快的那个人把灯送回去，然后让最后两个人过河，再让第二快的去接最快的那个人。</strong></p>
+<p>我们<strong>得到了两个状态转移方程</strong>，只是我们只要取得他们之间的<strong>最小值</strong>就行了。所以说最终的状态转移方程是</p>
+<p><code>f(i) = min( f(i-1) + 2*time[0] + time[i], f(i-2) + time[0] + time[i] + 2*time[1])</code></p>
+<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><pre><code class="c++">#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+/*  动态规划算法的线性模型
+ * 【例题1】在一个夜黑风高的晚上，有n（n &lt;= 50）个小朋友在桥的这边，现在他们需要过桥，但是由于桥很窄，
+ * 每次只允许不大于两人通过，他们只有一个手电筒，所以每次过桥的两个人需要把手电筒带回来，
+ * i号小朋友过桥的时间为T[i]，两个人过桥的总时间为二者中时间长者。问所有小朋友过桥的总时间最短是多少。
+ */
+
+int size_time[10]{0};
+int solution(vector&lt;int&gt;, int);
+
+int solution(vector&lt;int&gt; person_time){
+    return solution(person_time, person_time.size()-1);
+}
+
+// 备忘录类型的自上而下的动态规划，使用递归来实现
+int solution(vector&lt;int&gt; person_time, int size){
+    // 动态规划
+    if (size_time[size] != 0){
+        return size_time[size];
+    }
+    if (size == 0){
+        size_time[0] = person_time[0];
+        return size_time[0];
+    }else if (size == 1){
+        size_time[1] =  max(person_time[0],person_time[1]);
+        return size_time[1];
+    }else{
+        // 递归的一个子问题，前几个怎么过，再加一个人怎么过？ 双数是怎么过？单数是怎么过？
+        size_time[size] = min(solution(person_time, size-1)+person_time[0]+person_time[size],
+                    solution(person_time, size-2) + person_time[0] + person_time[size] + 2*person_time[1]);
+        return size_time[size];
+    }
+}</code></pre>
+<p>前面的那个动态规划的文章也说过了，我们完全可以将这里的<strong>递归转为递推</strong>。</p>
+<pre><code class="c++">int solution2(vector&lt;int&gt; person_time){
+    int size = person_time.size()-1;
+    size_time[0] = person_time[0];
+    if (size == 0){
+        return size_time[0];
+    }
+    size_time[1] = max(person_time[0], person_time[1]);
+    if (size == 1){
+        return size_time[1];
+    }
+
+    // 其实完全可以不使用数组，只使用三个变量就可以完事了，不过这个已经不是非常的重要了，问题不大
+    // 自下而上的动态规划，使用递归的方式实现，比上面的算法更加的高效
+    for (int i=2; i&lt;=size; ++i){
+        size_time[i] = min(size_time[i-1]+person_time[0]+person_time[i],
+                        size_time[i-2]+person_time[0]+person_time[i]+2*person_time[1]);
+    }
+
+    return size_time[size];
+
+}
+
+int main(int argc, char const *argv[])
+{
+    vector&lt;int&gt; person_time = {5,1,2 ,10};
+    sort(person_time.begin(), person_time.end()); // 一定要排序！
+    cout&lt;&lt;solution2(person_time)&lt;&lt;endl;
+    system(&quot;pause&quot;);
+    return 0;
+}</code></pre>
+<h3 id="区间模型-回文串"><a href="#区间模型-回文串" class="headerlink" title="区间模型  回文串"></a>区间模型  回文串</h3><pre><code class="c++">/**
+ * 动态规划算法的区间模型
+ * 区间模型的状态表示一般为d[i][j]，表示区间[i, j]上的最优解，
+ * 然后通过状态转移计算出[i+1, j]或者[i, j+1]上的最优解，逐步扩大区间的范围，最终求得[1, len]的最优解。
+ */</code></pre>
+<h4 id="思路分析-2"><a href="#思路分析-2" class="headerlink" title="思路分析"></a>思路分析</h4><p>  【例题2】给定一个长度为n（n &lt;= 1000）的字符串A，求插入最少多少个字符使得它变成一个回文串。<br>  分析：<br>  典型的区间模型，回文串拥有很明显的子结构特征，即当字符串X是一个回文串时，<br>  在<strong>X两边各添加一个字符’a’后，aXa仍然是一个回文串</strong>，<br>  我们用<code>d[i][j]</code>来表示A[i…j]这个子串变成回文串所需要添加的最少的字符数，<br>  那么对于A[i] == A[j]的情况，很明显有 <code>d[i][j]= d[i+1][j-1]</code><br>  （这里需要明确一点，当i+1 &gt; j-1时也是有意义的，它代表的是空串，空串也是一个回文串，<br>  所以这种情况下<code>d[i+1][j-1] = 0</code>）；当A[i] != A[j]时，我们将它变成更小的子问题求解，我们有两种决策：</p>
 <ol>
-<li><p>第三行代表的含义是什么？</p>
-<p>第二行代码其实就是在造桶子，十个桶子，每个桶子的大小的都是arr.length，因为万一所有的数的某一位都是相同的，那个桶子不就爆了喵？？而第三行的数组是存放每个桶子中的元素的个数。因为下面还是要取出元素的，不知道放了几个元素，怎么取，玩蛇皮的嘛。</p>
+<li><p>在A[j]后面添加一个字符A[i]；</p>
 </li>
-<li><p>为什么要求最大的数字的长度？</p>
-<p>这个把<strong>数字转为字符串来求长度</strong>还是非常的妙的。不过你问为啥要求最大的数字的长度？？因为后面我们要从个位数开始根据每个位置开始排序啊。</p>
-</li>
-<li><p>t的作用是什么？</p>
-<p>第一次取到个位数就是 num/1%10。取百位数就是 num/10%10。我们通过每次t /= t就可以依次取到各个位数了。每次放入一个元素之后，对应的用来计数的数组中的值也要增加1.</p>
-</li>
-<li><p>如何取出数据的？</p>
-<p>这恐怕是更容易理解的。找到桶里有数据的桶，看看桶中有几个数据取出来放到原来的数组中不就完事了。</p>
-<p>唉~，这个算法是实在简单，搞得我是真的没话说了。我也是醉了吖。。。</p>
+<li><p>在A[i]前面添加一个字符A[j]；</p>
+<p>根据两种决策列出状态转移方程为：<br><code>d[i][j] = min{ d[i+1][j], d[i][j-1] } + 1;</code> (每次状态转移，区间长度增加1)<br>空间复杂度O(n^2)，时间复杂度O(n^2)， 下文会提到将空间复杂度降为O(n)的优化算法。</p>
 </li>
 </ol>
-</blockquote>
-<h3 id="基数排序的测试"><a href="#基数排序的测试" class="headerlink" title="基数排序的测试"></a>基数排序的测试</h3><hr>
-<p>测试环境及工具：<em>我的电脑 Huawei MateBook 13+JDK1.8+Eclipse</em></p>
-<p>测试手段：<em>随机生成80000个和8,000,000个[0,800000）的整数的数组进行排序，观察所花费的时间</em></p>
-<p>测试代码：</p>
-<pre><code class="java">public static void main(String[] args) {
-        int[] arr = new int[80000];
-        for (int i = 0; i &lt; arr.length; i++) {
-//            arr[i] = (int) (Math.random()*800000);
-            arr[i] = new Random().nextInt(800000);
-        }
-//        System.out.println(Arrays.toString(arr));
-        long start_time = System.currentTimeMillis();
-        radixSort(arr);
-        long end_time = System.currentTimeMillis();
-//        System.out.println(Arrays.toString(arr));
-        System.out.println(&quot;Time :&quot;+(end_time-start_time)+&quot;ms&quot;);
+<h4 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h4><pre><code class="c++">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt;
+using std::string;
+using std::cout;
+using std::endl;
+using std::min;
+
+int memo[10][10]{0};
+
+int func(string, int, int);
+int func(string str){
+    return func(str, 0, str.length()-1);
+}
+
+// 开始区间类型的动态规划 下面使用的时候备忘录类型的
+int func(string str, int start, int end){
+    if (memo[start][end] != 0){
+        return memo[start][end];
+    }
+    if (start &gt;= end){
+        return 0;
+    }
+    if (str[start] == str[end]){
+        return func(str, start+1, end-1);
+    }else {
+        memo[start][end] =  min(func(str, start+1, end), func(str, start, end-1))+1;
+        return memo[start][end];
+    }
+}
+
+int main(int argc, char const *argv[])
+{
+    string str = &quot;srsher&quot;; 
+    cout&lt;&lt;func(str)&lt;&lt;endl;  
+    system(&quot;pause&quot;);
+    return 0;
 }</code></pre>
-<blockquote>
-<p><strong>80,000数据时：</strong></p>
-<ul>
-<li><em>Time :  12ms</em></li>
-<li><em>Time :  16ms</em></li>
-<li><em>Time :  17ms</em></li>
-</ul>
-<p><strong>8,000,000数据时：</strong></p>
-<ul>
-<li><em>Time :  423ms</em></li>
-<li><em>Time :  397ms</em></li>
-<li><em>Time :  404ms</em></li>
-</ul>
-</blockquote>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><hr>
-<p>可以清楚的看到排八万个这种小数据的时候，几种高效的算法几乎没有区别。不过排八百万个数据的时候，基数排序就发挥出了他的优势。快啊！不过要说明的是，<strong>基数排序极其占用内存，如果是排序八千万个数耗费的就是4个G左右的内存</strong>，所以说在内存不足的情况下，这个算法是不适合考虑的。</p>
+<h3 id="0-1背包问题"><a href="#0-1背包问题" class="headerlink" title="0/1背包问题"></a>0/1背包问题</h3><pre><code>0/1背包问题：给定种物品和一个容量为的背包，物品的重量是，其价值为，背包问题是如何使选择装入背包内的物品，
+使得装入背包中的物品的总价值最大。其中，每种物品只有全部装入背包或不装入背包两种选择。</code></pre><h4 id="思路分析-3"><a href="#思路分析-3" class="headerlink" title="思路分析"></a>思路分析</h4><p>这是我第三次看到这个问题。我们还是先开始来找子问题。比如有四个物品，我们将其按价格排个序。现在加入我们只是发第一个物品。得到金额。然后我们放两个物品，得到金额。问题就在放n个物品得到的金额和n-1个物品到底有没有关联呢？</p>
+<p>可以第n个物品太重了，空间根本放不下，放n个物品的金额就是等于n-1个物品。</p>
+<p>还有可能第n个物品可以放下去，还有剩余的空间，再用剩余的空间放那n-1个物品。</p>
+<p>这两种方案并不能确定谁大谁小，所以说状态转移方程中，要比较他们的大小关系。</p>
+<p><code>f(n, weight) = min{f(n-1, weight), v[n]+f(n-1 ,weight-w[n]))}</code></p>
+<p>这里的weight其实指的是背包的容量还有多少。v数组指的是某一样物品的价格，w指的是某一样物品的重量</p>
+<h4 id="代码实现-3"><a href="#代码实现-3" class="headerlink" title="代码实现"></a>代码实现</h4><pre><code class="c++">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using std::cout;
+using std::endl;
+using std::vector;
+using std::max;
+
+int memo[10][10]{0};
+
+int func(vector&lt;int&gt; weight, vector&lt;int&gt; value, int i, int size){
+    if (i == 0){
+        if (weight[0] &gt; size){
+            return 0;
+        }else {
+            return value[0];
+        }
+    }
+    if (memo[i][size] != 0){
+        return memo[i][size];
+    }
+    if (weight[i] &gt; size){
+        return func(weight, value, i-1, size);
+    }
+    // 放入第i件物品，再使用剩下的空间放i-1件物品， 这样做到底有没有不放入第i件，只是使用前面的i件好？
+    // 但是有个问题是，这个我们可能不知道到底把什么放入了背包？？？这个问题很大我感觉。。。
+    // 不过，似乎用一个数组来表示是否被放入的状态可能可以解决
+    memo[i][size] = max(func(weight, value, i-1, size), func(weight, value, i-1, size-weight[i])+value[i]);
+    return memo[i][size];
+}
+
+int func(vector&lt;int&gt; weight, vector&lt;int&gt; value, int size){
+    return func(weight, value, weight.size()-1, size);
+}
+
+int main(int argc, char const *argv[])
+{
+    vector&lt;int&gt; weight = {1,3,5,7,9};
+    vector&lt;int&gt; value = {1,3,5,7,10};
+
+    cout &lt;&lt; func(weight, value, 100) &lt;&lt;endl;
+
+    system(&quot;pause&quot;);
+    return 0;
+}</code></pre>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面的几道题目就是动态规划问题的经典问题。从这里我们基本就可以看出动态规划的问题到底该怎么解决。第一寻找子问题到底是什么？然后寻找状态转移方程，注意这个状态转移方程的多样性。其实之前的那个动态规划基本介绍中讲的蛮详细的，不过也蛮啰嗦的。不管了，动态规划就此了结吧，拜拜了您嘞！</p>
 
         </div>
         <!-- .entry-content -->
@@ -523,36 +667,19 @@
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/07/19/排序算法（八）堆排序/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/17.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/17.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                排序算法（八）堆排序</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/07/18/排序算法（六）归并排序/" rel="next">
+            <a href="/2019/07/31/最长回文子串问题/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/19.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/19.jpg">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/38.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/38.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                排序算法（六）归并排序</h3>
+                最长回文子串问题</h3>
                 <hr>
               </div>
             </a>

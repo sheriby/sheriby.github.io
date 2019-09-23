@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">theme-sakura | Sher的小博客</title>
+  <title itemprop="name">java中的IO-02 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,51 +340,350 @@
   </div>
 </header>
 
-        <div class="pattern-center-blank"></div>
-  
-    <div class="pattern-center ">
-      <div class="pattern-attachment-img">
-        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://static.2heng.xin/wp-content/uploads//2018/05/sakura2.jpeg" class="lazyload" onerror="imgError(this,3)" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
-      </div>
-      <header class="pattern-header ">
-        <h1 class="entry-title">
-        Hexo 主题 Sakura 🌸</h1>
-      </header>
-    </div>
-  
-  <div id="content" class="site-content">
-    <article class="post-item post-301 page type-page status-publish has-post-thumbnail hentry">
-      <p>Hexo主题Sakura修改自WordPress主题<a href="https://github.com/mashirozx/Sakura/" target="_blank" rel="noopener">Sakura</a>，感谢原作者<a href="https://2heng.xin/" target="_blank" rel="noopener">Mashiro</a></p>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
 
-      <!-- .entry-content -->
-      
-      <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
-      <footer class="post-footer">
-        <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
-        <div class="post-tags">
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/43.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/43.jpg">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      java中的IO-02</h1>
+      <p class="entry-census">
+        <span>
+          <a href="sheriby.github.io">
+            <img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true">
+          </a>
+        </span>
+        <span>
+          <a href="sheriby.github.io">Hony Sher</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2019-9-23<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="Java中的IO-02"><a href="#Java中的IO-02" class="headerlink" title="Java中的IO-02"></a>Java中的IO-02</h1><h2 id="FileInputStream与FileOutputStream对字节文件的操作"><a href="#FileInputStream与FileOutputStream对字节文件的操作" class="headerlink" title="FileInputStream与FileOutputStream对字节文件的操作"></a>FileInputStream与FileOutputStream对字节文件的操作</h2><p>根据官方文档的说法，FileInputStream和FileOutputStream这两个流主要是对图像，视频等原始字节流进行操作的，但是我们举的例子却是一个字符串操作，不能体现这两个流的专门用途。下面可以用这两个流写一个图片的拷贝操作。</p>
+<h3 id="图片文件的拷贝"><a href="#图片文件的拷贝" class="headerlink" title="图片文件的拷贝"></a>图片文件的拷贝</h3><pre><code class="java">public class ImgCopy {
+    public static void main(String[] args) {
+        File file = new File(&quot;D:/unziptest.jpg&quot;);
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        try {
+            fis = new FileInputStream(file);
+            byte[] b = fis.readAllBytes(); // 读取原始字节
+            fos = new FileOutputStream(&quot;./Exercise/src/test.jpg&quot;);
+            fos.write(b); // 写入到文件中
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally { // 关闭流
+            try {
+                if (fis != null){
+                    fis.close();
+                }
+                if (fos != null){
+                    fos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}</code></pre>
+<p>上面是一个简单的图片的拷贝的操作。其中第八行的字节来源是从本地读取，其实也可以从网络上读取，然后写入到本地，这样就是一个文件下载的操作。其实这个写入字节和写入字符串的操作比起来，是一模一样的，因为这个流就是写入原始字节，就算是字符串我们不也是使用<code>content.getBytes()</code>的方式得到字节的。（注意这里的编码问题，默认就是工程的编码，我这里就是utf-8 的编码）</p>
+<h2 id="字符IO流"><a href="#字符IO流" class="headerlink" title="字符IO流"></a>字符IO流</h2><p>我们之前看FileOutputStream的官方文档的时候，发现了这样的一句话。</p>
+<blockquote>
+<p><code>FileOutputStream</code>用于写入诸如图像数据的原始字节流。  对于写入字符流，请考虑使用<code>FileWriter</code> 。</p>
+</blockquote>
+<p>那么这个FileWriter又是个什么玩意呢？</p>
+<p>从官方文档中看他的继承结构。</p>
+<pre><code>java.lang.Object 
+    java.io.Writer 
+        java.io.OutputStreamWriter 
+            java.io.FileWriter </code></pre><p>我们发现这个流和OutputStream竟然没有任何关系，他竟然是继承于一个叫java.io.writer的类。</p>
+<pre><code class="java">public abstract class Writer
+extends Object
+implements Appendable, Closeable, Flushable</code></pre>
+<blockquote>
+<p>用于写入字符流的抽象类。 子类必须实现的唯一方法是write（char  []，int，int），flush（）和close（）。  然而，大多数子类将覆盖这里定义的一些方法，以便提供更高的效率，附加的功能或两者。 </p>
+</blockquote>
+<p>看来这个流是专门为了更加方便的写入字符而准备了。可以看到他的write方法中的参数是<code>char[]</code>，而不是<code>byte[]</code>，这样我们就可以不把字符转为字节进行写入，这样可以更加方便地写入也可以更加方便地读取。（有些字符可能会占用两个字节，如果我们是一个字节一个字节进行读取的话，就可能会出现乱码的情况，但是一个字符一个字符读取就不会出现这种问题。所以说进行字符流的操作的时候尽量使用这个流的子类）</p>
+<p>写入写出基本上都是有对应的类的，这里既然有Writer，那当然就会Reader，不过他们的用法基本都是相同的。</p>
+<h3 id="OutputStreamWriter与InputStreamReader"><a href="#OutputStreamWriter与InputStreamReader" class="headerlink" title="OutputStreamWriter与InputStreamReader"></a>OutputStreamWriter与InputStreamReader</h3><pre><code class="java">public class OutputStreamWriter
+extends Writer</code></pre>
+<blockquote>
+<ul>
+<li><p>OutputStreamWriter是字符的桥梁流以字节流：向其写入的字符编码成使用指定的字节<a href="../../java/nio/charset/Charset.html"><code>charset</code></a> 。  它使用的字符集可以由名称指定，也可以被明确指定，或者可以接受平台的默认字符集。 </p>
+</li>
+<li><p>每次调用write（）方法都会使编码转换器在给定字符上被调用。所得到的字节在写入底层输出流之前累积在缓冲区中。可以指定此缓冲区的大小，但是默认情况下它大部分用于大多数目的。请注意，传递给write（）方法的字符不会缓冲。</p>
+</li>
+<li><p>为了最大的效率，请考虑在BufferedWriter中包装一个OutputStreamWriter，以避免频繁的转换器调用。例如：</p>
+<pre><code class="java">  Writer out
+   = new BufferedWriter(new OutputStreamWriter(System.out)); </code></pre>
+</li>
+</ul>
+</blockquote>
+<p>上面是官方文档对这个类的一些说明。第一点倒是之前讲过了一点，对于字符流，一般我们要指定一个字符集，如果不指定的话就会是我们项目默认的字符集，不过如果我们的代码文件转移到别的环境之后，可能会出现一些字符集不一样的bug。至于第三点，我们发现了一个新的流，这个是之后要介绍的了。</p>
+<pre><code class="java">OutputStreamWriter(OutputStream out) 
+// 创建一个使用默认字符编码的OutputStreamWriter。  
+OutputStreamWriter(OutputStream out, Charset cs)
+// 创建一个使用给定字符集的OutputStreamWriter。  
+OutputStreamWriter(OutputStream out, CharsetEncoder enc)
+// 创建一个使用给定字符集编码器的OutputStreamWriter。 
+OutputStreamWriter(OutputStream out, String charsetName) 
+//创建一个使用命名字符集的OutputStreamWriter。  
+</code></pre>
+<p>观察这个类的三个狗渣函数，第一个构造函数没有指定字符集使用的就是默认的字符集。而后面的是哪个构造函数使用了三种不同的方式指定了这个字符流使用的字符集。一般情况下，我们使用第四种就行了，使用字符串来指定字符集，比如“UTF-8”和“GBK”这两种常见的字符集。不过我们使用如下的方式程序将会运行的更快<code>StandardCharsets.UTF-8</code></p>
+<p>然后我们再看看这个函数的第一个参数，是一个OutputStream，我们知道OutputStream是一个抽象类，是不能被实例化的，所以我们可以使用他的子类，比如FileOutputStream。</p>
+<p>现在再看看这个类的主要的方法。</p>
+<pre><code class="java">void close() 
+// 关闭流，先刷新。  
+void flush() 
+// 刷新流。  
+String getEncoding() 
+// 返回此流使用的字符编码的名称。  
+void write(char[] cbuf, int off, int len) 
+// 写入字符数组的一部分。  
+void write(int c) 
+// 写一个字符  
+void write(String str, int off, int len) 
+// 写一个字符串的一部分。  </code></pre>
+<p>可见这个类不仅可以写入字符数组<code>byte[]</code>，还可以写入<code>String</code>，这是真的方便啊。</p>
+<h3 id="代码测试"><a href="#代码测试" class="headerlink" title="代码测试"></a>代码测试</h3><pre><code class="java">public class OutputStreamWriterDemo {
+    public static void main(String[] args) {
+        File file = new File(&quot;./Exercise/src/writer.txt&quot;);
+        OutputStreamWriter osw = null;
+        FileOutputStream fis = null;
+        try {
+            fis = new FileOutputStream(file);
+            osw = new OutputStreamWriter(fis, StandardCharsets.UTF_8);
+            String content = &quot;sher is a wonderful boy!&quot;;
+            osw.write(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (osw != null) {
+                    osw.close();
+                }
+                if (fis != null) {
+                    fis.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+</code></pre>
+<blockquote>
+<p>代码的几点说明：</p>
+<ul>
+<li>在new出OutputStream的时候，一般我们要指定一个字符集，可以使用<code>StandardCharsets.UTF_8</code>的这种写法。也可以直接写<code>“UTF-8&quot;</code>。</li>
+<li>写入流的时候可以直接使用String，也可以直接使用char[]，不必将其转换成为字节。</li>
+<li>关闭流的时候，我们需要<strong>先关闭外部的OutputStream然后再关闭内部的FileOutputStream</strong>，不然会抛出异常。</li>
+</ul>
+</blockquote>
+<p>至于InputStreamReader的使用，和OutPutstreamWriter的使用是如出一辙的。</p>
+<pre><code class="java">public class InputStreamReaderDemo {
+    public static void main(String[] args) {
+        File file = new File(&quot;./Exercise/src/sher&quot;);
+        InputStreamReader isr = null;
+        InputStream is = null;
+        try {
+            is = new FileInputStream(file);
+            isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+            int res;
+            while ((res = is.read()) != -1){
+                System.out.print((char)res);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (isr != null){
+                    isr.close();
+                }
+                if (is != null){
+                    is.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+</code></pre>
+<blockquote>
+<p>不过需要注意的是，使用<code>read()</code>方法可以读取一个字符，当读取到文件的末尾的时候将<strong>返回-1</strong>。</p>
+</blockquote>
+<p>OutputStreamWriter已经基本可以满足我们写入字符串的需要了，不过这和官方文档告诉我们的FileWrtter还是不一样，FileWriter‘是其的子类。</p>
+<h2 id="FileWriter与FileReader的使用"><a href="#FileWriter与FileReader的使用" class="headerlink" title="FileWriter与FileReader的使用"></a>FileWriter与FileReader的使用</h2><pre><code class="java">public class FileWriter
+extends OutputStreamWriter</code></pre>
+<pre><code class="java">java.lang.Object 
+    java.io.Writer 
+        java.io.OutputStreamWriter 
+            java.io.FileWriter </code></pre>
+<p>FileWriter既然是上面说的那个OutputStreamWriter的子类，那么它到底有什么有别于他的父类的特殊功能呢？</p>
+<blockquote>
+<ul>
+<li>方便课写字符文件。该类的构造函数假定默认字符编码和默认字节缓冲区大小是可以接受的。要自己指定这些值，请在FileOutputStream上构造一个OutputStreamWriter。</li>
+<li>文件是否可用或可能被创建取决于底层平台。  特别是某些平台允许一次只能打开一个文件来写入一个<code>FileWriter</code> （或其他文件写入对象）。  在这种情况下，如果所涉及的文件已经打开，则此类中的构造函数将失败。</li>
+<li><code>FileWriter</code>是用于写入字符流。  要编写原始字节流，请考虑使用<code>FileOutputStream</code> 。 </li>
+</ul>
+</blockquote>
+<p>可以看一下第一点，我们可以知道使用这个类的时候我们是无法向OutputStreamWriter那样指定一个字符集的，这个类默认使用系统或者是项目的默认的字符集。第二点倒是不难理解，不过也没有什么重点可言。我们可以看到第三点，这个和我们在FileOutputStream中看到的是一样的。</p>
+<p>不过问题在于，使用FileWriter和OutputstreamWriter之间到底有什么区别呢？</p>
+<pre><code class="java">FileWriter(File file) 
+// 给一个File对象构造一个FileWriter对象。  
+FileWriter(File file, boolean append) 
+// 给一个File对象构造一个FileWriter对象。  
+FileWriter(FileDescriptor fd) 
+// 构造与文件描述符关联的FileWriter对象。  
+FileWriter(String fileName) 
+// 构造一个给定文件名的FileWriter对象。  
+FileWriter(String fileName, boolean append) 
+// 构造一个FileWriter对象，给出一个带有布尔值的文件名，表示是否附加写入的数据。  </code></pre>
+<p>这里的构造函数没有我们之间看到的OutputStream了，也就是说我们使用FileWriter的时候不必像使用OutputstreamWriter那样先创建一个FIleOutputStream，这个倒是蛮方便的。我们可以给定File类或者文件名进行字符文件的读取。这个类的话是没有额外的方法的，也就是说这个类的使用方法和OutputStreamWriter基本是一样的。</p>
+<pre><code class="java">public class FileWriterDemo {
+    public static void main(String[] args) {
+        File file = new File(&quot;./Exercise/src/writer.txt&quot;);
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(file);
+            String content = &quot;why are u so beautiful my girl?&quot;;
+            writer.write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (writer != null){
+                    writer.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}</code></pre>
+<p>FileReader的使用方式也是类似的。</p>
+<pre><code class="java">public class FileReaderDemo {
+    public static void main(String[] args) {
+        File file = new File(&quot;./Exercise/src/sher&quot;);
+        FileReader reader = null;
+        try {
+            reader = new FileReader(file);
+            int res;
+            while ((res = reader.read()) != -1) {
+                System.out.print((char)res);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null){
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}</code></pre>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面主要介绍的就是Writer和Reader，其实IO中的四大抽象类就是InputStream，OutputStream，Writer，Reader这四种。前两种主要负责的就是原始字节流的操作，而后两种主要就是字符流的操作。不过我们也是可以通过前面的两种类来操作字符流的，不过这就是有点儿麻烦而且无法处理多字符的问题。后面要学习的是更加复杂一点的IO流的知识。</p>
+
         </div>
-        <div class="post-share">
-          <div class="social-share sharehidden share-component"></div>
-          <i class="iconfont show-share icon-forward"></i>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/WechatPayQr.png"></li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </footer><!-- .entry-footer -->
-    </article>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
       <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2019/09/22/Java中的IO-01/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/42.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/42.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                Java中的IO-01</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
       <section class="author-profile">
         <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <a href="/about/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/head.jpg" itemprop="image" alt="Sher的小博客" height="70" width="70"></a>
+          <a href="sheriby.github.io" class="profile gravatar"><img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
           <div class="meta">
             <span class="title">Author</span>
             <h3 itemprop="name">
-            <a href="https://sheriby.github.io" itemprop="url" rel="author">Sher的小博客</a>
+            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
             </h3>
           </div>
         </div>
         <hr>
-        <p><i class="iconfont icon-write"></i>To Make Some Funny and Meaningful Things!</p>
+        <p><i class="iconfont icon-write"></i>一枚小菜鸡</p>
       </section>
+    </main><!-- #main -->
   </div><!-- #primary -->
 </div>
+
+
+
     </div>    
     <div class="ins-search">
     <div class="ins-search-mask"></div>

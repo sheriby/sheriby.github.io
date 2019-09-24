@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">java中的IO-02 | Sher的小博客</title>
+  <title itemprop="name">Java中的IO-03 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/43.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/43.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      java中的IO-02</h1>
+      Java中的IO-03</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-9-23<span class="bull">
+        2019-9-24<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,100 +376,22 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Java中的IO-02"><a href="#Java中的IO-02" class="headerlink" title="Java中的IO-02"></a>Java中的IO-02</h1><h2 id="FileInputStream与FileOutputStream对字节文件的操作"><a href="#FileInputStream与FileOutputStream对字节文件的操作" class="headerlink" title="FileInputStream与FileOutputStream对字节文件的操作"></a>FileInputStream与FileOutputStream对字节文件的操作</h2><p>根据官方文档的说法，FileInputStream和FileOutputStream这两个流主要是对图像，视频等原始字节流进行操作的，但是我们举的例子却是一个字符串操作，不能体现这两个流的专门用途。下面可以用这两个流写一个图片的拷贝操作。</p>
-<h3 id="图片文件的拷贝"><a href="#图片文件的拷贝" class="headerlink" title="图片文件的拷贝"></a>图片文件的拷贝</h3><pre><code class="java">public class ImgCopy {
-    public static void main(String[] args) {
-        File file = new File(&quot;D:/unziptest.jpg&quot;);
-        FileInputStream fis = null;
-        FileOutputStream fos = null;
-        try {
-            fis = new FileInputStream(file);
-            byte[] b = fis.readAllBytes(); // 读取原始字节
-            fos = new FileOutputStream(&quot;./Exercise/src/test.jpg&quot;);
-            fos.write(b); // 写入到文件中
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally { // 关闭流
-            try {
-                if (fis != null){
-                    fis.close();
-                }
-                if (fos != null){
-                    fos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-}</code></pre>
-<p>上面是一个简单的图片的拷贝的操作。其中第八行的字节来源是从本地读取，其实也可以从网络上读取，然后写入到本地，这样就是一个文件下载的操作。其实这个写入字节和写入字符串的操作比起来，是一模一样的，因为这个流就是写入原始字节，就算是字符串我们不也是使用<code>content.getBytes()</code>的方式得到字节的。（注意这里的编码问题，默认就是工程的编码，我这里就是utf-8 的编码）</p>
-<h2 id="字符IO流"><a href="#字符IO流" class="headerlink" title="字符IO流"></a>字符IO流</h2><p>我们之前看FileOutputStream的官方文档的时候，发现了这样的一句话。</p>
+          <h1 id="Java中的IO-03"><a href="#Java中的IO-03" class="headerlink" title="Java中的IO-03"></a>Java中的IO-03</h1><h2 id="缓冲流BufferedReader和BufferedWriter"><a href="#缓冲流BufferedReader和BufferedWriter" class="headerlink" title="缓冲流BufferedReader和BufferedWriter"></a>缓冲流BufferedReader和BufferedWriter</h2><p>在之前我们讲OutputStreamWriter中，官网文档给了我们三个建议。其中第二条是我们有点儿看不懂的。现在我们再来看一遍试试看。</p>
 <blockquote>
-<p><code>FileOutputStream</code>用于写入诸如图像数据的原始字节流。  对于写入字符流，请考虑使用<code>FileWriter</code> 。</p>
+<p>为了最大的效率，请考虑在BufferedWriter中包装一个OutputStreamWriter，以避免频繁的转换器调用。  例如： </p>
+<pre><code class="java"> Writer out
+  = new BufferedWriter(new OutputStreamWriter(System.out)); </code></pre>
 </blockquote>
-<p>那么这个FileWriter又是个什么玩意呢？</p>
-<p>从官方文档中看他的继承结构。</p>
-<pre><code>java.lang.Object 
-    java.io.Writer 
-        java.io.OutputStreamWriter 
-            java.io.FileWriter </code></pre><p>我们发现这个流和OutputStream竟然没有任何关系，他竟然是继承于一个叫java.io.writer的类。</p>
-<pre><code class="java">public abstract class Writer
-extends Object
-implements Appendable, Closeable, Flushable</code></pre>
-<blockquote>
-<p>用于写入字符流的抽象类。 子类必须实现的唯一方法是write（char  []，int，int），flush（）和close（）。  然而，大多数子类将覆盖这里定义的一些方法，以便提供更高的效率，附加的功能或两者。 </p>
-</blockquote>
-<p>看来这个流是专门为了更加方便的写入字符而准备了。可以看到他的write方法中的参数是<code>char[]</code>，而不是<code>byte[]</code>，这样我们就可以不把字符转为字节进行写入，这样可以更加方便地写入也可以更加方便地读取。（有些字符可能会占用两个字节，如果我们是一个字节一个字节进行读取的话，就可能会出现乱码的情况，但是一个字符一个字符读取就不会出现这种问题。所以说进行字符流的操作的时候尽量使用这个流的子类）</p>
-<p>写入写出基本上都是有对应的类的，这里既然有Writer，那当然就会Reader，不过他们的用法基本都是相同的。</p>
-<h3 id="OutputStreamWriter与InputStreamReader"><a href="#OutputStreamWriter与InputStreamReader" class="headerlink" title="OutputStreamWriter与InputStreamReader"></a>OutputStreamWriter与InputStreamReader</h3><pre><code class="java">public class OutputStreamWriter
-extends Writer</code></pre>
-<blockquote>
-<ul>
-<li><p>OutputStreamWriter是字符的桥梁流以字节流：向其写入的字符编码成使用指定的字节<a href="../../java/nio/charset/Charset.html"><code>charset</code></a> 。  它使用的字符集可以由名称指定，也可以被明确指定，或者可以接受平台的默认字符集。 </p>
-</li>
-<li><p>每次调用write（）方法都会使编码转换器在给定字符上被调用。所得到的字节在写入底层输出流之前累积在缓冲区中。可以指定此缓冲区的大小，但是默认情况下它大部分用于大多数目的。请注意，传递给write（）方法的字符不会缓冲。</p>
-</li>
-<li><p>为了最大的效率，请考虑在BufferedWriter中包装一个OutputStreamWriter，以避免频繁的转换器调用。例如：</p>
-<pre><code class="java">  Writer out
-   = new BufferedWriter(new OutputStreamWriter(System.out)); </code></pre>
-</li>
-</ul>
-</blockquote>
-<p>上面是官方文档对这个类的一些说明。第一点倒是之前讲过了一点，对于字符流，一般我们要指定一个字符集，如果不指定的话就会是我们项目默认的字符集，不过如果我们的代码文件转移到别的环境之后，可能会出现一些字符集不一样的bug。至于第三点，我们发现了一个新的流，这个是之后要介绍的了。</p>
-<pre><code class="java">OutputStreamWriter(OutputStream out) 
-// 创建一个使用默认字符编码的OutputStreamWriter。  
-OutputStreamWriter(OutputStream out, Charset cs)
-// 创建一个使用给定字符集的OutputStreamWriter。  
-OutputStreamWriter(OutputStream out, CharsetEncoder enc)
-// 创建一个使用给定字符集编码器的OutputStreamWriter。 
-OutputStreamWriter(OutputStream out, String charsetName) 
-//创建一个使用命名字符集的OutputStreamWriter。  
-</code></pre>
-<p>观察这个类的三个狗渣函数，第一个构造函数没有指定字符集使用的就是默认的字符集。而后面的是哪个构造函数使用了三种不同的方式指定了这个字符流使用的字符集。一般情况下，我们使用第四种就行了，使用字符串来指定字符集，比如“UTF-8”和“GBK”这两种常见的字符集。不过我们使用如下的方式程序将会运行的更快<code>StandardCharsets.UTF-8</code></p>
-<p>然后我们再看看这个函数的第一个参数，是一个OutputStream，我们知道OutputStream是一个抽象类，是不能被实例化的，所以我们可以使用他的子类，比如FileOutputStream。</p>
-<p>现在再看看这个类的主要的方法。</p>
-<pre><code class="java">void close() 
-// 关闭流，先刷新。  
-void flush() 
-// 刷新流。  
-String getEncoding() 
-// 返回此流使用的字符编码的名称。  
-void write(char[] cbuf, int off, int len) 
-// 写入字符数组的一部分。  
-void write(int c) 
-// 写一个字符  
-void write(String str, int off, int len) 
-// 写一个字符串的一部分。  </code></pre>
-<p>可见这个类不仅可以写入字符数组<code>byte[]</code>，还可以写入<code>String</code>，这是真的方便啊。</p>
-<h3 id="代码测试"><a href="#代码测试" class="headerlink" title="代码测试"></a>代码测试</h3><pre><code class="java">public class OutputStreamWriterDemo {
+<p>为了提高更高的效率，我们要用一个包装类BufferedWriter，减少频繁调用转换器。这个到底是什么意思呢？众所周知，buffer是缓冲区的意思，那么这个BufferedWriter的作用大概率就是给OutputStreamWriter添加了一个缓冲的地方。</p>
+<p>我们来看一下原来的OutputStreamWriter的代码。</p>
+<pre><code class="java">public class OutputStreamWriterDemo {
     public static void main(String[] args) {
         File file = new File(&quot;./Exercise/src/writer.txt&quot;);
         OutputStreamWriter osw = null;
         FileOutputStream fis = null;
         try {
             fis = new FileOutputStream(file);
-            osw = new OutputStreamWriter(fis, StandardCharsets.UTF_8);
+            osw = new OutputStreamWriter(fis, &quot;GBK&quot;);
             String content = &quot;sher is a wonderful boy!&quot;;
             osw.write(content);
         } catch (Exception e) {
@@ -487,17 +409,8 @@ void write(String str, int off, int len)
             }
         }
     }
-}
-</code></pre>
-<blockquote>
-<p>代码的几点说明：</p>
-<ul>
-<li>在new出OutputStream的时候，一般我们要指定一个字符集，可以使用<code>StandardCharsets.UTF_8</code>的这种写法。也可以直接写<code>“UTF-8&quot;</code>。</li>
-<li>写入流的时候可以直接使用String，也可以直接使用char[]，不必将其转换成为字节。</li>
-<li>关闭流的时候，我们需要<strong>先关闭外部的OutputStream然后再关闭内部的FileOutputStream</strong>，不然会抛出异常。</li>
-</ul>
-</blockquote>
-<p>至于InputStreamReader的使用，和OutPutstreamWriter的使用是如出一辙的。</p>
+}</code></pre>
+<p>这个是如何写入的呢？里面好像只有那一行的代码。。。<code>osw.write(content)</code>，这个我们怎么看写入的方式呢？我们可以再来看一看OutputStreamReader的代码。</p>
 <pre><code class="java">public class InputStreamReaderDemo {
     public static void main(String[] args) {
         File file = new File(&quot;./Exercise/src/sher&quot;);
@@ -525,47 +438,112 @@ void write(String str, int off, int len)
             }
         }
     }
-}
-</code></pre>
-<blockquote>
-<p>不过需要注意的是，使用<code>read()</code>方法可以读取一个字符，当读取到文件的末尾的时候将<strong>返回-1</strong>。</p>
-</blockquote>
-<p>OutputStreamWriter已经基本可以满足我们写入字符串的需要了，不过这和官方文档告诉我们的FileWrtter还是不一样，FileWriter‘是其的子类。</p>
-<h2 id="FileWriter与FileReader的使用"><a href="#FileWriter与FileReader的使用" class="headerlink" title="FileWriter与FileReader的使用"></a>FileWriter与FileReader的使用</h2><pre><code class="java">public class FileWriter
-extends OutputStreamWriter</code></pre>
-<pre><code class="java">java.lang.Object 
-    java.io.Writer 
-        java.io.OutputStreamWriter 
-            java.io.FileWriter </code></pre>
-<p>FileWriter既然是上面说的那个OutputStreamWriter的子类，那么它到底有什么有别于他的父类的特殊功能呢？</p>
+}</code></pre>
+<p>这个读取的过程就看的非常的清晰了，每次我们都读取了一个字符，然后判断是否为空，然后输入那一个字符。也就是说读取和输出之间没有缓冲区。其实我们可以每次读取1024（比如）个字符，然后一次性写入。然后再去读取1024个字符。这个buffer数组其实就是所谓的缓冲区。</p>
+<pre><code class="java">public class InputStreamReaderDemo {
+    public static void main(String[] args) {
+        File file = new File(&quot;./Exercise/src/sher&quot;);
+        InputStreamReader isr = null;
+        InputStream is = null;
+        try {
+            is = new FileInputStream(file);
+            isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+            int cot;
+            byte[] buffer = new byte[1024]; // 缓冲区
+            while ((cot = is.read(buffer)) != -1){
+                System.out.println(new String(buffer, 0, cot));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (isr != null){
+                    isr.close();
+                }
+                if (is != null){
+                    is.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}</code></pre>
+<p>上面只是我们简单的实现了一个缓冲的原理。Java IO中专门给我提供了这样的包装类（所谓的包装类就是设计模式中的装饰模式，简单的说就是给原有的类添加一些新的功能）。就是BufferedXXX，后面的XXX就是指的就是我们之前学过的Reader, Writer和InputStream和OutputStream这些流。</p>
+<p>下面来看一下官方的文档是怎么说的。</p>
+<pre><code class="java">public class BufferedReader
+extends Reader</code></pre>
 <blockquote>
 <ul>
-<li>方便课写字符文件。该类的构造函数假定默认字符编码和默认字节缓冲区大小是可以接受的。要自己指定这些值，请在FileOutputStream上构造一个OutputStreamWriter。</li>
-<li>文件是否可用或可能被创建取决于底层平台。  特别是某些平台允许一次只能打开一个文件来写入一个<code>FileWriter</code> （或其他文件写入对象）。  在这种情况下，如果所涉及的文件已经打开，则此类中的构造函数将失败。</li>
-<li><code>FileWriter</code>是用于写入字符流。  要编写原始字节流，请考虑使用<code>FileOutputStream</code> 。 </li>
+<li><p>从字符输入流读取文本，缓冲字符，以提供字符，数组和行的高效读取。</p>
+</li>
+<li><p>可以指定缓冲区大小，或者可以使用默认大小。 默认值足够大，可用于大多数用途。 </p>
+</li>
+<li><p>通常，由读取器做出的每个读取请求将引起对底层字符或字节流的相应读取请求。  因此，建议将BufferedReader包装在其read（）操作可能昂贵的读取器上，例如FileReaders和InputStreamReaders。  例如， </p>
+<pre><code class="java">  BufferedReader in
+   = new BufferedReader(new FileReader(&quot;foo.in&quot;)); </code></pre>
+</li>
+<li><p>将缓冲指定文件的输入。没有缓冲，每次调用read（）或readLine（）可能会导致从文件中读取字节，转换成字符，然后返回，这可能非常低效。</p>
+</li>
+<li><p>使用DataInputStreams进行文本输入的程序可以通过用适当的BufferedReader替换每个DataInputStream进行本地化。  </p>
+</li>
 </ul>
 </blockquote>
-<p>可以看一下第一点，我们可以知道使用这个类的时候我们是无法向OutputStreamWriter那样指定一个字符集的，这个类默认使用系统或者是项目的默认的字符集。第二点倒是不难理解，不过也没有什么重点可言。我们可以看到第三点，这个和我们在FileOutputStream中看到的是一样的。</p>
-<p>不过问题在于，使用FileWriter和OutputstreamWriter之间到底有什么区别呢？</p>
-<pre><code class="java">FileWriter(File file) 
-// 给一个File对象构造一个FileWriter对象。  
-FileWriter(File file, boolean append) 
-// 给一个File对象构造一个FileWriter对象。  
-FileWriter(FileDescriptor fd) 
-// 构造与文件描述符关联的FileWriter对象。  
-FileWriter(String fileName) 
-// 构造一个给定文件名的FileWriter对象。  
-FileWriter(String fileName, boolean append) 
-// 构造一个FileWriter对象，给出一个带有布尔值的文件名，表示是否附加写入的数据。  </code></pre>
-<p>这里的构造函数没有我们之间看到的OutputStream了，也就是说我们使用FileWriter的时候不必像使用OutputstreamWriter那样先创建一个FIleOutputStream，这个倒是蛮方便的。我们可以给定File类或者文件名进行字符文件的读取。这个类的话是没有额外的方法的，也就是说这个类的使用方法和OutputStreamWriter基本是一样的。</p>
-<pre><code class="java">public class FileWriterDemo {
+<p>看一下他的构造函数。</p>
+<pre><code class="java">BufferedReader(Reader in) 
+// 创建使用默认大小的输入缓冲区的缓冲字符输入流。  
+BufferedReader(Reader in, int sz) 
+// 创建使用指定大小的输入缓冲区的缓冲字符输入流。  </code></pre>
+<p>非常的简单，他是一个包装流，就是为了来包装Reader这个类的子类的，其中我们可以使用第二个参数来指定缓冲区的大小，不过也看了上面的说明其实一般情况是我们是不用指定的。</p>
+<p>下面该看的就是这个类的方法了。其实这个流对象的各种方法我们基本都已经熟悉了。不过这个BufferedReader有一个我最喜欢的方法，那就是readLine()方法。</p>
+<pre><code class="java">public String readLine()
+                throws IOException
+                读一行文字。 一行被视为由换行符（&#39;\ n&#39;），回车符（&#39;\ r&#39;）中的任何一个或随后的换行符终止。 
+结果 
+    包含行的内容的字符串，不包括任何行终止字符，如果已达到流的末尾，则为null 
+异常 
+    IOException - 如果发生I / O错误 
+另请参见： 
+Files.readAllLines(java.nio.file.Path, java.nio.charset.Charset) </code></pre>
+<p>一次就可以读一行了，这个方法不要太方便哦~~</p>
+<p>下面随便写一个代码来展示一下这个类。</p>
+<pre><code class="java">public class BufferedReaderDemo {
     public static void main(String[] args) {
-        File file = new File(&quot;./Exercise/src/writer.txt&quot;);
-        FileWriter writer = null;
+        File file = new File(&quot;./Exercise/src/sher&quot;);
+        BufferedReader bufferedReader = null;
         try {
-            writer = new FileWriter(file);
-            String content = &quot;why are u so beautiful my girl?&quot;;
+            bufferedReader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = bufferedReader.readLine()) != null){
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedReader != null){
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}</code></pre>
+<blockquote>
+<p>可见看到，这里我没有将FileReader这个类放在外面，也没有在finally中将其关闭，那是因为在我们关闭BufferedReader的时候其实也就是关闭了FileReader，之前说了BufferedReader是他的包装流，其实包装的就是FileWriter，底层也是FileWriter，所谓的BufferedReader其实也不是流，只是一个壳子而已。这就是为啥叫他包装流或者说装饰流。</p>
+</blockquote>
+<p>下面就是BufferedWriter了，其实具体的用法都是相似的。</p>
+<pre><code class="java">public class BufferedWriterDemo {
+    public static void main(String[] args) {
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(&quot;./Exercise/src/buf.txt&quot;));
+            String content = &quot;hello World&quot;;
             writer.write(content);
+            writer.newLine();
+            writer.write(content);
+            writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -579,23 +557,31 @@ FileWriter(String fileName, boolean append)
         }
     }
 }</code></pre>
-<p>FileReader的使用方式也是类似的。</p>
-<pre><code class="java">public class FileReaderDemo {
+<p>可以看到BufferedWriter多了一个方法。newLine()。在linux和windows当中换行的符号是不一样的。windows中的换行是<code>\r\n</code>，而在linux中的换行的符号是<code>\n</code>。其中\r的意思是回到行首。所以说使用newLine()这个方法来换行个不错的选择。</p>
+<h2 id="BufferedInputStream和BufferedOutputStream"><a href="#BufferedInputStream和BufferedOutputStream" class="headerlink" title="BufferedInputStream和BufferedOutputStream"></a>BufferedInputStream和BufferedOutputStream</h2><p>上面讲过了BufferedReader, BufferedWriter了，下面的这两个也是包装流，其实就可以一带而过了。</p>
+<pre><code class="java">public class BufferedInputStreamDemo {
     public static void main(String[] args) {
-        File file = new File(&quot;./Exercise/src/sher&quot;);
-        FileReader reader = null;
+        BufferedInputStream bufferedInputStream = null;
+        BufferedOutputStream bufferedOutputStream = null;
         try {
-            reader = new FileReader(file);
-            int res;
-            while ((res = reader.read()) != -1) {
-                System.out.print((char)res);
-            }
+            bufferedInputStream =
+                    new BufferedInputStream(
+                            new FileInputStream(&quot;./Exercise/src/test.jpg&quot;));
+            byte[] b = bufferedInputStream.readAllBytes();
+            bufferedOutputStream =
+                    new BufferedOutputStream(
+                            new FileOutputStream(&quot;./Exercise/src/testCopy.jpg&quot;));
+            bufferedOutputStream.write(b);
+            bufferedOutputStream.flush();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
-                if (reader != null){
-                    reader.close();
+                if (bufferedInputStream != null){
+                    bufferedInputStream.close();
+                }
+                if (bufferedOutputStream != null){
+                    bufferedOutputStream.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -603,7 +589,7 @@ FileWriter(String fileName, boolean append)
         }
     }
 }</code></pre>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面主要介绍的就是Writer和Reader，其实IO中的四大抽象类就是InputStream，OutputStream，Writer，Reader这四种。前两种主要负责的就是原始字节流的操作，而后两种主要就是字符流的操作。不过我们也是可以通过前面的两种类来操作字符流的，不过这就是有点儿麻烦而且无法处理多字符的问题。后面要学习的是更加复杂一点的IO流的知识。</p>
+<p>其实从上面可以看出，用法和之前是完全相同的，使用Buffered之后，只是增加了一个所谓的缓冲区，是流的输入和输出变得更加快呢，而且BufferedReader还提供了readLine()这种神级的方法，所以说，Buffered这种东西，不是啥特殊情况的话，最后在使用流的时候都加上吧。</p>
 
         </div>
         <!-- .entry-content -->
@@ -631,36 +617,19 @@ FileWriter(String fileName, boolean append)
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/09/24/Java中的IO-03/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                Java中的IO-03</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/09/22/Java中的IO-01/" rel="next">
+            <a href="/2019/09/23/Java中的IO-02/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/42.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/42.jpg">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/43.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/43.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                Java中的IO-01</h3>
+                java中的IO-02</h3>
                 <hr>
               </div>
             </a>

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Sher的小博客</title>
+  <title itemprop="name">Java中的IO-06 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,517 +340,308 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 0px;"></div>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      Java中的IO-06</h1>
+      <p class="entry-census">
+        <span>
+          <a href="sheriby.github.io">
+            <img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true">
+          </a>
+        </span>
+        <span>
+          <a href="sheriby.github.io">Hony Sher</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2019-9-26<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
 <div id="content" class="site-content">
-  
-  <div class="notice" style="margin-top:60px">
-    <i class="iconfont icon-notification">
-    </i>
-    <div class="notice-content">欢迎来带到Sher的小博客！</div>
-  </div>
-  
-  <div class="top-feature-row">
-  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
-  <i class="fa fa-anchor" aria-hidden="true">
-  </i>
-  START:DASH!!</h1>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/theme-sakura/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/sakura.md.png">
-        </div>
-        <div class="info">
-          <h3>Sakura</h3>
-          <p>本站 hexo 主题</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="http://space.bilibili.com/37532334" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/bilibili.jpg">
-        </div>
-        <div class="info">
-          <h3>Bilibili</h3>
-          <p>Sher的b站视频</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/wangshiwu.jpg">
-        </div>
-        <div class="info">
-          <h3>Sher的万事屋</h3>
-          <p>技术服务</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-</div>
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
-      <i class="fa fa-envira" aria-hidden="true"></i>
-      Discovery</h1>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="Java-中的IO-06"><a href="#Java-中的IO-06" class="headerlink" title="Java 中的IO-06"></a>Java 中的IO-06</h1><h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>其实之前我们已经学过了Java IO中的主要的一些流，剩下来的流基本上都是一个套路没有必要一个一个再去研讨。下面是Java IO中的一个体系图。 Java IO中主要分为了四大抽象类，然后各种流都是继承于这些抽象类，实现这些抽象类的方法。下面的图中有的是我每次学过的，有的是我们没看过的，有的还是Java中已经废弃了的，不过其实我们也完全没有必要按照这个图再去将其余的流再去学习一次，我们学习java IO其实是学习的Java IO 的思路。即使我们遇到一个陌生的流，我们也完全可以应付的来。</p>
+<p><img src="https://www.processon.com/chart_image/571f0618e4b049474cdfd72c.png" alt></p>
+<h2 id="回到Hello-World"><a href="#回到Hello-World" class="headerlink" title="回到Hello World"></a>回到Hello World</h2><p>我们对IO流的学习其实是源于Hello world的输出，当时我们不知道，现在我们知道了<code>System.out</code>其实就是一个流对象，调用<code>println()</code>方法就是向控制台中输出信息。而当我们想要获取键盘的输入的时候我们使用的是<code>System.in</code>这个流，一般情况下，我们使用的方式是</p>
+<pre><code class="java">Scanner in = new Scanner(System.in);
+String str = in.next();
+int num = in.nextInt();</code></pre>
+<p>这个Scanner就是Java为了方便我们处理键盘的输入而产生的类。不过我们也可以使用我们之前的方式读取键盘的输入。</p>
+<pre><code class="java">BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+String s = bufferedReader.readLine();
+int a = Integer.parseInt(bufferedReader.readLine());
+System.out.println(s + a);</code></pre>
+<p>不过可以清晰的看到这个方法是有一点儿烦的，所以说使用Scanner在读取控制台的输入还是非常的方便而且简单的。</p>
+<p>不过这个Scanner并不是只可以读取控制的输入的，也可以读取文件。只要是流都是可以读取的。更好的是这个类有<code>hasNext</code>等一系列的方法，所以说上面的scanner代码可以修改一下。</p>
+<pre><code class="java">Scanner in = new Scanner(System.in);
+if (in.hasNext()){
+    String str = in.next();
+}
+if (in.hasNextInt){
+    int num = in.nextInt();    
+}</code></pre>
+<p>下面来演示一下使用<code>Scanner</code>来读取文件的操作，其实是一样的，文件流和控制台的标准流都是流。</p>
+<pre><code class="java">private static void scannerReadFile() {
+    // Use Scanner to read file!
+    final String path = &quot;C:/Users/SHeR/IdeaProjects/Exercise/src/com/sher/corejava/hello/file.txt&quot;;
+    Scanner scanner = null;
+    try {
+        scanner = new Scanner(Path.of(path), StandardCharsets.UTF_8);
+        while (scanner.hasNextLine()) {
+            System.out.println(scanner.nextLine());
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        if (scanner != null) {
+            scanner.close();
+        }
+    }
+}</code></pre>
+<p><code>System.in</code>是一个<code>OnputStream</code>，但是<code>System.out</code>并不是<code>OutputStream</code>而是一个叫<code>PrintWriter</code>的玩意，这就是很好奇了。现在我们来看一看这个<code>PrintWriter</code>是一个什么玩意。</p>
+<h3 id="PrintWriter"><a href="#PrintWriter" class="headerlink" title="PrintWriter"></a>PrintWriter</h3><p>看到这个类是以Writer结尾的，我们立马就知道了，这是一个字符流。不过也对，我们想控制台输入的肯定是字符啊。输入字节我们也是看不懂的，这是没必要的。先观察一下这个类的官方文档再说。</p>
+<pre><code class="java">java.lang.Object 
+    java.io.Writer 
+        java.io.PrintWriter </code></pre>
+<pre><code class="java">public class PrintWriter
+extends Writer</code></pre>
+<blockquote>
+<ul>
+<li>将对象的格式表示打印到文本输出流。这个类实现了全部在发现<code>print种</code>方法<a href="../../java/io/PrintStream.html"><code>PrintStream</code></a> 。它不包含用于编写原始字节的方法，程序应使用未编码的字节流。</li>
+<li>不像<a href="../../java/io/PrintStream.html"><code>PrintStream</code></a>类，如果启用自动刷新，它只会在调用的<code>println，printf，</code>或<code>format</code>方法来完成，而不是当一个换行符恰好是输出。  这些方法使用平台自己的行分隔符而不是换行符。 </li>
+<li>这个类中的方法不会抛出I / O异常，尽管它的一些构造函数可能。 客户可以通过调用<a href="../../java/io/PrintWriter.html#checkError--"><code>checkError()</code></a>查询是否发生错误。  </li>
+</ul>
+</blockquote>
+<pre><code class="java">PrintWriter(File file) 
+// 使用指定的文件创建一个新的PrintWriter，而不需要自动的线路刷新。  
+PrintWriter(File file, String csn) 
+// 使用指定的文件和字符集创建一个新的PrintWriter，而不需要自动进行线条刷新。  
+PrintWriter(OutputStream out) 
+// 从现有的OutputStream创建一个新的PrintWriter，而不需要自动线路刷新。  
+PrintWriter(OutputStream out, boolean autoFlush) 
+// 从现有的OutputStream创建一个新的PrintWriter。  
+PrintWriter(String fileName) 
+// 使用指定的文件名创建一个新的PrintWriter，而不需要自动执行行刷新。  
+PrintWriter(String fileName, String csn) 
+// 使用指定的文件名和字符集创建一个新的PrintWriter，而不需要自动线路刷新。  
+PrintWriter(Writer out) 
+// 创建一个新的PrintWriter，没有自动线冲洗。  
+PrintWriter(Writer out, boolean autoFlush) 
+//创建一个新的PrintWriter。  </code></pre>
+<pre><code class="java">PrintWriter append(char c) 
+// 将指定的字符附加到此作者。  
+PrintWriter append(CharSequence csq) 
+// 将指定的字符序列附加到此作者。  
+PrintWriter append(CharSequence csq, int start, int end) 
+// 将指定字符序列的子序列附加到此作者。  
+boolean checkError() 
+// 如果流未关闭，请刷新流并检查其错误状态。  
+protected void clearError() 
+// 清除此流的错误状态。  
+void close() 
+// 关闭流并释放与之相关联的任何系统资源。  
+void flush() 
+// 刷新流。  
+PrintWriter format(Locale l, String format, Object... args) 
+// 使用指定的格式字符串和参数将格式化的字符串写入此写入程序。  
+PrintWriter format(String format, Object... args) 
+// 使用指定的格式字符串和参数将格式化的字符串写入此写入程序。  
+void print(boolean b) 
+// 打印布尔值。  
+void print(char c) 
+// 打印一个字符  
+void print(char[] s) 
+// 打印字符数组。  
+void print(double d) 
+// 打印双精度浮点数。  
+void print(float f) 
+// 打印浮点数。  
+void print(int i) 
+// 打印一个整数。  
+void print(long l) 
+// 打印一个长整数。  
+void print(Object obj) 
+// 打印一个对象。  
+void print(String s) 
+// 打印字符串。  
+PrintWriter printf(Locale l, String format, Object... args) 
+// 使用指定的格式字符串和参数将格式化的字符串写入该writer的方便方法。  
+PrintWriter printf(String format, Object... args) 
+// 使用指定的格式字符串和参数将格式化的字符串写入该writer的方便方法。  
+void println() 
+// 通过写入行分隔符字符串来终止当前行。  
+void println(boolean x) 
+// 打印一个布尔值，然后终止该行。  
+void println(char x) 
+// 打印一个字符，然后终止该行。  
+void println(char[] x) 
+// 打印字符数组，然后终止行。  
+void println(double x) 
+// 打印双精度浮点数，然后终止行。  
+void println(float x) 
+// 打印一个浮点数，然后终止该行。  
+void println(int x) 
+// 打印一个整数，然后终止该行。  
+void println(long x) 
+// 打印一个长整型，然后终止行。  
+void println(Object x) 
+// 打印一个对象，然后终止该行。  
+void println(String x) 
+// 打印一个字符串，然后终止行。  
+protected void setError() 
+// 表示发生错误。  
+void write(char[] buf) 
+// 写入一个字符数组。  
+void write(char[] buf, int off, int len) 
+// 写一个字符数组的一部分。  
+void write(int c) 
+// 写一个字符  
+void write(String s) 
+// 写一个字符串  
+void write(String s, int off, int len) 
+// 写一个字符串的一部分。  </code></pre>
+<p>可以看到这个类虽然方法很多，不过基本上都是重载的方法。也就是<code>print</code>,<code>printf</code>,<code>println</code>这三个方法。</p>
+<p>下面来个代码来演示一下这个流的使用。</p>
+<pre><code class="java">private static void printWriterFile() {
+    PrintWriter printWriter = null;
+    try {
+        printWriter = new PrintWriter(&quot;Hello.txt&quot;, StandardCharsets.UTF_8);
+        printWriter.println(&quot;hello printWriter&quot;);
+        printWriter.println(&quot;hello world\nhello core java&quot;);
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        if (printWriter != null) {
+            printWriter.close();
+        }
+    }
+}</code></pre>
+<p>从上面的构战函数可以得知，也可以从现有的<code>OutputStream</code>的基础上创建<code>PrintWriter</code>。所以上面的代码等价于</p>
+<pre><code class="java">private static void printWriterFile() {
+    FileOutputStream fileOutputStream = null;
+    PrintWriter printWriter = null;
+    try {
+        fileOutputStream = new FileOutputStream(new File(&quot;hello.txt&quot;));
+        printWriter = new PrintWriter(fileOutputStream);
+        printWriter.println(&quot;hello printWriter&quot;);
+        printWriter.println(&quot;hello world&quot;);
+        printWriter.println(&quot;hello hello&quot;);
+        printWriter.flush();
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (fileOutputStream != null) {
+                fileOutputStream.close();
+            }
+            if (printWriter != null) {
+                printWriter.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+<blockquote>
+<p><strong>注意：</strong>上面代码的第十行代码是必须的，不然文件中不会产生任何的数据。其实每次输出都可以刷新一下缓冲的。</p>
+</blockquote>
+<p>上面说了<code>PrintWriter</code>那么是否有<code>PrintReader</code>呢？答案是没有的，，，至于为什么，好好想想去伐。。。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到此为此，对IO的学习基本上已经结束了。下面的一个将会讲一讲Commons IO这个玩意，那时候也就是IO真正的结束了。</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/WechatPayQr.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2019/09/25/Java中的IO-05/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/46.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/46.png">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                Java中的IO-05</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-  <div class="post-thumb">
-    <a href="/2019/09/26/Java中的IO-06/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-9-26 17:09</div>
-      <a href="/2019/09/26/Java中的IO-06/" class="post-title">
-        <h3>Java中的IO-06</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java-IO/">Java IO<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java IO流的一些知识</p>
-        <div class="post-bottom">
-          <a href="/2019/09/26/Java中的IO-06/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="sheriby.github.io" class="profile gravatar"><img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
+            </h3>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/09/25/Java中的IO-05/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/46.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-9-25 20:09</div>
-      <a href="/2019/09/25/Java中的IO-05/" class="post-title">
-        <h3>Java中的IO-05</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java-Io/">Java Io<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java当中的IO流的知识</p>
-        <div class="post-bottom">
-          <a href="/2019/09/25/Java中的IO-05/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/09/25/Java中的IO-04/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/45.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-9-25 17:09</div>
-      <a href="/2019/09/25/Java中的IO-04/" class="post-title">
-        <h3>Java中的IO-04</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java-IO/">Java IO<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java当中的IO流的知识</p>
-        <div class="post-bottom">
-          <a href="/2019/09/25/Java中的IO-04/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/09/24/Java中的IO-03/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-9-24 19:09</div>
-      <a href="/2019/09/24/Java中的IO-03/" class="post-title">
-        <h3>Java中的IO-03</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/JAVA-IO/">JAVA IO<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java当中的IO流的操作</p>
-        <div class="post-bottom">
-          <a href="/2019/09/24/Java中的IO-03/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/09/23/Java中的IO-02/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/43.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-9-23 10:09</div>
-      <a href="/2019/09/23/Java中的IO-02/" class="post-title">
-        <h3>java中的IO-02</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java-IO/">Java IO<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java中的IO流</p>
-        <div class="post-bottom">
-          <a href="/2019/09/23/Java中的IO-02/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/09/22/Java中的IO-01/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/42.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-9-22 18:09</div>
-      <a href="/2019/09/22/Java中的IO-01/" class="post-title">
-        <h3>Java中的IO-01</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/java基础/">java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单地学习java的中的IO流的操作</p>
-        <div class="post-bottom">
-          <a href="/2019/09/22/Java中的IO-01/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/08/05/再谈最长回文子串——马拉车算法/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/40.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-8-5 19:08</div>
-      <a href="/2019/08/05/再谈最长回文子串——马拉车算法/" class="post-title">
-        <h3>再谈最长回文子串——马拉车算法</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/算法/">算法<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>最长回文子串问题的另一种有名的解法</p>
-        <div class="post-bottom">
-          <a href="/2019/08/05/再谈最长回文子串——马拉车算法/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/08/02/再谈动态规划/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/39.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-8-2 07:08</div>
-      <a href="/2019/08/02/再谈动态规划/" class="post-title">
-        <h3>再谈动态规划</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/算法/">算法<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>动态规划算法的几道经典的题目</p>
-        <div class="post-bottom">
-          <a href="/2019/08/02/再谈动态规划/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/31/最长回文子串问题/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/38.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-31 09:07</div>
-      <a href="/2019/07/31/最长回文子串问题/" class="post-title">
-        <h3>最长回文子串问题</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/算法/">算法<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>leetcode的第五题——最长回文子串问题</p>
-        <div class="post-bottom">
-          <a href="/2019/07/31/最长回文子串问题/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/26/设计模式（二）工厂模式/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/36.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-26 16:07</div>
-      <a href="/2019/07/26/设计模式（二）工厂模式/" class="post-title">
-        <h3>设计模式（二）工厂模式</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/设计模式/">设计模式<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>工厂设计模式的基本介绍和简单实现</p>
-        <div class="post-bottom">
-          <a href="/2019/07/26/设计模式（二）工厂模式/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-
-
-    </main>
-      <!-- 首页默认取最最新文章集 -->
-    <!-- 
-      <nav class="navigator">
-        
-        <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next</a>
-      </nav>
-     -->
-  </div>
-  
-    <div id="pagination"><a href="/page/2/" class="">Previous</a></div>
-  
+        <hr>
+        <p><i class="iconfont icon-write"></i>一枚小菜鸡</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
 
     </div>    
     <div class="ins-search">

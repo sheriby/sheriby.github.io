@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Apache Commons IO简介 | Sher的小博客</title>
+  <title itemprop="name">IO应用——文件分割 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Apache Commons IO简介</h1>
+      IO应用——文件分割</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-9-26<span class="bull">
+        2019-9-27<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,182 +376,379 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Apache-Commons-IO简介"><a href="#Apache-Commons-IO简介" class="headerlink" title="Apache Commons IO简介"></a>Apache Commons IO简介</h1><hr>
-<p>之前一直学的都是Java中IO的知识，使用起来基本上都是那个一个样，说实话我确实是有点儿感到厌倦了。于是世界上著名的开源组织阿帕奇(Apache)将Java中的IO进行了封装写了Commons IO这个玩意。这个是需要从阿帕奇的光网上面去下载的，因为这个并不是jdk自带的库。下载完之后还自带了源码以及官方文档，不过都是英文的，，这就非常考验我的能力了。</p>
-<p>先看一下这个Commons IO 由哪些东西组成。</p>
-<pre><code class="java">org.apache.commons.io    
-// This package defines utility classes for working with streams, readers, writers and files.
-org.apache.commons.io.comparator    
-// This package provides various Comparator implementations for Files.
-org.apache.commons.io.filefilter    
-// This package defines an interface (IOFileFilter) that combines both FileFilter and FilenameFilter.
-org.apache.commons.io.input    
-// This package provides implementations of input classes, such as InputStream and Reader.
-org.apache.commons.io.monitor    
-// This package provides a component for monitoring file system events (directory and file create, update and delete events).
-org.apache.commons.io.output    
-// This package provides implementations of output classes, such as OutputStream and Writer.
-org.apache.commons.io.serialization    
-// This package provides a framework for controlling the deserialization of classes.</code></pre>
-<p>上面的这所只言片语，说实话我是什么都看不懂的，如果不是对Commons IO的体系有足够的了解，是肯定看不懂的。就像给我们一开始看那个Java io的体系图，我们也肯定是看的一脸懵逼的吖~~</p>
-<p>而且上面的并不是一些类而已，只是一些包，每个包中还有非常多的类，每个类中又有非常多的方法。所以说不可能一个一个去学习的，只能寻找自己需要的去学，这里就看一下别人的博客,毕竟我对这个玩意是一点也不了解。</p>
-<p><a href="https://blog.csdn.net/langgufu314/article/details/84721816" target="_blank" rel="noopener"><strong>Apache Commons IO入门教程</strong></a></p>
-<p>这个博客写了一点，但是我感觉写的并不怎么样，看了也没什么收获。下面我就直接上一些这个类的常用方法的代码吧。</p>
-<h2 id="文件或者文件夹的大小"><a href="#文件或者文件夹的大小" class="headerlink" title="文件或者文件夹的大小"></a>文件或者文件夹的大小</h2><pre><code class="java">public class TestCommonIo {
-    public static void main(String[] args) {
-        long len1 = FileUtils.sizeOf(new File(&quot;test&quot;));
-        long len2 = FileUtils.sizeOf(new File(&quot;./Exercise/src&quot;));
-        System.out.println(len1);
-        System.out.println(len2);
-    }
-}</code></pre>
-<p>上面的第一个就是文件的大小，第二个是文件夹的大小，使用的方法是一样的。对于计算一个文件的大小，这还是非常简单的，使用length()方法就可以了，不过计算文件夹的代码确实要进行递归的操作，可以说要考虑的东西很多，而且也很繁琐。</p>
-<p>我们可以看一下这个方法的源码</p>
-<pre><code class="java">public static long sizeOf(final File file) {
-
-    if (!file.exists()) {
-        final String message = file + &quot; does not exist&quot;;
-        throw new IllegalArgumentException(message);
-    }
-
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file); // private method; expects directory
-    } else {
-        return file.length();
-    }
-
-}</code></pre>
-<p>可以看到源码中专门写了一个函数来计算文件夹的大小</p>
-<pre><code class="java">private static long sizeOfDirectory0(final File directory) {
-    final File[] files = directory.listFiles();
-    if (files == null) {  // null if security restricted
-        return 0L;
-    }
-    long size = 0;
-
-    for (final File file : files) {
+          <h1 id="IO应用——文件分割"><a href="#IO应用——文件分割" class="headerlink" title="IO应用——文件分割"></a>IO应用——文件分割</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>很多下载软件下载的速度飞快是因为使用了多线程下载（至于多线程的知识，后面还是会学习的），将文件分割成不同的小块，然后不同的小块同时下载，最后再将这些小块的文件进行合并，这样下载就完成了，这样可以显著的提高下载的速度。这里我们显然不是做一个这样的下载器，而是做其中的一部分，将文件分割成许多小块，然后再将这些小文件合并。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>其实之前没有看过任何人的思路或者写法，我就自己就我之前学过的IO流的知识来实现这个功能。其实说简单也不简单。能用就行其实确实是可以用，不过代码中的漏洞或者交互性应该是很差的。</p>
+<h3 id="我的代码"><a href="#我的代码" class="headerlink" title="我的代码"></a>我的代码</h3><pre><code class="java">public class FileSplit {
+    public static void split(String src, String dest, int num) {
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
         try {
-            if (!isSymlink(file)) {
-                size += sizeOf0(file); // internal method
-                if (size &lt; 0) {
-                    break;
+            File file = new File(src);
+            fis = new FileInputStream(file);
+            byte[] buff = new byte[(int) file.length() / num + 1];
+            fis.read(buff);
+            int a = 1;
+            while (a &lt;= num) {
+                fos = new FileOutputStream(new File(dest + a));
+                fos.write(buff);
+                fos.flush();
+                a++;
+                fis.read(buff);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) {
+                    fis.close();
+                }
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void merge(String src, String dest, int num) {
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        int a = 1;
+        try {
+            fos = new FileOutputStream(new File(dest));
+            while (a &lt;= num) {
+                File file = new File(src + a);
+                fis = new FileInputStream(file);
+                fos.write(fis.readAllBytes());
+                a++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) {
+                    fis.close();
+                }
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        split(&quot;Exercise/src/test.jpg&quot;, &quot;D:/dst&quot;, 10);
+        merge(&quot;D:/dst&quot;,&quot;D:/merge.jpg&quot;,10);
+    }
+}</code></pre>
+<p>这个思路故事是个人都会做。不过这个代码的问题也是非常的大的。在分割图片你的时候或许我们察觉不到分割后然后合并的文件和之前的文件有什么区别，但是分割文本文件额时候，不一样的地方就非常的明显了。我们可以轻易的发现，文本的最后会多出一点儿的内容，而且这一点儿的内容非常的奇怪，我也不清楚这一小块的内容是从哪儿来的。现在也非常的惆怅。我真的是喵了个咪了！</p>
+<p>为什么会出现最后多出了一部分你的内容呢？是因为我们没有考虑到最后一块的大小，一般来说最后一块的大小肯定是要比前面的几块都要小的，所以说在写入最后一块的时候不能再用前面的大小。</p>
+<p>经过修改后的代码 如下所示</p>
+<pre><code class="java">package com.sher.ioinjava;
+
+import java.io.*;
+
+/**
+ * @author SHeR
+ * @time 9/27/2019 8:36 PM
+ * @describe
+ */
+public class FileSplit {
+    public static void split(String src, String dest, int num) {
+        FileInputStream fis = null;
+        BufferedInputStream bis = null;
+        FileOutputStream fos = null;
+        BufferedOutputStream bos = null;
+        try {
+            File file = new File(src);
+            if (!file.isFile()) {
+                throw new IllegalArgumentException(&quot;Src must be a file&quot;);
+            }
+            File dst = new File(dest);
+
+            if (!dst.exists()){
+                if (!dst.mkdir()){
+                    return;
                 }
             }
-        } catch (final IOException ioe) {
-            // Ignore exceptions caught when asking if a File is a symlink.
+            fis = new FileInputStream(file);
+            bis = new BufferedInputStream(fis);
+            byte[] buff = new byte[(int) file.length() / num + 1];
+            int cot = bis.read(buff);
+            int a = 1;
+            while (a &lt;= num) {
+                fos = new FileOutputStream(new File(dest +&quot;/&quot;+ a));
+                bos = new BufferedOutputStream(fos);
+                bos.write(buff, 0, cot);
+                bos.flush();
+                a++;
+                cot = bis.read(buff);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bis != null) {
+                    bis.close();
+                }
+                if (bos != null) {
+                    bos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    return size;
-}
+    public static void merge(String src, String dest) {
+        FileInputStream fis = null;
+        BufferedInputStream bis = null;
+        FileOutputStream fos = null;
+        BufferedOutputStream bos = null;
 
-private static long sizeOf0(final File file) {
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file);
-    } else {
-        return file.length(); // will be 0 if file does not exist
-    }
-}</code></pre>
-<p>简单的看一下确实也是使用递归的方法来计算文件夹的大小的。</p>
-<h2 id="列出文件"><a href="#列出文件" class="headerlink" title="列出文件"></a>列出文件</h2><pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, null);
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
-}</code></pre>
-<p><code>listFiles</code>函数的第一个参数是待列的文件夹，第二个参数是文件过滤器（这里使用的是非空过滤器），第三个参数是文件夹过滤器（使用null就是表示不列出文件夹）</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, DirectoryFileFilter.INSTANCE);
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
-}</code></pre>
-<p>使用这个方法就可以列出所有的文件，包括文件夹以及文件夹里面的内容。还有一种常用的文件过滤器是后缀名过滤。比如说我只想要后缀为Java的非空的文件，可以这样写。</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), 
-            FileFilterUtils.and(new SuffixFileFilter(&quot;java&quot;), EmptyFileFilter.NOT_EMPTY), 
-            DirectoryFileFilter.INSTANCE);
-
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
-}</code></pre>
-<p>可以使用<code>FileFilterUtils.and</code>,<code>FileFilterUtils.or</code>或者<code>FileFilterUtils.or</code>来组织过滤器之间的逻辑，比如上面的就是以java为后缀名的并且非空的文件。</p>
-<h2 id="读取内容"><a href="#读取内容" class="headerlink" title="读取内容"></a>读取内容</h2><pre><code class="java">static void test3() {
-    try {
-        String msg = FileUtils.readFileToString(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        System.out.println(msg);
-
-        byte[] b = FileUtils.readFileToByteArray(new File(&quot;hony&quot;));
-        System.out.println(new String(b, StandardCharsets.UTF_8));
-
-        List&lt;String&gt; lines = FileUtils.readLines(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        for (String line : lines) {
-            System.out.println(line);
+        File srcDir = new File(src);
+        if (!srcDir.exists()) {
+            throw new RuntimeException(&quot;Src does not exist!&quot;);
         }
 
-        LineIterator lineIterator = FileUtils.lineIterator(new File(&quot;hony&quot;), &quot;UTF-8&quot;);
-        while (lineIterator.hasNext()) {
-            System.out.println(lineIterator.nextLine());
+        File [] files = srcDir.listFiles();
+        if (files == null) {
+            throw new RuntimeException(&quot;Src is empty&quot;);
         }
-    } catch (IOException e) {
-        e.printStackTrace();
+        int num = files.length;
+
+        int a = 1;
+        try {
+            fos = new FileOutputStream(new File(dest));
+            bos = new BufferedOutputStream(fos);
+            while (a &lt;= num) {
+                File file = new File(src + &quot;/&quot; + a);
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                byte[] buff = new byte[1024];
+                int cot = -1;
+                while ((cot = bis.read(buff))!=-1){
+                    bos.write(buff, 0, cot);
+                }
+                a++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bis != null) {
+                    bis.close();
+                }
+                if (bos != null) {
+                    bos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        split(&quot;Exercise/src/SimpleInput.java&quot;, &quot;D:/dst&quot;, 3);
+        merge(&quot;D:/dst&quot;,&quot;D:/hello.java&quot;);
     }
 }</code></pre>
-<p>读取文件中的内容主要有上面的四种方式，无论哪一种都是比我们使用原始的Java IO流方便多了。</p>
-<p>第一种是直接将文件中的内容读取到一个String对象中。第二种则是读取到字节数组中。</p>
-<p>第三种是将文件的每一行都放入到一个List中。第四种方式倒是有点儿特殊，是使用迭代器的方式进行遍历文件的。</p>
-<h2 id="写出内容"><a href="#写出内容" class="headerlink" title="写出内容"></a>写出内容</h2><pre><code class="java">static void test4() {
+<p>经过我的测试，上面的代码基本上是没什么错误的地方了。那么这个题目我们就算是完成了。思路大概就是分割的时候一个输入流多个输出流，合并的时候一个输出流多个输入流。</p>
+<p>不过这个代码并不能说是很完善的，我们看一下别人写的代码。</p>
+<pre><code class="java">package com.sher.ioinjava;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
+/**
+ * @author SHeR
+ * @time 9/28/2019 11:30 AM
+ * @describe
+ */
+public class SplitFile {
+    //源头
+    private File src;
+    //目的地(文件夹)
+    private String destDir;
+    //所有分割后的文件存储路径
+    private List&lt;String&gt; destPaths;
+    //每块大小
+    private int blockSize;
+    //块数: 多少块
+    private int size;
+
+    public SplitFile(String srcPath,String destDir) {
+        this(srcPath,destDir,1024);
+    }
+    public SplitFile(String srcPath,String destDir,int blockSize) {
+        this.src =new File(srcPath);
+        this.destDir =destDir;
+        this.blockSize =blockSize;
+        this.destPaths =new ArrayList&lt;String&gt;();
+
+        //初始化
+        init();
+    }
+    //初始化
+    private void init() {
+        //总长度
+        long len = this.src.length();
+        //块数: 多少块
+        this.size =(int) Math.ceil(len*1.0/blockSize);
+        //路径
+        for(int i=0;i&lt;size;i++) {
+            this.destPaths.add(this.destDir +&quot;/&quot;+i+&quot;-&quot;+this.src.getName());
+        }
+    }
+    /**
+     * 分割
+     * 1、计算每一块的起始位置及大小
+     * 2、分割
+     * @throws IOException
+     */
+    public void split() throws IOException {
+        //总长度
+        long len = src.length();
+        //起始位置和实际大小
+        int beginPos = 0;
+        int actualSize = (int)(blockSize&gt;len?len:blockSize);
+        for(int i=0;i&lt;size;i++) {
+            beginPos = i*blockSize;
+            if(i==size-1) { //最后一块
+                actualSize = (int)len;
+            }else {
+                actualSize = blockSize;
+                len -=actualSize; //剩余量
+            }
+            splitDetail(i,beginPos,actualSize);
+        }
+    }
+    /**
+     * 指定第i块的起始位置 和实际长度
+     * @param i
+     * @param beginPos
+     * @param actualSize
+     * @throws IOException
+     */
+    private  void splitDetail(int i,int beginPos,int actualSize ) throws IOException {
+        RandomAccessFile raf =new RandomAccessFile(this.src,&quot;r&quot;);
+        RandomAccessFile raf2 =new RandomAccessFile(this.destPaths.get(i),&quot;rw&quot;);
+        //随机读取
+        raf.seek(beginPos);
+        //读取
+        //3、操作 (分段读取)
+        byte[] flush = new byte[1024]; //缓冲容器
+        int len = -1; //接收长度
+        while((len=raf.read(flush))!=-1) {
+            if(actualSize&gt;len) { //获取本次读取的所有内容
+                raf2.write(flush, 0, len);
+                actualSize -=len;
+            }else {
+                raf2.write(flush, 0, actualSize);
+                break;
+            }
+        }
+        raf2.close();
+        raf.close();
+    }
+    /**
+     * 文件的合并
+     * @throws IOException
+     */
+    public void merge(String destPath) throws IOException {
+        //输出流
+        OutputStream os =new BufferedOutputStream( new FileOutputStream(destPath,true));
+        Vector&lt;InputStream&gt; vi=new Vector&lt;InputStream&gt;();
+        SequenceInputStream sis =null;
+        //输入流
+        for(int i=0;i&lt;destPaths.size();i++) {
+            vi.add(new BufferedInputStream(new FileInputStream(destPaths.get(i))));
+        }
+        sis =new SequenceInputStream(vi.elements());
+        //拷贝
+        //3、操作 (分段读取)
+        byte[] flush = new byte[1024]; //缓冲容器
+        int len = -1; //接收长度
+        while((len=sis.read(flush))!=-1) {
+            os.write(flush,0,len); //分段写出
+        }
+        os.flush();
+        sis.close();
+        os.close();
+    }
+    public static void main(String[] args) throws IOException {
+        SplitFile sf = new SplitFile(&quot;Exercise/src/SimpleInput.java&quot;,&quot;dest&quot;) ;
+        sf.split();
+        sf.merge(&quot;aaa.java&quot;);
+    }
+}</code></pre>
+<p>里面使用了两个新的流<code>RandomAccessFile</code>和<code>SequenceInputStream</code>。我们可以稍微学习一下这个流，然后对我们直接的代码进行一些改进。</p>
+<p>不过我发现使用上面的第一个类好像更加的繁琐，而且我完全没有必须去随机读取，所有说使用上面的第一个流就是没事找事干的。而上面的第二个流是将多个输入流合成一个输入流，使用后面操作更加的简单，我感觉这个功能还是稍微可以的。所以说这个可以有！</p>
+<p>原来的分割文件的代码我没有进行修改，合并文件的方法我使用了<code>SequenceInputStream</code>进行了修改。修改后代码如下所示：</p>
+<pre><code class="java">public static void merge(String src, String dest) {
+    FileInputStream fis = null;
+    BufferedInputStream bis = null;
+    FileOutputStream fos = null;
+    BufferedOutputStream bos = null;
+
+    File srcDir = new File(src);
+    if (!srcDir.exists()) {
+        throw new RuntimeException(&quot;Src does not exist!&quot;);
+    }
+
+    File [] files = srcDir.listFiles();
+    if (files == null) {
+        throw new RuntimeException(&quot;Src is empty&quot;);
+    }
+    int num = files.length;
+
+    SequenceInputStream sinput = null;
+    Vector&lt;InputStream&gt; vector = new Vector&lt;&gt;();
+
+    int a = 1;
     try {
-        FileUtils.write(new File(&quot;happy.txt&quot;),
-                &quot;I am happy1!&quot;, StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy2!&quot;, StandardCharsets.UTF_8, true);
-        FileUtils.writeByteArrayToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy3!&quot;.getBytes(StandardCharsets.UTF_8), true);
+        fos = new FileOutputStream(new File(dest));
+        bos = new BufferedOutputStream(fos);
 
-        List&lt;String&gt; datas = new ArrayList&lt;&gt;();
-        datas.add(&quot;sher&quot;);
-        datas.add(&quot;hony&quot;);
-        datas.add(&quot;sherhony&quot;);
+        while (a &lt;= num) {
+            File file = new File(src + &quot;/&quot; + a);
+            fis = new FileInputStream(file);
+            bis = new BufferedInputStream(fis);
+            vector.add(bis);
+            a++;
+        }
 
-        FileUtils.writeLines(new File(&quot;happy.txt&quot;),
-                datas, &quot;\r\n&quot;, true);
-
-    } catch (IOException e) {
+        sinput = new SequenceInputStream(vector.elements());
+        int cot = -1;
+        byte[] buff = new byte[1024];
+        while ((cot = sinput.read(buff))!=-1){
+            bos.write(buff, 0, cot);
+        }
+    } catch (Exception e) {
         e.printStackTrace();
+    } finally {
+        try {
+            if (bis != null) {
+                bis.close();
+            }
+            if (bos != null) {
+                bos.close();
+            }
+            if (sinput != null) {
+                sinput.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }</code></pre>
-<p>写出到文件中同样有以上的好几种方式。上面函数的第四个参数都是代表<strong>是否一追加的形式写入</strong>到文件当中，在Java原始流当中也是使用的这种方式。不过下面的<code>FileUtils.writeLines</code>方法的第三个参数不再是编码了，而是分隔符，也就是说写入的这些data之间用什么隔开，这里我是用的是windows下的换行符。</p>
-<h2 id="拷贝"><a href="#拷贝" class="headerlink" title="拷贝"></a>拷贝</h2><p>拷贝包括拷贝文件或者说的是拷贝文件夹，拷贝文件的操作我们已经做过了，但是拷贝文件夹的操作是有点儿复杂，需要递归的操作。不过这个commons io提供给我们一个十分方便地方法。</p>
-<pre><code class="java">static void test5() {
-    try {
-        FileUtils.copyFile(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;Exercise/src/test-copy.jpg&quot;));
-        FileUtils.copyFileToDirectory(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;D:/&quot;));
-        FileUtils.copyDirectory(new File(&quot;Exercise/out&quot;), new File(&quot;Exercise/out-copy&quot;));
-        FileUtils.copyDirectoryToDirectory(new File(&quot;Exercise/out&quot;),
-                new File(&quot;Exercise/src&quot;));
-        String url = &quot;http://i1.hdslb.com/bfs/archive/9cc5e3fcc7d6c48e5a0d8d3dd8bbb6ed11937f89.jpg&quot;;
-        FileUtils.copyURLToFile(new URL(url), new File(&quot;Exercise/src/miaonei.jpg&quot;));
-        String baidu = &quot;http://www.baidu.com&quot;;
-        String wangyi = &quot;http://www.163.com&quot;;
-        String bd = IOUtils.toString(new URL(baidu), StandardCharsets.UTF_8);
-        String wy = IOUtils.toString(new URL(wangyi), &quot;GBK&quot;);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/baidu.txt&quot;), bd,
-                StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/wangyi.txt&quot;), wy,
-                &quot;GBK&quot;);
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}</code></pre>
-<p>上面是拷贝的常见的操作。可以看到这个方法是什么的方便的。不过需要注意的是，从网络流中拷贝东西（也就是下载东西）的时候，如果是文字的话（也就网页的代码），可以使用<code>IOUtils.toString</code>方法，这个方法可以指定字符的编码。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面就是Commons IO中简单的常用的一些操作，不过Commons IO这么强大的库怎么可能就这么一点点功能，只不过其余的功能太过与强大，而且并不是经常用到，所以现在可以不用了解。现在就是简单的看看这个类，知道有这么个玩意就行了。</p>
+<p>其实修改的地方并不多，只是将多个输入流整合成一个输入流了而已。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面的虽然是一个简单的应用，不过也会出不少的细节上面的小问题。所以说，解决了这个问题，对我们对IO的理解还是有一定的帮助的。</p>
 
         </div>
         <!-- .entry-content -->
@@ -579,36 +776,19 @@ private static long sizeOf0(final File file) {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/09/27/IO应用——文件分割/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                IO应用——文件分割</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/09/26/Java中的IO-06/" rel="next">
+            <a href="/2019/09/26/Apache Commons IO简介/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                Java中的IO-06</h3>
+                Apache Commons IO简介</h3>
                 <hr>
               </div>
             </a>

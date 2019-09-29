@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Apache Commons IO简介 | Sher的小博客</title>
+  <title itemprop="name">唠一唠接口 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/52.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/52.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Apache Commons IO简介</h1>
+      唠一唠接口</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-9-26<span class="bull">
+        2019-9-29<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,182 +376,188 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Apache-Commons-IO简介"><a href="#Apache-Commons-IO简介" class="headerlink" title="Apache Commons IO简介"></a>Apache Commons IO简介</h1><hr>
-<p>之前一直学的都是Java中IO的知识，使用起来基本上都是那个一个样，说实话我确实是有点儿感到厌倦了。于是世界上著名的开源组织阿帕奇(Apache)将Java中的IO进行了封装写了Commons IO这个玩意。这个是需要从阿帕奇的光网上面去下载的，因为这个并不是jdk自带的库。下载完之后还自带了源码以及官方文档，不过都是英文的，，这就非常考验我的能力了。</p>
-<p>先看一下这个Commons IO 由哪些东西组成。</p>
-<pre><code class="java">org.apache.commons.io    
-// This package defines utility classes for working with streams, readers, writers and files.
-org.apache.commons.io.comparator    
-// This package provides various Comparator implementations for Files.
-org.apache.commons.io.filefilter    
-// This package defines an interface (IOFileFilter) that combines both FileFilter and FilenameFilter.
-org.apache.commons.io.input    
-// This package provides implementations of input classes, such as InputStream and Reader.
-org.apache.commons.io.monitor    
-// This package provides a component for monitoring file system events (directory and file create, update and delete events).
-org.apache.commons.io.output    
-// This package provides implementations of output classes, such as OutputStream and Writer.
-org.apache.commons.io.serialization    
-// This package provides a framework for controlling the deserialization of classes.</code></pre>
-<p>上面的这所只言片语，说实话我是什么都看不懂的，如果不是对Commons IO的体系有足够的了解，是肯定看不懂的。就像给我们一开始看那个Java io的体系图，我们也肯定是看的一脸懵逼的吖~~</p>
-<p>而且上面的并不是一些类而已，只是一些包，每个包中还有非常多的类，每个类中又有非常多的方法。所以说不可能一个一个去学习的，只能寻找自己需要的去学，这里就看一下别人的博客,毕竟我对这个玩意是一点也不了解。</p>
-<p><a href="https://blog.csdn.net/langgufu314/article/details/84721816" target="_blank" rel="noopener"><strong>Apache Commons IO入门教程</strong></a></p>
-<p>这个博客写了一点，但是我感觉写的并不怎么样，看了也没什么收获。下面我就直接上一些这个类的常用方法的代码吧。</p>
-<h2 id="文件或者文件夹的大小"><a href="#文件或者文件夹的大小" class="headerlink" title="文件或者文件夹的大小"></a>文件或者文件夹的大小</h2><pre><code class="java">public class TestCommonIo {
+          <h1 id="唠一唠接口"><a href="#唠一唠接口" class="headerlink" title="唠一唠接口"></a>唠一唠接口</h1><h2 id="接口可以new？"><a href="#接口可以new？" class="headerlink" title="接口可以new？"></a>接口可以new？</h2><p>众所周知，接口是一种完全抽象化的设计，不能够实例化，即我们不能创建接口类型的对象。也就是说我们是不可以new出一个接口对象的，但是仔细想想看，我们是不是经常使用new一个接口的操作呢？</p>
+<h3 id="new出一个接口"><a href="#new出一个接口" class="headerlink" title="new出一个接口"></a>new出一个接口</h3><p>其实之前刚刚讲过了lambda表达式，在那儿的时候我就想多说一句的，不过我还是忍住了，到这个地方再说。</p>
+<pre><code class="java">public class Test {
     public static void main(String[] args) {
-        long len1 = FileUtils.sizeOf(new File(&quot;test&quot;));
-        long len2 = FileUtils.sizeOf(new File(&quot;./Exercise/src&quot;));
-        System.out.println(len1);
-        System.out.println(len2);
-    }
-}</code></pre>
-<p>上面的第一个就是文件的大小，第二个是文件夹的大小，使用的方法是一样的。对于计算一个文件的大小，这还是非常简单的，使用length()方法就可以了，不过计算文件夹的代码确实要进行递归的操作，可以说要考虑的东西很多，而且也很繁琐。</p>
-<p>我们可以看一下这个方法的源码</p>
-<pre><code class="java">public static long sizeOf(final File file) {
-
-    if (!file.exists()) {
-        final String message = file + &quot; does not exist&quot;;
-        throw new IllegalArgumentException(message);
-    }
-
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file); // private method; expects directory
-    } else {
-        return file.length();
-    }
-
-}</code></pre>
-<p>可以看到源码中专门写了一个函数来计算文件夹的大小</p>
-<pre><code class="java">private static long sizeOfDirectory0(final File directory) {
-    final File[] files = directory.listFiles();
-    if (files == null) {  // null if security restricted
-        return 0L;
-    }
-    long size = 0;
-
-    for (final File file : files) {
-        try {
-            if (!isSymlink(file)) {
-                size += sizeOf0(file); // internal method
-                if (size &lt; 0) {
-                    break;
-                }
+        Bird bird = new Bird() {
+            @Override
+            public void fly() {
+                System.out.println(&quot;Bird can fly!&quot;);
             }
-        } catch (final IOException ioe) {
-            // Ignore exceptions caught when asking if a File is a symlink.
-        }
+        };
+//        Bird bird = ()-&gt;{
+//            System.out.println(&quot;Bird can fly&quot;);
+//        };
+        bird.fly();
     }
-
-    return size;
 }
 
-private static long sizeOf0(final File file) {
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file);
-    } else {
-        return file.length(); // will be 0 if file does not exist
+interface Bird {
+    void fly();
+}</code></pre>
+<p>注释中我使用的是lambda表达式的写法，上面的是一个匿名内部类。停！上面的是一个匿名内部类？我们是不是搞错了，上面我们new了一个接口？这编译器竟然还不报错，是吃干饭的嘛？</p>
+<p>上面的代码一切都运行正常，不过这是不是就可以说明接口其实是可以进行实例化的呢？</p>
+<p>既然他是可以new出来的，那我们就在这个类中打印一下他的类型看一下。看看是不是<code>Bird</code>类型，如果是的话就可以证明其实接口也是可以被new的。</p>
+<pre><code class="java">System.out.println(this.getClass());</code></pre>
+<p>输出的结果是<code>class com.sher.learnInterface.Test$1</code></p>
+<p><code>Test$1</code>这是个什么类，<code>Test</code>类是我们创建的，但是这个类我们根本不知道。这到底是怎么回事呢？</p>
+<p>其实接口可以new完全是一个假象。接口是完全抽象化的设计，是不可能实例化的。不过那如果理解上面的代码呢？其实程序中的创建方式就是匿名内部类来实现的。上面的那个类<code>Test$1</code>就是由系统创建的一个类，这个类实现了<code>Bird</code>接口，并且实现了<code>fly()</code>方法。不怪刚学Java的时候，Java不建议在自己起的变量名中使用<code>$</code>，因为这个符号广泛的被Java所使用。</p>
+<p>上面的那个匿名内部类的实现如下</p>
+<pre><code class="java">static final class Test$1 implement Bird{
+    public void fly(){
+        System.out.println(&quot;Bird can fly&quot;);
+    }
+}
+Bird bird = new Test$1();</code></pre>
+<p>由此可见，认为接口可以new真的是天大的笑话。</p>
+<h2 id="Java中没有多继承？"><a href="#Java中没有多继承？" class="headerlink" title="Java中没有多继承？"></a>Java中没有多继承？</h2><p>Java来源于C++。可以多继承是C++的一个重大的特点之一，不过Java认为C++中的多继承把继承结构搞得一团糟，比如继承两个类都有相同的方法和属性的时候。所以索性<strong>Java直接禁止类的多继承</strong>，只允许单继承。但是Java中多了接口，<strong>类可以实现多个接口</strong>。</p>
+<p>所以说，当别人问你，Java中有没有多继承的时候，我们应该回答没有？？</p>
+<p>上面只是说Java禁止类的多继承，也没说禁止其他的多继承啊。但是Java中除了类，还有什么玩意可以继承的吗？还真的有，那就是接口，接口也是可以继承的。是的，你没有听错，接口也是可以继承的。</p>
+<p>下面我们来重新的了解一下接口到底是个什么玩意。</p>
+<blockquote>
+<ul>
+<li>接口中所有的方法都必须是public , abstract类型</li>
+<li>接口中的所有的属性都必须是public, static, final类型。</li>
+<li>接口中的所有的内部类（包括枚举）都必须是public, static类型。</li>
+</ul>
+</blockquote>
+<p>上面是Java当中接口的一些硬性的要求，第三点或许有点儿陌生，不过不看第三点其实问题也不大。</p>
+<p>然后下面我要该了解的就是接口继承的规则了，其实这也就是方法重写的规则。如果接口中的<code>mSub</code>方法，重写了父接口的<code>mSuper</code>接口，那么需要满足一下的条件。</p>
+<blockquote>
+<ul>
+<li>mSub的签名是mSuper的子签名</li>
+<li>mSub的返回类型是mSuper返回类型的可替换类型</li>
+<li>mSub不能抛出比mSuper更多的受检异常</li>
+</ul>
+</blockquote>
+<p>上面的条件其实我们早就知道了。（方法的签名就是指函数的参数的类型）</p>
+<p>对于类的基础中的方法重写还要有几个条件，不过这些条件接口都已经默认的满足了。</p>
+<blockquote>
+<ul>
+<li>mSub和mSuper都是实例方法。（接口中的方法都是实例方法，不可能是static)</li>
+<li>mSub的访问权限不能低于mSuper。(接口中的方法全都是public的)</li>
+<li>mSub继承了父类的mSuper方法。(都是public的，当然是可以继承的)</li>
+</ul>
+</blockquote>
+<p>经过了上面的探讨，我们可以知道，Java中的接口是完全可以继承的，而且是可以进行多继承的。</p>
+<p>不过既然是可以多继承的，那么我们就要来处理一下C++中的那个问题，如果有相同的方法或者属性，怎么办？</p>
+<h3 id="相同的属性名"><a href="#相同的属性名" class="headerlink" title="相同的属性名"></a>相同的属性名</h3><pre><code class="java">interface A{
+    int id = 1;
+}
+
+interface B{
+    int id = 2;
+}
+
+interface C extends A, B{
+    int id1 = A.id;
+    int id2 = B.id;
+}
+
+public class Test2 implements A, B {
+    public static void main(String[] args) {
+//        System.out.println(id); 、、 Reference to &#39;id&#39; is ambiguous, both A.id and B.id match 
+        System.out.println(A.id);
+        System.out.println(B.id);
     }
 }</code></pre>
-<p>简单的看一下确实也是使用递归的方法来计算文件夹的大小的。</p>
-<h2 id="列出文件"><a href="#列出文件" class="headerlink" title="列出文件"></a>列出文件</h2><pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, null);
-    for (File file : files) {
-        System.out.println(file.getName());
+<p>从上面可以看到，如果是实现了多个接口的话，同时接口中有相同的属性，我们就不可以使用简单的方式来访问这个变量，我们必须在使用的时候在前面加上类名一防止产生没有必要的歧义。</p>
+<h3 id="相同的方法签名"><a href="#相同的方法签名" class="headerlink" title="相同的方法签名"></a>相同的方法签名</h3><p>加入方法名相同，但是方法的签名相同，那么这个两个方法是完全可以分辨的。所以这种函数没有什么歧义。比如<code>func(int)</code>和<code>func(String)</code>是完全没有歧义的。有歧义的就是方法签名相同的函数。</p>
+<pre><code class="java">interface A {
+    void func();
+}
+
+interface B {
+    void func();
+}
+
+interface C extends A, B {
+
+}
+
+public class Test2 implements C {
+
+    public static void main(String[] args) {
+        A a = new Test2();
+        a.func();
+
+        B b = new Test2();
+        b.func();
+    }
+
+    @Override
+    public void func() {
+
     }
 }</code></pre>
-<p><code>listFiles</code>函数的第一个参数是待列的文件夹，第二个参数是文件过滤器（这里使用的是非空过滤器），第三个参数是文件夹过滤器（使用null就是表示不列出文件夹）</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, DirectoryFileFilter.INSTANCE);
-    for (File file : files) {
-        System.out.println(file.getName());
+<p>可以看到上面有相同的返回值是没有关系的，反正两个接口中都是没有实现的，所以类中实现一个就行了。使用其中的任何一个接口都可以访问到这个函数，但是两个函数是一样的。(相同名的函数，你还想实现两次，那怎么调用？)</p>
+<p>不过如果方法的返回值不一样呢？</p>
+<pre><code class="java">interface A {
+    int func();
+}
+
+interface B {
+    String func();
+}
+
+interface C extends A, B { // Error
+}
+
+public class Test2 implements C { // Error
+}
+</code></pre>
+<p>虽然这个上面没有什么报错提示，但是我的idea上报错都满天飞了，看来返回值不相同是没有办法多继承的了。</p>
+<p>不过真的如此吗？</p>
+<pre><code class="java">interface A {
+    Collection&lt;String&gt; func();
+}
+
+interface B {
+    List&lt;String&gt; func();
+}
+
+interface C extends A, B {
+}
+
+public class Test2 implements C {
+
+    public static void main(String[] args) {
+        A a = new Test2();
+        a.func();
+
+        B b = new Test2();
+        b.func();
     }
-}</code></pre>
-<p>使用这个方法就可以列出所有的文件，包括文件夹以及文件夹里面的内容。还有一种常用的文件过滤器是后缀名过滤。比如说我只想要后缀为Java的非空的文件，可以这样写。</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), 
-            FileFilterUtils.and(new SuffixFileFilter(&quot;java&quot;), EmptyFileFilter.NOT_EMPTY), 
-            DirectoryFileFilter.INSTANCE);
 
-    for (File file : files) {
-        System.out.println(file.getName());
+    @Override
+    public List&lt;String&gt; func() {
+        return null;
     }
-}</code></pre>
-<p>可以使用<code>FileFilterUtils.and</code>,<code>FileFilterUtils.or</code>或者<code>FileFilterUtils.or</code>来组织过滤器之间的逻辑，比如上面的就是以java为后缀名的并且非空的文件。</p>
-<h2 id="读取内容"><a href="#读取内容" class="headerlink" title="读取内容"></a>读取内容</h2><pre><code class="java">static void test3() {
-    try {
-        String msg = FileUtils.readFileToString(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        System.out.println(msg);
-
-        byte[] b = FileUtils.readFileToByteArray(new File(&quot;hony&quot;));
-        System.out.println(new String(b, StandardCharsets.UTF_8));
-
-        List&lt;String&gt; lines = FileUtils.readLines(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        for (String line : lines) {
-            System.out.println(line);
-        }
-
-        LineIterator lineIterator = FileUtils.lineIterator(new File(&quot;hony&quot;), &quot;UTF-8&quot;);
-        while (lineIterator.hasNext()) {
-            System.out.println(lineIterator.nextLine());
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
+}
+</code></pre>
+<p>可以看到，虽然方法的返回值是不一样的，但是由于<code>List&lt;&gt;</code>是<code>Collection&lt;&gt;</code>的子类，所以说多继承的时候会将范围扩大，返回值变成了<code>List&lt;String&gt;</code>，这样就可以多继承啦。（<code>List&lt;String&gt;</code>同时为<code>List&lt;String&gt;</code>和<code>Collection&lt;String&gt;</code>的子签名）。</p>
+<p>由此可见，如果方法的签名相同，而且返回值还没有相同的子签名，那么这个两个接口将无法进行多继承。</p>
+<h2 id="接口中可以拥有非final的属性吗？"><a href="#接口中可以拥有非final的属性吗？" class="headerlink" title="接口中可以拥有非final的属性吗？"></a>接口中可以拥有非final的属性吗？</h2><p>经过上面的了解，我们也知道了接口当中的所有的属性都必须要是public static final 的。原因是在于Java当中的接口是一种完全抽象的结构。是用来给多个类实现的。如果存在非final的变量，其中的一个实现修改了变量，其他的所有的实现中的该变量都将被修改，这是非常不合理的。所以说Java的中接口是对修改封闭的。禁止你修改的。</p>
+<p>但是真的是对修改封闭了吗？</p>
+<p>final是对值的修改封闭的。但是Java中有非常多的引用的类型。我修改引用里面的内容但是却不修改引用这完全符合final。</p>
+<pre><code class="java">interface AA{
+    CA ca = new CA();
+}
+public class Test3 implements AA{
+    public static void main(String[] args) {
+        System.out.println(ca.id); // 10
+        ca.id = 110;
+        System.out.println(ca.id); // 110
     }
-}</code></pre>
-<p>读取文件中的内容主要有上面的四种方式，无论哪一种都是比我们使用原始的Java IO流方便多了。</p>
-<p>第一种是直接将文件中的内容读取到一个String对象中。第二种则是读取到字节数组中。</p>
-<p>第三种是将文件的每一行都放入到一个List中。第四种方式倒是有点儿特殊，是使用迭代器的方式进行遍历文件的。</p>
-<h2 id="写出内容"><a href="#写出内容" class="headerlink" title="写出内容"></a>写出内容</h2><pre><code class="java">static void test4() {
-    try {
-        FileUtils.write(new File(&quot;happy.txt&quot;),
-                &quot;I am happy1!&quot;, StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy2!&quot;, StandardCharsets.UTF_8, true);
-        FileUtils.writeByteArrayToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy3!&quot;.getBytes(StandardCharsets.UTF_8), true);
+}
 
-        List&lt;String&gt; datas = new ArrayList&lt;&gt;();
-        datas.add(&quot;sher&quot;);
-        datas.add(&quot;hony&quot;);
-        datas.add(&quot;sherhony&quot;);
-
-        FileUtils.writeLines(new File(&quot;happy.txt&quot;),
-                datas, &quot;\r\n&quot;, true);
-
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
+class CA{
+    public static int id = 10;
 }</code></pre>
-<p>写出到文件中同样有以上的好几种方式。上面函数的第四个参数都是代表<strong>是否一追加的形式写入</strong>到文件当中，在Java原始流当中也是使用的这种方式。不过下面的<code>FileUtils.writeLines</code>方法的第三个参数不再是编码了，而是分隔符，也就是说写入的这些data之间用什么隔开，这里我是用的是windows下的换行符。</p>
-<h2 id="拷贝"><a href="#拷贝" class="headerlink" title="拷贝"></a>拷贝</h2><p>拷贝包括拷贝文件或者说的是拷贝文件夹，拷贝文件的操作我们已经做过了，但是拷贝文件夹的操作是有点儿复杂，需要递归的操作。不过这个commons io提供给我们一个十分方便地方法。</p>
-<pre><code class="java">static void test5() {
-    try {
-        FileUtils.copyFile(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;Exercise/src/test-copy.jpg&quot;));
-        FileUtils.copyFileToDirectory(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;D:/&quot;));
-        FileUtils.copyDirectory(new File(&quot;Exercise/out&quot;), new File(&quot;Exercise/out-copy&quot;));
-        FileUtils.copyDirectoryToDirectory(new File(&quot;Exercise/out&quot;),
-                new File(&quot;Exercise/src&quot;));
-        String url = &quot;http://i1.hdslb.com/bfs/archive/9cc5e3fcc7d6c48e5a0d8d3dd8bbb6ed11937f89.jpg&quot;;
-        FileUtils.copyURLToFile(new URL(url), new File(&quot;Exercise/src/miaonei.jpg&quot;));
-        String baidu = &quot;http://www.baidu.com&quot;;
-        String wangyi = &quot;http://www.163.com&quot;;
-        String bd = IOUtils.toString(new URL(baidu), StandardCharsets.UTF_8);
-        String wy = IOUtils.toString(new URL(wangyi), &quot;GBK&quot;);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/baidu.txt&quot;), bd,
-                StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/wangyi.txt&quot;), wy,
-                &quot;GBK&quot;);
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}</code></pre>
-<p>上面是拷贝的常见的操作。可以看到这个方法是什么的方便的。不过需要注意的是，从网络流中拷贝东西（也就是下载东西）的时候，如果是文字的话（也就网页的代码），可以使用<code>IOUtils.toString</code>方法，这个方法可以指定字符的编码。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面就是Commons IO中简单的常用的一些操作，不过Commons IO这么强大的库怎么可能就这么一点点功能，只不过其余的功能太过与强大，而且并不是经常用到，所以现在可以不用了解。现在就是简单的看看这个类，知道有这么个玩意就行了。</p>
+<p>可见，通过这种方式，我们修改了接口中的值，（其实并没有修改，接口中保存的只是引用）就好像有了一个非final的属性。</p>
+<p>我写这个例子并不是为了说，这样写就可以是接口拥有非final的属性，恰恰相反，我是为了防止这种情况的发生，在接口中我们尽量不要放置这种引用类型的变量。（idea才提醒我使用ca.id是个危险的行为）</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Java中的接口可谓的是一个非常强大的结构。算了，我也没有什么可以总结的地方了，一句话，接口牛逼就是了！！</p>
 
         </div>
         <!-- .entry-content -->
@@ -579,36 +585,19 @@ private static long sizeOf0(final File file) {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/09/27/IO应用——文件分割/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                IO应用——文件分割</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/09/26/Java中的IO-06/" rel="next">
+            <a href="/2019/09/29/认识ambda/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/51.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/51.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                Java中的IO-06</h3>
+                认识lambda</h3>
                 <hr>
               </div>
             </a>

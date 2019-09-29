@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Java中的IO-04 | Sher的小博客</title>
+  <title itemprop="name">Java的包装类--装箱与拆箱 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/45.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/45.png">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/50.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/50.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Java中的IO-04</h1>
+      Java的包装类--装箱与拆箱</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-9-25<span class="bull">
+        2019-9-28<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,107 +376,288 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Java中的IO-04"><a href="#Java中的IO-04" class="headerlink" title="Java中的IO-04"></a>Java中的IO-04</h1><h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>之前已经介绍过很多的IO流了。比如四大抽象流<code>InputStream</code>，<code>OutputStream</code>，<code>Reader</code>,<code>Writer</code>。前面的两个是<strong>字节流</strong>，后面的两个是<strong>字符流</strong>。所谓的字节流与字符流之间的最大的区别就是，<strong>字节流是写给计算机看的，而字符流写写给我们人看的。</strong>Java当中所有的IO流基本上都继承于这个四大抽象流，而且基本上都以他们结尾。之前还说过一个特殊的流<code>OutputStreamWriter</code>，<code>InputStreamReader</code>。这两个流却是有点儿特殊，他们的前面是字节流，后面却是字符流。之前我们说他是处理字符相关的流，不过实际上他是<strong>将字节流转换成字符流的特殊流</strong>。因而我们可以指定编码(字节流转换成为字符流的一种方式)来进行字节到字符的转换。如果我们要处理一些字符文件的话，之前学的<code>FileReader</code>，<code>FileWriter</code>无疑是一个最合适的选择。如果要是处理一些字节文件比如图片或者视频什么的，我们需要使用字节流<code>FileInputStream</code>，<code>FileOutputStream</code>。不过单独使用这些流的话，效率可能是一个问题。所以缓冲区是必须的，Java IO 中给我们提供了<strong>缓冲的包装流</strong>。<code>BufferedInputStream</code>,<code>BufferedOutputStream</code>,<code>BufferedReader</code>,<code>BufferedWriter</code>。这四个流是对前面的四个基本的抽象流的包装，如果不是什么特殊情况的话，我们可以每次都加上这个缓冲层。</p>
-<h2 id="ByteArrayInputStream-ByteArrayOutputStream"><a href="#ByteArrayInputStream-ByteArrayOutputStream" class="headerlink" title="ByteArrayInputStream, ByteArrayOutputStream"></a>ByteArrayInputStream, ByteArrayOutputStream</h2><p>字节流我们只是介绍了一种，也就是从文件中读取字节。不过并不是所有的情况下我们都要从文件中读取字节的。比如说我们获取一个字节数组，我们想使用流来处理一下这个字节数组，好像我们现在学过的流中没有这样的功能。</p>
-<p>于是现在我们引入了处理数组的新的流，<code>ByteArrayInputStream</code>和 <code>ByteArrayOutputStream</code>。</p>
-<p>下面就是我们正常的官方文档的学习环节。</p>
+          <h1 id="Java的包装类–装箱与拆箱"><a href="#Java的包装类–装箱与拆箱" class="headerlink" title="Java的包装类–装箱与拆箱"></a>Java的包装类–装箱与拆箱</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>众所周知，Java是一种纯面向对象的语言（并不是说Java程序员都要看着女朋友编程），不像C++中既可以面向对象也可以面向过程。但是这不意味着Java当中全被的类型都是对象。之前我们也学过Java中的类型包括，<strong>对象和8种基本数据类型</strong>。之所以不将这八种基本数据类型是因为相对于对象来说，基本数据类型在使用是更加的方便，而且使用的效率上也是远远的高于对象类型。但是，在Java的一些类库中，并不支持对基本数据类型的操作，比如说集合类型。刚开始学Java的新手肯定会发现这样的一个问题。</p>
+<pre><code class="java">List&lt;int&gt; list = new List&lt;int&gt;();</code></pre>
+<p>上面的这种代码，估计八成就是从C++刚转到Java的新手写出的代码。</p>
+<p>第一点List是一个接口，是不能够new的，我们只可以new出他的子类，比如我们经常使用的<code>ArrayList</code>。</p>
+<p>第二点<strong>Java当中的集合类型并不支持基本数据类型</strong>，我们应该将基本数据类型转变为相应的包装类。</p>
+<p>所以说正确的代码应该是</p>
+<pre><code class="java">List&lt;Integer&gt; list = new ArrayList&lt;&gt;();</code></pre>
+<p>后面的&lt;&gt;中的类型是可以省略不写的，毕竟前面都已经写过了。</p>
+<h2 id="为什么不能使用基本数据类型？"><a href="#为什么不能使用基本数据类型？" class="headerlink" title="为什么不能使用基本数据类型？"></a>为什么不能使用基本数据类型？</h2><p>同样是面向对象的语言，Java和C++中的对象是不一样的。Java中对象和python有一点类型，他们都有一个终极的父类<code>Object</code>，所以说所有的对象肯定都是<code>Object</code>的子类。但是C++是不一样的。</p>
+<p>现在我们考虑List中为什么不能使用基本数据类型，我们可以先看一下List如果不指定类型会怎么样。</p>
+<pre><code class="java">List list2 = new ArrayList();</code></pre>
+<p>我们发现这样的代码也可以通过，而且和上面的代码不一样，这个List中可以放任何类型的数据(除了基本数据类型)。为什么呢？因为如果不指定对应的类型的话，List这些容器就会默认指定类型为<code>Object</code>，而Java中的任何的对象都是<code>Object</code>类型的子类，所以说是可以放入的。(但是这样也有一个坏处，我们取出的数据类型也是<code>Object</code>，这时我们可能并不知道将这个数据转成什么样的类型，所以说最好还是要指定好类型)。但是基本数据类型不是对象，他们和<code>Ojbect</code>没有任何的联系，所以说基本数据类型是放不进去的。要想放进去，我们就必须要是<strong>基本数据类型和对象之间建立一种一一对应的联系</strong>。于是包装类出现了。</p>
+<p>就比如说上面的<code>Intger</code>就是<code>int</code>类型的包装类。这个类中封装了一个基本数据类型。这个时候，当集合想要操作基本数据类型的时候，就可以转向基本数据类型的包装类进行操作。</p>
+<h2 id="包装类介绍"><a href="#包装类介绍" class="headerlink" title="包装类介绍"></a>包装类介绍</h2><p>下面就以<code>int</code>的包装类<code>Integer</code>为例进行包装类的说明。</p>
 <pre><code class="java">java.lang.Object 
-    java.io.InputStream 
-        java.io.ByteArrayInputStream </code></pre>
-<pre><code class="java">public class ByteArrayInputStream
-extends InputStream</code></pre>
+    java.lang.Number 
+        java.lang.Integer </code></pre>
+<pre><code class="java">public final class Integer
+extends Number
+implements Comparable&lt;Integer&gt;</code></pre>
 <blockquote>
 <ul>
-<li>A <code>ByteArrayInputStream</code>包含一个内部缓冲区，其中包含可以从流中读取的字节。内部计数器跟踪<code>read</code>方法要提供的下一个字节。</li>
-<li>关闭<code>ByteArrayInputStream</code>没有任何效果。  在关闭流之后，可以调用此类中的方法，而不生成<code>IOException</code> 。 </li>
+<li><code>Integer</code>类包装一个对象中的原始类型<code>int</code>的值。类型为<code>Integer</code>的对象包含一个单一字段，其类型为<code>int</code> 。</li>
+<li>此外，该类还提供了一些将<code>int</code>转换为<code>String</code>和<code>String</code>转换为<code>int</code>  ，以及在处理<code>int</code>时有用的其他常量和方法。 </li>
 </ul>
 </blockquote>
-<pre><code class="java">ByteArrayInputStream(byte[] buf) 
-// 创建一个 ByteArrayInputStream ，使其使用 buf作为其缓冲区数组。  
-ByteArrayInputStream(byte[] buf, int offset, int length) 
-// 创建 ByteArrayInputStream使用 buf作为其缓冲器阵列。  </code></pre>
-<pre><code class="java">int available() 
-// 返回可从此输入流读取（或跳过）的剩余字节数。  
-void close() 
-// 关闭 ByteArrayInputStream没有任何效果。  
-void mark(int readAheadLimit) 
-// 设置流中当前标记的位置。  
-boolean markSupported() 
-// 测试 InputStream是否支持标记/复位。  
-int read() 
-// 从该输入流读取下一个数据字节。  
-int read(byte[] b, int off, int len) 
-// 将 len字节的数据读入此输入流中的字节数组。  
-void reset() 
-// 将缓冲区重置为标记位置。  
-long skip(long n) 
-// 从此输入流跳过 n个字节的输入。  </code></pre>
-<p>其实上面的这些方法，和这些属性都是可以一眼就看懂的，和其他的流是没什么区别的。</p>
-<p>看一下官方文档的第一点，我们可以知道使用<code>ByteArrayInputStream</code>内部有一个缓冲区，那是否可以使用<code>BufferedInputStream</code>来包装呢？这个肯定是可以用的，毕竟这个也是<code>InputStream</code>的子类吖。</p>
-<p>第二点是关于这个流的关闭的，官方文档告诉我们，这个流的关闭是不会做任何事情的，也就是说我们可以选择不关闭。但是为了IO流中操作的有机的统一和规范。虽然关闭没有用，我们还是推荐来关闭一下子的。</p>
-<h3 id="代码举例"><a href="#代码举例" class="headerlink" title="代码举例"></a>代码举例</h3><pre><code class="java">public class ByteArrayInputStreamDemo {
-    public static void main(String[] args) {
-        byte[] b = &quot;sher is a wonderful boy!&quot;.getBytes();
-        ByteArrayInputStream bais = new ByteArrayInputStream(b);
-        StringBuilder sb = new StringBuilder();
-        int temp = 0;
-        while ((temp = bais.read()) != -1){
-            sb.append((char) temp);
-        }
-        System.out.println(sb.toString());
-    }
-}</code></pre>
-<p>其实上面的我的用法不没有是把这个作为一个IO流来使用，所以也没有使用IO流的<code>try catch finally</code>的标准操作。而且这个流也是不会抛出<code>IOException</code>的。</p>
-<p>下面随便写一个有关<code>ByteArrayOutputStream</code>的代码举例</p>
-<pre><code class="java">public class ByteArrayOutputStreamDemo {
-    public static void main(String[] args) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        while (baos.size() &lt;= 10){
-            try {
-                baos.write(System.in.read());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        byte[] b = baos.toByteArray();
-        System.out.println(new String(b));
+<p>这个类的方法是非常多的，而且大多为static方法，比如说我们之前经常使用的<code>String</code>转为<code>int</code>的方法就是他的静态方法.<code>Integet.parseInt(String num, int radix)</code>第二个参数是指定进制，默认是十进制。</p>
+<p>先看一个这个类的构造函数</p>
+<pre><code class="java">Integer(int value) 
+// 构造一个新分配的 Integer对象，该对象表示指定的 int值。  
+Integer(String s) 
+// 构造一个新分配 Integer对象，表示 int由指示值 String参数。  </code></pre>
+<p>然后就是他的所有的方法其实是没有必要一一去看的。下面说的是所有的包装类都有的方法。</p>
+<p>第一个就是<code>xxxValue()</code>成员方法，返回这个包装类中封装的基本数据类型。如</p>
+<pre><code class="java">int intValue() 
+// 将 Integer的值作为 int 。  </code></pre>
+<p>如果要是double的话就是<code>doubleValue</code>，char就是<code>charValue</code>。</p>
+<p>第二个就是<code>valueOf(xxx)</code>静态方法，参数是一个基本的数据类型。比如说</p>
+<pre><code class="java">static Integer valueOf(int i) 
+// 返回一个 Integer指定的 int值的 Integer实例。  </code></pre>
+<p>不过也可以是String，指定进制的那个可不是所有的包装类都有的，只是整形才有的方法。</p>
+<pre><code class="java">static Integer valueOf(String s) 
+// 返回一个 Integer对象，保存指定的值为 String 。  
+static Integer valueOf(String s, int radix) 
+// 返回一个 Integer对象，保存从指定的String中 String的值，当用第二个参数给出的基数进行解析时。  </code></pre>
+<p>这个方法的用法如下所示。</p>
+<pre><code class="java">Integer i = Integer.valueOf(3);</code></pre>
+<p>还有另一种写法是</p>
+<pre><code class="java">Integer i = new Integer(3);</code></pre>
+<p>这两种方法其实等价的，但是官方建议使用第一种方法，也就是<code>valueOf()</code>方法，这个方法更加的快一点。这个可能是和包装类的常量池有关，就比如我们使用<code>String</code>的时候使用<code>String a = “hello”;</code>而不推荐使用<code>String a = new String(&quot;Hello&quot;);</code>因为前者，一是可以加入String的常量池，方便以后再用，而是如果常量池中有的话也可以不用产生新的对象。毕竟Java的中的String是一种不可变类型，基本数据类型的包装类也是如此。好像有点儿扯远了。下面继续回到正题中来。的</p>
+<p>上面我们介绍的虽然只是<code>int</code>的包装类，但是其余的包装类的使用其实也是差不多的，方法也都是差不多的。</p>
+<p>下面来展示一下基本数据类型和他们的包装类型。</p>
+<table>
+<thead>
+<tr>
+<th>基本数据类型</th>
+<th>包装类型</th>
+<th>基本数据类型</th>
+<th>包装类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>int</td>
+<td>Integer</td>
+<td>short</td>
+<td>Short</td>
+</tr>
+<tr>
+<td>char</td>
+<td>Character</td>
+<td>double</td>
+<td>Double</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>Boolean</td>
+<td>byte</td>
+<td>Byte</td>
+</tr>
+<tr>
+<td>long</td>
+<td>Long</td>
+<td>float</td>
+<td>Float</td>
+</tr>
+</tbody></table>
+<p>可以除了<code>int</code>和<code>char</code>变成了<code>Integer</code>和<code>Character</code>的全称之外，其余的包装类都是将首字母大小.(这就是Java的命名规则)</p>
+<h2 id="装箱与拆箱"><a href="#装箱与拆箱" class="headerlink" title="装箱与拆箱"></a>装箱与拆箱</h2><p>上面说到了Java当中的集合类型只可以放入基本数据类型的包装类，但是这一点确实有点违背我们的常识。比如这样的代码</p>
+<pre><code class="java">List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+list.add(1);</code></pre>
+<p>可以看到，这个list中我们放入的是1,但是1是一个基本数据类型。我们要放入的本应该是包装类型，却放入了基本数据。那么是真的放入了基本的数据类型吗？其实不然。</p>
+<p>在jdk1.5之前这样写代码是错误的。jdk1.5之前，我们需要手动装箱，手懂拆箱。</p>
+<pre><code class="java">List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+list.add(Integer.valueOf(1));
+// list.add(new Integer(1));</code></pre>
+<p>但是jdk1.5之后，Java引入自动装箱，自动拆箱的机制。也就是虽然我们是<code>list.add(1)</code>，编译器会将1自动装箱成<code>Integer</code>数据类型，然后放入list中。这一点虽然从原码上看不出来，但是反编译Java的文件，我们甚至可以看出编译器调用的是<code>Integer.valueOf(1)</code>这个方法。</p>
+<p>那什么又是拆箱呢？比如如下的代码</p>
+<pre><code class="java">List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+list.add(1);
+int a = list.get(1);</code></pre>
+<p>从上面的知识我们应该知道了，<code>list.get()</code>返回的应该是<code>Object</code>的子类<code>Integer</code>，但是我们确实使用int类型来接受返回值的，这就有点奇怪了。其实这就是自动拆箱。通过反编译Java class文件，我们可以知道调用的<code>intValue</code>方法。也就是Java编译器自动调用<code>intValue</code>方法将<code>Integer</code>中封装的<code>int</code>数据赋值给了左面的<code>int</code>变量。</p>
+<h2 id="进一步研究装箱与拆箱"><a href="#进一步研究装箱与拆箱" class="headerlink" title="进一步研究装箱与拆箱"></a>进一步研究装箱与拆箱</h2><p>通过上面的研究，我们已经知道了Java中的基本类型和包装类是可以直接<strong>相互赋值</strong>的。比如一下的代码都是正确的</p>
+<pre><code class="java">int a = Integer.valueof(3);
+Integer b = 3;</code></pre>
+<p>那么除了赋值，加减乘除有如何呢？比如下面代码。</p>
+<pre><code class="java">Integer a = 3;
+int b = a + 4;
+Integer c = a + b;</code></pre>
+<p>上面的代码都是正常运行的，可以说明Java的自动装箱拆箱机制还是非常聪明的，基本上和使用原来的基本数据类型一样。为啥是基本上？？？原因下面再说。</p>
+<p>我们先看看第三行代码，a是<code>int</code>，b是<code>Integer</code>。他们两个是不同的类型的。那么Java是装箱呢？还是拆箱呢？这个问题其实不难回答。加入说是装箱的话，变成了两个<code>Integer</code>相加，不过Java中是没有运算符重载的，两个对象加个毛线啊，是加不了的。(我知道String对象是可以加的，不过那个也不算是运算符重载实际上。。。)。所以说我们只能拆箱，变成两个<code>int</code>相加，然后将结果装箱赋值给左面的<code>Integer</code>对象。</p>
+<p>由此我们可以知道，当<strong>包装类在进行加减乘除的运算的时候，会拆箱成基本的数据类型进行运算。</strong></p>
+<p>上面说了使用包装类其实并不能和使用基础数据类型完全一模一样，下面来举了例子。</p>
+<pre><code class="java">short a = 1;
+short b = 2;
+a += b; // if it is &#39;a = a + b&#39;, it will be error!
 
+Short a = 1;
+Short b = 2;
+a += b; // Error!!</code></pre>
+<p>上面的使用基本数据类型是对的，下面的是错误的。可能很多人都看不出来对与错，大概率是因为不懂<code>+=</code>这个符号的含义。其实上面的<code>a += b</code>就是相当于<code>a = (short)(a + b);</code><strong>两个<code>short</code>值相加是一个<code>int</code></strong>,这个知识点确实是很多人的盲区。<code>int</code>虽然不可以直接赋值给<code>short</code>，但是<code>+=</code>自带了一个强转，而<code>int</code>是可以强转为<code>short</code>的。再看看下面的代码，<code>a += b</code>是相当于<code>a = (Short)(a + b);</code>这里我们是要将一个<code>int</code>的值转为一个<code>Short</code>，这明显是不可能的。所以说这行代码将会报错了。综上所述，可以使用基本数据类型的时候，我们非要使用他的包装类，这不是闲得蛋疼嘛。别没事找事干就不会有什么问题。</p>
+<p>不过还有一个特殊的云算符<code>==</code>,这个符号似乎是既可以应用于对象之间也可以应用于基本数据之间。对象还有一个<code>equals()</code>方法与<code>==</code>的作用相似。之前我写过东西谈过这个问题了。这里不再赘述这个问题了。举例说明。</p>
+<pre><code class="java">Integer a = 3;
+Integer b = 3;
+int c = 3;
+System.out.println(a == b); // true
+System.out.println(a == c); // true
+System.out.println(a.equals(b)); // true
+System.out.println(a.equals(c)); // true</code></pre>
+<p>可以看到上面的三个结果都是<code>true</code>。看一下<code>Integer</code>中的<code>equals()</code>方法的源码。</p>
+<pre><code class="java">public boolean equals(Object obj) {
+    if (obj instanceof Integer) {
+        return value == ((Integer)obj).intValue();
+    }
+    return false;
+}</code></pre>
+<p>可以看到是做了重写的（重写了Object的equals()方法）。而且是比较包装类中的值。</p>
+<p>那么现在来看一下第五行的代码，一个int值和Integer类对象进行<code>==</code>比较。究竟是将int装箱呢？还是将Integer拆箱呢？这两种方法好像是都可以的，毕竟无论是对象还是基本数据类型都是可以使用<code>==</code>操作符的。不过Java采用的是将Integer拆箱。为什么呢？知道<code>==</code>和<code>equals()</code>的区别的人应该都不会意外。对象的<code>==</code>比较的是地址（引用），如果把int装箱，这个地址都不是之前我们可以决定的，又有什么比较的意义呢？</p>
+<p>不过现在你可能有所发现，<code>==</code>比较的是地址，为何第四行输出的也是<code>true</code>?? 这个就是另外的一个问题了。且听下面慢慢道来。</p>
+<h2 id="包装类的缓存"><a href="#包装类的缓存" class="headerlink" title="包装类的缓存"></a>包装类的缓存</h2><p>之前我们或许都遇到过关于String缓存的例子。(上面我也谈到了缓存这一块的知识了).</p>
+<pre><code class="java">String a = &quot;Hello World&quot;;
+String b = new String(&quot;Hello World&quot;);
+String c = &quot;Hello World&quot;;
+String d = new String(&quot;Hello World&quot;);
+System.out.println(a == b); // false
+System.out.println(a == c); // true
+System.out.println(b == d); // false</code></pre>
+<p>上面的第四行和第五行的输出结果相异，主要就是因为String常量池。我们使用<code>String xx = “xxx;”</code>的方式声明一个<code>String</code>变量的时候，系统会将这个<code>“xxx”</code>放入常量池。（毕竟<code>String</code>是一个不可变的对象），然后将地址赋给<code>xx</code>。下面如果还有<code>String</code>变量的值和这个常量池中相等的话，就不会新建<code>String</code>对象，会直接返回常量池中的<code>String</code>对象。所以说上面的<code>a</code>和<code>c</code>的地址相同的。使用<code>new String(&quot;xxx&quot;);</code>的方式声明的<code>String</code>对象虽然也是不可变的对象，不过他位于堆中而不是常量池中。所以说他们的地址是不相等的。</p>
+<p>那么上面说提及的包装类是不是也是这么个情况呢？写个代码测试一下.</p>
+<pre><code class="java">public class Test {
+    public static void main(String[] args) {
+        Integer a = -200;
+        Integer b = -200;
+        Integer c = -100;
+        Integer d = -100;
+        Integer e = 100;
+        Integer f = 100;
+        Integer g = 200;
+        Integer h = 200;
+        System.out.println(a == b); // false
+        System.out.println(c == d); // true
+        System.out.println(e == f); // true
+        System.out.println(g == h); // false
     }
 }</code></pre>
-<p>这里也没有使用标准的IO流操作方式，毕竟这个流是有点儿特殊了。</p>
-<h2 id="CharArrayWriter-CharArrayReader"><a href="#CharArrayWriter-CharArrayReader" class="headerlink" title="CharArrayWriter, CharArrayReader"></a>CharArrayWriter, CharArrayReader</h2><p>和上面的字节数组类似的，字符流中也有相应的流是和字符数组相关的。其实他们之间的道理是一样的，这里就不再赘述了。</p>
-<pre><code class="java">public class CharArrayWriterDemo {
-    public static void main(String[] args) {
-        char[] ch = &quot;sher is the best boy!&quot;.toCharArray();
-        CharArrayWriter c = new CharArrayWriter();
+<p>在我写这个代码的时候，idea就一直提示我，不要使用<code>==</code>用于包装类的比较，建议使用<code>equals()</code>。这个和<code>String</code>的比较倒是非常类似的，都是建议使用<code>equals()</code>方法。不过这个结果就和<code>String</code>类非常的不类似了，竟然不是都输入<code>true</code>,还有的输入的是<code>false</code>。</p>
+<p>这到底是什么原因呢？我开始查阅资料，和观察<code>Integer</code>的源码。发现了这样的一个类。</p>
+<pre><code class="java">    /**
+     * Cache to support the object identity semantics of autoboxing for values between
+     * -128 and 127 (inclusive) as required by JLS.
+     *
+     * The cache is initialized on first usage.  The size of the cache
+     * may be controlled by the {@code -XX:AutoBoxCacheMax=&lt;size&gt;} option.
+     * During VM initialization, java.lang.Integer.IntegerCache.high property
+     * may be set and saved in the private system properties in the
+     * jdk.internal.misc.VM class.
+     *
+     * WARNING: The cache is archived with CDS and reloaded from the shared
+     * archive at runtime. The archived cache (Integer[]) and Integer objects
+     * reside in the closed archive heap regions. Care should be taken when
+     * changing the implementation and the cache array should not be assigned
+     * with new Integer object(s) after initialization.
+     */
 
-        try {
-            c.write(ch);
-            c.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(c.toString());
-    }
-}</code></pre>
-<pre><code class="java">public class CharArrayReaderDemo {
-    public static void main(String[] args) {
-        char [] ch = &quot;abcdefg&quot;.toCharArray();
-        CharArrayReader char1 = new CharArrayReader(ch);
-        StringBuilder sb = new StringBuilder();
-        int temp = 0;
-        while (true){
-            try {
-                if (((temp = char1.read()) == -1)) break;
-            } catch (IOException e) {
-                e.printStackTrace();
+    private static class IntegerCache {
+        static final int low = -128;
+        static final int high;
+        static final Integer[] cache;
+        static Integer[] archivedCache;
+
+        static {
+            // high value may be configured by property
+            int h = 127;
+            String integerCacheHighPropValue =
+                VM.getSavedProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);
+            if (integerCacheHighPropValue != null) {
+                try {
+                    h = Math.max(parseInt(integerCacheHighPropValue), 127);
+                    // Maximum array size is Integer.MAX_VALUE
+                    h = Math.min(h, Integer.MAX_VALUE - (-low) -1);
+                } catch( NumberFormatException nfe) {
+                    // If the property cannot be parsed into an int, ignore it.
+                }
             }
-            sb.append((char)temp);
+            high = h;
+
+            // Load IntegerCache.archivedCache from archive, if possible
+            VM.initializeFromArchive(IntegerCache.class);
+            int size = (high - low) + 1;
+
+            // Use the archived cache if it exists and is large enough
+            if (archivedCache == null || size &gt; archivedCache.length) {
+                Integer[] c = new Integer[size];
+                int j = low;
+                for(int i = 0; i &lt; c.length; i++) {
+                    c[i] = new Integer(j++);
+                }
+                archivedCache = c;
+            }
+            cache = archivedCache;
+            // range [-128, 127] must be interned (JLS7 5.1.7)
+            assert IntegerCache.high &gt;= 127;
         }
-        System.out.println(sb.toString());
-    }
+
+        private IntegerCache() {}
+    }</code></pre>
+<p>其实这个代码一点都看不懂，不过看看上面的文档就可以的。文档中说</p>
+<blockquote>
+<ul>
+<li>缓存以支持JLS要求的自动装箱的对象标识语义，其值介于-128和127（含）之间。</li>
+<li>首次使用时会初始化缓存。 缓存的大小可以由<code>{@code -XX：AutoBoxCacheMax = &lt;size&gt;}</code>选项控制。</li>
+<li>在VM初始化期间，可以设置<code>java.lang.Integer.IntegerCache.high</code>属性并将其保存在<code>jdk.internal.misc.VM</code>类的私有系统属性中。</li>
+<li>警告：缓存是使用CDS存档的，并在运行时从共享存档中重新加载。 归档的缓存（Integer []）和Integer对象位于封闭的归档堆区域中。 更改实现时应注意，初始化后不应为缓存数组分配新的Integer对象。</li>
+</ul>
+</blockquote>
+<p>第一点就是告诉我们，如果我们不指定的话，系统将会默认缓存<code>[-128, 127]</code>之间的包装类。后面就是我们修改缓存大小的方式。</p>
+<p>这样我们就明白了为什么上面的有一些是是输出的<code>true</code>，而有一些是输出的<code>false</code>。原因是在于-200和200已经不在<code>Integer</code>的缓存的范围中了，所以需要另外的构建对象，因而返回<code>false</code>。而-100和100在缓存的范围当中，所以直接获取了缓存的值。因而返回<code>true</code>。</p>
+<p>我们也可以来看看<code>Integer.valueOf()</code>方法，这个方法中也有缓存的体现。</p>
+<pre><code class="java">@HotSpotIntrinsicCandidate
+public static Integer valueOf(int i) {
+    if (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)
+        return IntegerCache.cache[i + (-IntegerCache.low)];
+    return new Integer(i);
 }</code></pre>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>其实这些流都不是常见的流，基本上我们是用不到的。不过稍微做一下了解也是好的呢、</p>
+<p>上面的if当中的范围就是缓存的范围。如果不在缓存中的范围的时候才去new一个<code>Integer</code>对象。</p>
+<p>那么除了<code>Integer</code>类，其余的包装类的缓存范围又是多少呢？</p>
+<table>
+<thead>
+<tr>
+<th>包装类型</th>
+<th>缓存范围</th>
+<th>包装类型</th>
+<th>缓存范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Boolean</td>
+<td>true, false（全部）</td>
+<td>Byte</td>
+<td>[-128, 127]（全部）</td>
+</tr>
+<tr>
+<td>Short</td>
+<td>[-128, 127]</td>
+<td>Character</td>
+<td>[0, 127]</td>
+</tr>
+<tr>
+<td>Integer</td>
+<td>[-128, 127]</td>
+<td>Long</td>
+<td>[-128, 127]</td>
+</tr>
+<tr>
+<td>Float</td>
+<td>无</td>
+<td>Double</td>
+<td>无</td>
+</tr>
+</tbody></table>
+<p>其实他们的缓存值还是非常有规律的。浮点值类型没有缓存值，布尔类型只有两个值当然都要缓存。至于其他的都是[-128, 127]。不过因为<code>Character</code>是没有负值的，所以去掉了负数的部分。</p>
+<p>其实缓存值中只有<code>Integer</code>是最特殊的。我们是可以修改<code>Integer</code>缓存的上限的。(127是最低的上限)。<code>Integer</code>的下限<code>-128</code>是固定的不能修改的。至于如何修改上限，这里就不折腾了。可以干，但是没有必要。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Java当中的包装类可谓是一个非常重要而且非常常用的一个类。关键是用到的时候你或许还没意识到自己已经用到了这个类了，这就是所谓的自动装箱和自动拆箱。既然这个类这么常用，我们就势必应该缓存这个类的常用的部分，以便后面多次使用节省时间和内存，这就是所谓的包装类的缓存。</p>
 
         </div>
         <!-- .entry-content -->
@@ -504,36 +685,19 @@ long skip(long n)
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/09/25/Java中的IO-05/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/46.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/46.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                Java中的IO-05</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/09/24/Java中的IO-03/" rel="next">
+            <a href="/2019/09/27/IO应用——文件分割/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                Java中的IO-03</h3>
+                IO应用——文件分割</h3>
                 <hr>
               </div>
             </a>

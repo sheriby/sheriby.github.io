@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Java中的IO-04 | Sher的小博客</title>
+  <title itemprop="name">说说枚举 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/45.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/45.png">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/57.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/57.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Java中的IO-04</h1>
+      说说枚举</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-9-25<span class="bull">
+        2019-10-5<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,107 +376,354 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Java中的IO-04"><a href="#Java中的IO-04" class="headerlink" title="Java中的IO-04"></a>Java中的IO-04</h1><h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>之前已经介绍过很多的IO流了。比如四大抽象流<code>InputStream</code>，<code>OutputStream</code>，<code>Reader</code>,<code>Writer</code>。前面的两个是<strong>字节流</strong>，后面的两个是<strong>字符流</strong>。所谓的字节流与字符流之间的最大的区别就是，<strong>字节流是写给计算机看的，而字符流写写给我们人看的。</strong>Java当中所有的IO流基本上都继承于这个四大抽象流，而且基本上都以他们结尾。之前还说过一个特殊的流<code>OutputStreamWriter</code>，<code>InputStreamReader</code>。这两个流却是有点儿特殊，他们的前面是字节流，后面却是字符流。之前我们说他是处理字符相关的流，不过实际上他是<strong>将字节流转换成字符流的特殊流</strong>。因而我们可以指定编码(字节流转换成为字符流的一种方式)来进行字节到字符的转换。如果我们要处理一些字符文件的话，之前学的<code>FileReader</code>，<code>FileWriter</code>无疑是一个最合适的选择。如果要是处理一些字节文件比如图片或者视频什么的，我们需要使用字节流<code>FileInputStream</code>，<code>FileOutputStream</code>。不过单独使用这些流的话，效率可能是一个问题。所以缓冲区是必须的，Java IO 中给我们提供了<strong>缓冲的包装流</strong>。<code>BufferedInputStream</code>,<code>BufferedOutputStream</code>,<code>BufferedReader</code>,<code>BufferedWriter</code>。这四个流是对前面的四个基本的抽象流的包装，如果不是什么特殊情况的话，我们可以每次都加上这个缓冲层。</p>
-<h2 id="ByteArrayInputStream-ByteArrayOutputStream"><a href="#ByteArrayInputStream-ByteArrayOutputStream" class="headerlink" title="ByteArrayInputStream, ByteArrayOutputStream"></a>ByteArrayInputStream, ByteArrayOutputStream</h2><p>字节流我们只是介绍了一种，也就是从文件中读取字节。不过并不是所有的情况下我们都要从文件中读取字节的。比如说我们获取一个字节数组，我们想使用流来处理一下这个字节数组，好像我们现在学过的流中没有这样的功能。</p>
-<p>于是现在我们引入了处理数组的新的流，<code>ByteArrayInputStream</code>和 <code>ByteArrayOutputStream</code>。</p>
-<p>下面就是我们正常的官方文档的学习环节。</p>
-<pre><code class="java">java.lang.Object 
-    java.io.InputStream 
-        java.io.ByteArrayInputStream </code></pre>
-<pre><code class="java">public class ByteArrayInputStream
-extends InputStream</code></pre>
-<blockquote>
-<ul>
-<li>A <code>ByteArrayInputStream</code>包含一个内部缓冲区，其中包含可以从流中读取的字节。内部计数器跟踪<code>read</code>方法要提供的下一个字节。</li>
-<li>关闭<code>ByteArrayInputStream</code>没有任何效果。  在关闭流之后，可以调用此类中的方法，而不生成<code>IOException</code> 。 </li>
-</ul>
-</blockquote>
-<pre><code class="java">ByteArrayInputStream(byte[] buf) 
-// 创建一个 ByteArrayInputStream ，使其使用 buf作为其缓冲区数组。  
-ByteArrayInputStream(byte[] buf, int offset, int length) 
-// 创建 ByteArrayInputStream使用 buf作为其缓冲器阵列。  </code></pre>
-<pre><code class="java">int available() 
-// 返回可从此输入流读取（或跳过）的剩余字节数。  
-void close() 
-// 关闭 ByteArrayInputStream没有任何效果。  
-void mark(int readAheadLimit) 
-// 设置流中当前标记的位置。  
-boolean markSupported() 
-// 测试 InputStream是否支持标记/复位。  
-int read() 
-// 从该输入流读取下一个数据字节。  
-int read(byte[] b, int off, int len) 
-// 将 len字节的数据读入此输入流中的字节数组。  
-void reset() 
-// 将缓冲区重置为标记位置。  
-long skip(long n) 
-// 从此输入流跳过 n个字节的输入。  </code></pre>
-<p>其实上面的这些方法，和这些属性都是可以一眼就看懂的，和其他的流是没什么区别的。</p>
-<p>看一下官方文档的第一点，我们可以知道使用<code>ByteArrayInputStream</code>内部有一个缓冲区，那是否可以使用<code>BufferedInputStream</code>来包装呢？这个肯定是可以用的，毕竟这个也是<code>InputStream</code>的子类吖。</p>
-<p>第二点是关于这个流的关闭的，官方文档告诉我们，这个流的关闭是不会做任何事情的，也就是说我们可以选择不关闭。但是为了IO流中操作的有机的统一和规范。虽然关闭没有用，我们还是推荐来关闭一下子的。</p>
-<h3 id="代码举例"><a href="#代码举例" class="headerlink" title="代码举例"></a>代码举例</h3><pre><code class="java">public class ByteArrayInputStreamDemo {
+          <h1 id="说说枚举"><a href="#说说枚举" class="headerlink" title="说说枚举"></a>说说枚举</h1><h2 id="关于前几天"><a href="#关于前几天" class="headerlink" title="关于前几天"></a>关于前几天</h2><p>好几天都没写博客了，这不是因为这几天国庆放假都在宿舍里面睡觉，而是前几次的研究竟然是研究到了爬虫的领域。导致我又燃起了学习<code>python</code>的欲望，结果学了不少有关<code>python</code>爬虫的内容。本来只是 打算简单的学习一下的，但是我要爬取的网站比如说半次元这个网站，使用的是异步加载的机制(当时我还不知道啥叫<code>ajax</code>和<code>json</code>的异步加载的机制，也不知道这个网站竟然将<strong>json文件藏在了js文件中</strong>)，所以我就进一步的进行了有关python爬虫的学习，以至于学到了后面的<code>selenuim</code>自动化测试的软件，这还不是最骚的。然后我还是进行了学习，直接学习到了<strong>python的爬虫的大型的框架<code>scrapy</code></strong>。学到了这个地方我就感觉应该是比较困难花时间的了，于是简单的学习了一下就放弃了。至于为什么之前学习的python爬虫的内容没有写博家，那当然是因为我对这方面的知识也是一知半解的，根本就搞不透，现在也不想花时间在这个上面，所以说等之后可以花时间研究这个方面上。现阶段还是一学习java为重。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>枚举这个玩意其实在我而已是蛮没用的东西。从<code>c/c++</code>开始，我们就接触到了枚举这个玩意，不过事实上，我从来都没有使用过枚举这个玩意。我们或许是使用<code>#define xxx xxx</code>或许是使用<code>const xxx xxx = xxx</code>。很少有人去使用枚举这个玩意的。毕竟在<code>c/c++</code>中，枚举也就是<code>int</code>值，我们既然可以使用枚举，也就是可以使用<code>int</code>值来进行替代。而且，不同的枚举之间都是可以比较的，看起来确实是有点儿荒唐。不过Java中的枚举似乎是和我们之前学过的有点儿不一样。因为<strong>Java中枚举是一个类</strong>，这就<strong>避免了不同的枚举类之间荒唐的相互赋值</strong>，以及int值对枚举的替代的问题了。</p>
+<h2 id="Java中的枚举是什么样子的类？"><a href="#Java中的枚举是什么样子的类？" class="headerlink" title="Java中的枚举是什么样子的类？"></a>Java中的枚举是什么样子的类？</h2><p>上面我们已经说过了，Java为了避免C/C++那样的问题，将枚举做成了一个类。不过这个枚举到底是一个什么样子的类呢？</p>
+<p>我们可以先来定义一个简单的枚举来测试测试。</p>
+<pre><code class="java">enum Season{
+    SPRING,
+    SUMMER,
+    AUTUMN,
+    WINTER
+}</code></pre>
+<p>使用上面的这种方式，我们就定义了一个季节的枚举。如果这是c++的话，他们四个也就是对应了<code>0 1 2 3</code>。那么在Java中我们可不可以指定给他们对应的int值呢？明显是非法的。</p>
+<pre><code class="java">enum Season{
+    SPRING = 1,
+    SUMMER,
+    AUTUMN,
+    WINTER
+}</code></pre>
+<p>后面全都报错了，这说明在Java中我们是没有办法给枚举赋值的。</p>
+<p>那么这个枚举类是如何使用的呢？这个枚举类中的四个枚举似乎是没有修饰符的，是不是想接口那样，给定了默认的修饰符呢？比如说这些属性默认就是<code>public static final</code>的？？？</p>
+<p>我们先来看一下枚举类的使用</p>
+<pre><code class="java">public class Demo1 {
     public static void main(String[] args) {
-        byte[] b = &quot;sher is a wonderful boy!&quot;.getBytes();
-        ByteArrayInputStream bais = new ByteArrayInputStream(b);
-        StringBuilder sb = new StringBuilder();
-        int temp = 0;
-        while ((temp = bais.read()) != -1){
-            sb.append((char) temp);
-        }
-        System.out.println(sb.toString());
+        Season s1 = Season.SPRING;
+        Season s2 = Season.AUTUMN;
+
+        System.out.println(s1 == s2); // false
     }
 }</code></pre>
-<p>其实上面的我的用法不没有是把这个作为一个IO流来使用，所以也没有使用IO流的<code>try catch finally</code>的标准操作。而且这个流也是不会抛出<code>IOException</code>的。</p>
-<p>下面随便写一个有关<code>ByteArrayOutputStream</code>的代码举例</p>
-<pre><code class="java">public class ByteArrayOutputStreamDemo {
-    public static void main(String[] args) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        while (baos.size() &lt;= 10){
-            try {
-                baos.write(System.in.read());
-            } catch (IOException e) {
-                e.printStackTrace();
+<p>可见我们使用枚举，就像使用枚举类的静态成员变量一样。那么通过上面的代码我们就可以知道了，枚举中的枚举变量的类型应该是<code>public static final Season</code>。至于为什么是<code>final</code>呢？我想这个很容易明白，如果不是<code>final</code>的话。一处被修改了，那么所有的使用这个枚举的类的地方不就都遭殃了吗？而且，似乎我们并没有要修改这个枚举类的必要。</p>
+<p>既然我们已经知道了他的限定符了，那么我们是不是就可以想接口那样给他直接加上这些限定符呢？？</p>
+<p>答案是显然不能的，这些枚举似乎不是想接口哪样的值一个定义。这些<code>SPRING</code>已经是有值的了。不过这写玩意是如何实现的呢？当然不是这个枚举类实现的。枚举是一个类，那么他是否有父类呢？</p>
+<p>对了，前面我们使用了<code>==</code>，我们可以使用equals方法看一看。</p>
+<pre><code class="java">System.out.println(s1.equals(s2));</code></pre>
+<p>使用idea的方法源码查看，发现这个方法是来自<code>java.lang.Enum</code>这个类的，这就说明了，所有的枚举类都是继承于这个类的，不然怎么可以使用这个类的方法？</p>
+<h2 id="java-lang-Enum中的方法"><a href="#java-lang-Enum中的方法" class="headerlink" title="java.lang.Enum中的方法"></a>java.lang.Enum中的方法</h2><p>还是从官方的文档中看一看这个类。</p>
+<pre><code class="java">public abstract class Enum&lt;E extends Enum&lt;E&gt;&gt;
+extends Object
+implements Comparable&lt;E&gt;, Serializable</code></pre>
+<p>这个类的声明似乎是有点儿奇怪，不过看一下他的构战函数。</p>
+<pre><code class="java">protected  Enum(String name, int ordinal) 
+// 唯一的构造函数。  </code></pre>
+<p>唯一的构造函数都是私有的说明<strong>这个类没有办法被继承的</strong>（通过extends方式）。enum声明的类的基础肯定是通过底层实现的。</p>
+<pre><code class="java">protected Object clone() 
+// 抛出CloneNotSupportedException。  
+int compareTo(E o) 
+// 将此枚举与指定的对象进行比较以进行订购。  
+boolean equals(Object other) 
+// 如果指定的对象等于此枚举常量，则返回true。  
+protected void finalize() 
+// 枚举类不能有finalize方法。  
+class&lt;E&gt; getDeclaringClass() 
+// 返回与此枚举常量的枚举类型相对应的Class对象。  
+int hashCode() 
+// 返回此枚举常量的哈希码。  
+String name() 
+// 返回此枚举常量的名称，与其枚举声明中声明的完全相同。  
+int ordinal() 
+// 返回此枚举常数的序数（其枚举声明中的位置，其中初始常数的序数为零）。  
+String toString() 
+// 返回声明中包含的此枚举常量的名称。  
+static &lt;T extends Enum&lt;T&gt;&gt;
+T valueOf(class&lt;T&gt; enumType, String name) 
+// 返回具有指定名称的指定枚举类型的枚举常量。  </code></pre>
+<p>上面是这个类中的所有的方法。官方文档中对这个类的并没有什么描述，只是说这个类是所有的枚举的公开基类。下面我们就通过上面的这些方法来研究一下Java中枚举。</p>
+<p>可以看到上面的方法都是子类中可以使用的。</p>
+<p>第二个方法令我比较好奇，<strong>既然枚举不和int值挂钩，又是如何实现比较的呢？</strong></p>
+<pre><code class="java">System.out.println(s1.compareTo(s2)); // -2</code></pre>
+<p>输出-2。嗯，这个倒是和c/c++中一摸一样。不会枚举的内部也是对四个属性进行<code>0 1 2 3</code>这样的排序的吧。瞎的我感觉看了一下这个方法的源码。</p>
+<pre><code class="java">public final int compareTo(E o) {
+    Enum&lt;?&gt; other = (Enum&lt;?&gt;)o;
+    Enum&lt;E&gt; self = this;
+    if (self.getClass() != other.getClass() &amp;&amp; // optimization
+        self.getDeclaringClass() != other.getDeclaringClass())
+        throw new ClassCastException();
+    return self.ordinal - other.ordinal;
+}</code></pre>
+<p>上面的那么多是用来判断是否是一个枚举类的。<strong>不同的枚举类之间是不能够进行比较的</strong>。不过关键是最后一行代码。</p>
+<pre><code class="java">return self.ordinal - other.ordinal;</code></pre>
+<p><code>ordinal</code>是序数的意思，看来我们猜想的是对的，在枚举的内部也还是将枚举和一个int值挂钩的。我们可以看到方法的列表中也是有<code>int ordinal()</code>方法的。</p>
+<pre><code class="java">System.out.println(s1.ordinal()); // 0
+System.out.println(s2.ordinal()); // 2</code></pre>
+<p>完全符合我们的猜想。也就是这个序数其实就是枚举中声明的序数。不过我们是否是可以改变这个序数呢？就像c/c++中我们做的那样一样。（虽然这个是完全没有一意义的）这个问题我们可以在下面再讨论。</p>
+<p>我们继续来看枚举类的方法。</p>
+<p>首先一眼看到的方法就是<code>toString()</code>方法。这个方法是<code>Object</code>中就有的，声明如下</p>
+<pre><code class="java">public String toString() {
+    return getClass().getName() + &quot;@&quot; + Integer.toHexString(hashCode());
+}</code></pre>
+<p>枚举类中将这个方法从重载了，我们可以实验一下会输出什么东西。</p>
+<pre><code class="java">System.out.println(s1); // SPRING</code></pre>
+<p>输入的就是我们给定的枚举类的名字。这又是如何实现的呢？再来看一下这个方法的源码的实现。</p>
+<pre><code class="java">public String toString() {
+    return name;
+}</code></pre>
+<p>上面也有一个方法叫<code>name()</code>看来和<code>ordinal</code>一样这个属性也被枚举类给保存下来了。</p>
+<p>还有一个方法是我们需要了解的。<code>valueOf</code></p>
+<pre><code class="java">System.out.println(Season.valueOf(&quot;SPRING&quot;) == Season.SPRING); // true</code></pre>
+<p>作用是返回和这个名字相同的枚举变量。上面我们已经知道了，这个名字其实就是<code>name</code>属性。这里的比较使用的<code>==</code>，其实使用<code>equals()</code>也是一样的。毕竟这个枚举的都是唯一实例，无论是比较内容还是地址都是一样的。何况这个类中的equals()方法都相当于没有重载。<code>==</code>与<code>equals</code>是一样的。</p>
+<pre><code class="java">public final boolean equals(Object other) {
+    return this==other;
+}</code></pre>
+<p>其实还有一个很重要的方法，是父类没有的。就是<code>values()</code>方法。<strong>这个方法的作用是返回枚举类中的所有的枚举变量。</strong></p>
+<pre><code class="java">Season[] seasons = Season.values();
+for (Season season : seasons) {
+    System.out.println(season);
+}
+// SPRING
+// SUMMER
+// AUTUMN
+// WINTER</code></pre>
+<p>根据推测方法的声明可能是这样子的。</p>
+<pre><code class="java">public Season[] values();</code></pre>
+<p>数组中枚举的顺序就是他们<code>ordinal</code>的顺序。</p>
+<p>这让我想到一个问题，既然<code>valueOf</code>方法可以通过<code>name</code>属性获取到枚举值，我们是否可以通过<code>ordinal</code>属性来获取属性的值呢？很遗憾，Java中并没有提供这样的函数，不过我们可以通过<code>values</code>方法来写一个这样的方法。</p>
+<h2 id="枚举中的方法"><a href="#枚举中的方法" class="headerlink" title="枚举中的方法"></a>枚举中的方法</h2><p>其实上面我们一直在谈的都是枚举中的方法。不过我们似乎谈论的大多是枚举类中自带的方法。那我们是否可以在其中写一些方法呢？当然是可以的。比如上面我们说到的通过<code>ordinal</code>属性来获取枚举值。</p>
+<pre><code class="java">enum Season{
+    SPRING,
+    SUMMER,
+    AUTUMN,
+    WINTER; // there is ;
+
+    public static Season valueOf(int ordinal) {
+        Season[] seasons = values();
+        if (ordinal &lt; 0 || ordinal &gt;= seasons.length) {
+            throw new IndexOutOfBoundsException(&quot;Ordinal is out of range!&quot;);
+        }
+        return seasons[ordinal];
+    }
+}</code></pre>
+<p>第一个点需要注意的是枚举变量之间使用的逗号相隔。如果我们要在枚举中写方法的时候，我们需要使用一个分号想方法和定义的枚举型变量隔开。</p>
+<p>上面就像使用类一样定义了一个方法。而且经过测验之后也是满足我们的需求的。既然我们可以在枚举类中定义自己的方法。那么自己的属性也必然是可以的。只要在分号的后面就可以了。不仅如此，我们还可以<strong>重载枚举中的方法</strong>。比如<code>toString()</code>方法。</p>
+<pre><code class="java">@Override
+public String toString() {
+    return &quot;my toString: &quot; + super.toString();
+}</code></pre>
+<p>这样我们便<code>override</code>了<code>toString</code>方法。</p>
+<p>现在我们再回到上面的问题来，<code>valueOf(int ordinal)</code>方法对不对呢？看起来是对的。因为<code>ordinal</code>就是从0开始的。在<code>java.lang.Enum</code>中，<code>ordinal</code>的定义如下</p>
+<pre><code class="java">private final int ordinal;</code></pre>
+<p>也就是<code>ordinal</code>一经初始化之后便不可以被修改了。不过我们是否可以操作一下<code>ordinal</code>的初始化呢？</p>
+<h2 id="枚举变量的构造函数"><a href="#枚举变量的构造函数" class="headerlink" title="枚举变量的构造函数"></a>枚举变量的构造函数</h2><p>前面我们一直都忽略了一个细节，那就是<code>java.lang.Enum</code>的构造函数。我们继续来观察一下。</p>
+<pre><code class="java">protected  Enum(String name, int ordinal) 
+// 唯一的构造函数。  </code></pre>
+<p>这个构造函数有两个参数<code>name</code>和<code>ordinal</code>。嗯？是不是有点儿熟悉~~那么我们是否可以通过构造函数指定枚举变量的<code>name</code>和<code>ordinal</code>呢？</p>
+<p>看起来是不可以的，我们似乎都接触不到这个构造函数。而且<code>ordinal</code>在<code>java.lang.Enum</code>中的声明是私有的，我们更不可能修改到这个<code>ordinal</code>属性了。不过我们是否是可以修改<code>name</code>属性呢？相同的，我们也是不可以的。因为没有构造函数，属性还是私有的。可见这个方法是正确的。</p>
+<p>不过枚举类是否可以拥有自己的构造函数呢？</p>
+<pre><code class="java">private String name;
+private int ordinal;
+Season(String name, int ordinal) {
+    this.name = name;
+    this.ordinal = ordinal;
+}</code></pre>
+<p>我们发现是真的可以的，构造函数并没有报错，但是上面的那些枚举变量却报错了。经过查阅资料，我们需要使用如下的形式来调用构造函数。</p>
+<pre><code class="java">SPRING(&quot;春天&quot;,1),
+SUMMER(&quot;夏天&quot;,2),
+AUTUMN(&quot;秋天&quot;,3),
+WINTER(&quot;冬天&quot;, 4);</code></pre>
+<p>原来如此，如果我们在<strong>后面没有使用括号，也就是一开始的写法的话就是调用无参的构造函数</strong>，如果有参数的话就会寻找相应的参数的构造函数。也就是说其实枚举就是这样的一个普通的类。</p>
+<pre><code class="java">class Season extends java.lang.Enum{
+    public static final Season SPRING = new Season(&quot;春天&quot;,1);
+    public static final Season SUMMER = new Season(&quot;夏天&quot;,2);
+    public static final Season AUTUMN = new Season(&quot;秋天&quot;,3);
+    public static final Season WINTER = new Season(&quot;冬天&quot;,4);
+
+    private String name;
+    private int ordinal;
+    Season(String name, int ordinal){
+        this.name = name;
+        this.ordinal = ordinal;
+    }
+}</code></pre>
+<p>上面只是实现的一个例子，<strong>我们自然是不可以写出这样的类的。</strong>首先继承<code>java.lang.Enum</code>就是一个不可能的事情。不过上面的代码清晰的表现了枚举类的简单的原理。这里我没有使用反编译。毕竟我也不会<strong>反编译</strong>的手段。不过不使用反编译，我们也可以大概猜出枚举类的结构了。</p>
+<p>不过，还有一个非常大的问题。上面的枚举类中我没有使用限定符<code>access modifier</code>。没有使用限定符那么就是<code>default</code>，也就是包可访问的。那么我们可以在类外使用枚举类的构造函数？</p>
+<pre><code class="java">Season s = new Season(&quot;xxx&quot;,5);</code></pre>
+<p>报错了，报错信息显示这个构造函数是<code>access private</code>的，这里不可以访问。</p>
+<p>可见，<strong>枚举类的构造函数必然是<code>private</code>的</strong>。就比如接口中的函数，即使是什么限定符都不加，他也是<code>public abstract</code>的，这里的构造函数如是。</p>
+<h2 id="枚举的继承以及枚举中的抽象函数"><a href="#枚举的继承以及枚举中的抽象函数" class="headerlink" title="枚举的继承以及枚举中的抽象函数"></a>枚举的继承以及枚举中的抽象函数</h2><p>枚举是继承<code>java.lang.Enum</code>的。这就决定了枚举是不可以继承其他类的，同样的其他类也是不可以继承枚举的。(至于为什么，这不用说也应该可以明白吧)。</p>
+<p>不过，虽然枚举类不可以被继承，但是枚举类中，还是<strong>允许存在抽象的方法的</strong>。这就很令人不解了？既然不可以被继承，那么抽象方法的意义何在呢？</p>
+<p>当我们写下了这个抽象方法的时候，编译器给了一个提示。</p>
+<p><code>class ”Season“ must either be decleared abstrace or implememt abstract method “func” in Season</code></p>
+<p>不过当我使用<code>abstract enum Season</code>的时候他说<code>abstract is not allowed here</code>那这个的意思是自己要实现自己定义的抽象的方法。这也太没道理了吧。</p>
+<p>不过更没想到的是，原来是需要这样去实现抽象方法的。</p>
+<pre><code class="java">SPRING(&quot;春天&quot;,1){
+    @Override
+    public void func() {
+        System.out.println(&quot;Season.func&quot;);
+    }
+},
+SUMMER(&quot;夏天&quot;,2){
+    @Override
+    public void func() {
+        System.out.println(&quot;Season.func&quot;);
+    }
+},
+AUTUMN(&quot;秋天&quot;,3) {
+    @Override
+    public void func() {
+        System.out.println(&quot;Season.func&quot;);
+    }
+},
+WINTER(&quot;冬天&quot;, 4) {
+    @Override
+    public void func() {
+        System.out.println(&quot;Season.func&quot;);
+    }
+};</code></pre>
+<p>也就是说需要枚举类的属性来实现这个抽象的方法。这个形式，是不是有一点眼熟，没错就是<strong>匿名内部类的格式</strong>。这些函数在外面都是可以调用的。比如说<code>Season.SPRING.func()</code>。</p>
+<p>这个东西之前我们说过的其实匿名函数实现接口，内部是产生了一个类。那么上面的<strong>实现抽象函数的过程中是否产生了新的类呢</strong>？</p>
+<p>我们可以在<code>func()</code>使用<code>getClass()</code>方法。</p>
+<pre><code class="java">class com.sher.enumDemo.Season$1</code></pre>
+<p>看来果然是产生一个新的类。哇~，这个枚举中的奥秘也太多了吧。</p>
+<pre><code class="java">System.out.println(Season.SPRING.getClass());
+// class com.sher.enumDemo.Season$1
+
+System.out.println(Season.AUTUMN.getClass());
+// class com.sher.enumDemo.Season$3</code></pre>
+<p>在我们之前没有使用抽象函数，以及实现的时候。使用上面的函数输出是</p>
+<pre><code class="java">System.out.println(Season.SPRING.getClass());
+// class com.sher.enumDemo.Season
+
+System.out.println(Season.AUTUMN.getClass());
+// class com.sher.enumDemo.Season</code></pre>
+<p>正是由于实现了抽象函数所以才产生新的类的。不过这里又来了一个问题。<code>Season.SPRING</code>和<code>Season.AUTUMN</code>的类型不一样了，一个是<code>Season$1</code>,一个是<code>Season$3</code>。按照我们之前的说法，不同的类之间是不可以比较的，因为他们都不是同一个枚举类了。之前似乎说过了一个函数<code>compareTo()</code>，还看过了这个的源码，现在我们在来看一看。</p>
+<pre><code class="java">public final int compareTo(E o) {
+    Enum&lt;?&gt; other = (Enum&lt;?&gt;)o;
+    Enum&lt;E&gt; self = this;
+    if (self.getClass() != other.getClass() &amp;&amp; // optimization
+        self.getDeclaringClass() != other.getDeclaringClass())
+        throw new ClassCastException();
+    return self.ordinal - other.ordinal;
+}</code></pre>
+<p>上面判断的时候，使用了<code>getDeclaringClass()</code>这个函数。而<code>Season$!</code>和<code>Season$3</code>的<code>DeclaringClass</code>都是<code>Season</code>，原来是用这种方式保证枚举的相同类型的。所以说，如果我们要看枚举类型是否相同，其实看<code>getDeclaringClass()</code>就行了，毕竟如果<code>getClass()</code>想同，<code>getDeclaringClass()</code>也是相同的。</p>
+<h2 id="枚举与接口"><a href="#枚举与接口" class="headerlink" title="枚举与接口"></a>枚举与接口</h2><p>虽然我们说由于Java中单继承的机制，枚举是无法继承其他的类的，但是Java中对与接口的实现是没有限制的，所以说<strong>枚举类还可以实现接口。</strong>不过这里需要注意的是，并不是枚举这个类要实现接口中的函数，而是<strong>枚举中每一个枚举变量要实现接口中的函数</strong>。比如说有一个接口A</p>
+<pre><code class="java">interface A{
+    void aFunc();
+}</code></pre>
+<pre><code class="java">enum Season implements A{
+    SPRING(&quot;春天&quot;,1){
+        @Override
+        public void aFunc() {
+            System.out.println(&quot;Season.aFunc&quot;);
+        }
+
+        @Override
+        public void func() {
+            System.out.println(&quot;Season.func&quot;);
+            System.out.println(this.getClass());
+        }
+    },
+    SUMMER(&quot;夏天&quot;,2){
+        @Override
+        public void aFunc() {
+            System.out.println(&quot;Season.aFunc&quot;);
+        }
+
+        @Override
+        public void func() {
+            System.out.println(&quot;Season.func&quot;);
+        }
+    },
+    // ...</code></pre>
+<p>可见枚举中接口的实现是和普通的类不一样的。</p>
+<p>除此之外，枚举和接口还有另外的一个搭配。那就是在<strong>接口中组织枚举。</strong></p>
+<p>这个挺起来似乎是有点儿荒唐，接口中怎么能有枚举呢？不过确实如此，可以有这样的语法。</p>
+<p>如果我们需要将枚举类进行分组的话就可以使用这种方式。比如食物是一个枚举中的大类别，其中又可以分为甜的，酸的，辣的等等等。又比如说班级中中国学生，也有外国学生，我们想要<strong>保留他们都是学生的这个共同属性</strong>而又想要<strong>分别枚举</strong>就可以使用接口来组织枚举。</p>
+<pre><code class="java">interface Student {
+    enum ChineseStudent implements Student {
+        ZHANG3(1),
+        LI3(2),
+        WANG5(3);
+
+        @Override
+        public boolean same(Student s) {
+            if (s instanceof ChineseStudent) {
+                return true;
+            }else {
+                return false;
             }
         }
-        byte[] b = baos.toByteArray();
-        System.out.println(new String(b));
+
+        ChineseStudent(int a){
+
+        }
+
+        @Override
+        public void printName() {
+            System.out.println(this.name());
+        }
+
+    };
+
+    enum ExchangeStudent implements Student {
+        JACK,
+        MIKE,
+        TOM;
+
+        @Override
+        public boolean same(Student s) {
+            if (s instanceof ExchangeStudent) {
+                return true;
+            }else {
+                return false;
+            }
+        }
+
+        @Override
+        public void printName(){
+            System.out.println(this.name());
+        }
+
+    }
+
+    boolean same(Student s);
+    void printName();
+}</code></pre>
+<p>其中接口中的方法，每一个枚举类中都要实现。这里的接口实现和枚举类实现接口那样，不再是每一个属性都要实现了。通过这种方式，中国学生和交换什都保有了<code>Student</code>这样的一个共同的属性，而且还是分别的枚举了。</p>
+<p><strong>和普通的接口一样，这个接口也可以被实现</strong>。不过只需要实现接口中的那两个函数就行了。</p>
+<pre><code class="java">class B implements Student {
+
+    @Override
+    public boolean same(Student s) {
+        return false;
+    }
+
+    @Override
+    public void printName() {
 
     }
 }</code></pre>
-<p>这里也没有使用标准的IO流操作方式，毕竟这个流是有点儿特殊了。</p>
-<h2 id="CharArrayWriter-CharArrayReader"><a href="#CharArrayWriter-CharArrayReader" class="headerlink" title="CharArrayWriter, CharArrayReader"></a>CharArrayWriter, CharArrayReader</h2><p>和上面的字节数组类似的，字符流中也有相应的流是和字符数组相关的。其实他们之间的道理是一样的，这里就不再赘述了。</p>
-<pre><code class="java">public class CharArrayWriterDemo {
+<p>不过需要注意的是，这时的枚举可以通过上面的类B访问到。比如</p>
+<pre><code class="java">Student s = B.ChineseStudent.ZHANG3;</code></pre>
+<p>上面就是使用接口来组织枚举的简单的用法，至于更复杂的用法，这里暂时就不做更多的了解了。</p>
+<h2 id="枚举与单例模式"><a href="#枚举与单例模式" class="headerlink" title="枚举与单例模式"></a>枚举与单例模式</h2><p>前面我们介绍了单例模式，在我们学习内部类的时候，我也提到了使用静态内部类的方式来实现单例模式的懒加载。不过在我们详细的谈论单例模式的时候，我们还谈到了一种使用枚举来实现的单例模式。</p>
+<pre><code class="java">public class SingletonTest04 {
     public static void main(String[] args) {
-        char[] ch = &quot;sher is the best boy!&quot;.toCharArray();
-        CharArrayWriter c = new CharArrayWriter();
+        Singleton04 singleton1 = Singleton04.INSTANCE;
+        Singleton04 singleton2 = Singleton04.INSTANCE;
 
-        try {
-            c.write(ch);
-            c.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(c.toString());
+        System.out.println(&quot;singleton1:&quot; + singleton1.hashCode());
+        System.out.println(&quot;singleton2:&quot; + singleton2.hashCode());
     }
-}</code></pre>
-<pre><code class="java">public class CharArrayReaderDemo {
-    public static void main(String[] args) {
-        char [] ch = &quot;abcdefg&quot;.toCharArray();
-        CharArrayReader char1 = new CharArrayReader(ch);
-        StringBuilder sb = new StringBuilder();
-        int temp = 0;
-        while (true){
-            try {
-                if (((temp = char1.read()) == -1)) break;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            sb.append((char)temp);
-        }
-        System.out.println(sb.toString());
-    }
-}</code></pre>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>其实这些流都不是常见的流，基本上我们是用不到的。不过稍微做一下了解也是好的呢、</p>
+}
+
+enum Singleton04 {
+    INSTANCE;
+}
+</code></pre>
+<p>这种方式是真的简单又粗暴。不仅可以<strong>解决多线程的同步问题，也可以防止反序列化创建新的对象</strong>。这种方式也是《Effect Java》中推荐的方式。不过这个代码也是有一定的问题的，比如说<strong>无法进行懒加载</strong>。如果一点问题都没有，这个单例模式可不是十全十美了嘛~~</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面算是对Java中的枚举类的一个比较全面的一个学习了。不过都基本上是简单的介绍，并没有深入底层追究一些细节上面的东西，毕竟那玩意放到现在来说确实是有点儿复杂了。</p>
+<p>主要参考文章:<a href="https://blog.csdn.net/qq_31655965/article/details/55049192" target="_blank" rel="noopener">重新认识java（十） —- Enum（枚举类）</a></p>
 
         </div>
         <!-- .entry-content -->
@@ -504,36 +751,19 @@ long skip(long n)
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/09/25/Java中的IO-05/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/46.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/46.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                Java中的IO-05</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/09/24/Java中的IO-03/" rel="next">
+            <a href="/2019/10/02/使用lxml和bs4进行爬虫/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/56.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/56.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                Java中的IO-03</h3>
+                使用lxml和bs4进行爬虫</h3>
                 <hr>
               </div>
             </a>

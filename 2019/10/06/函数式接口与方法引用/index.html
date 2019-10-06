@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Apache Commons IO简介 | Sher的小博客</title>
+  <title itemprop="name">函数式接口与方法引用 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/58.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/58.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Apache Commons IO简介</h1>
+      函数式接口与方法引用</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-9-26<span class="bull">
+        2019-10-6<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,182 +376,235 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Apache-Commons-IO简介"><a href="#Apache-Commons-IO简介" class="headerlink" title="Apache Commons IO简介"></a>Apache Commons IO简介</h1><hr>
-<p>之前一直学的都是Java中IO的知识，使用起来基本上都是那个一个样，说实话我确实是有点儿感到厌倦了。于是世界上著名的开源组织阿帕奇(Apache)将Java中的IO进行了封装写了Commons IO这个玩意。这个是需要从阿帕奇的光网上面去下载的，因为这个并不是jdk自带的库。下载完之后还自带了源码以及官方文档，不过都是英文的，，这就非常考验我的能力了。</p>
-<p>先看一下这个Commons IO 由哪些东西组成。</p>
-<pre><code class="java">org.apache.commons.io    
-// This package defines utility classes for working with streams, readers, writers and files.
-org.apache.commons.io.comparator    
-// This package provides various Comparator implementations for Files.
-org.apache.commons.io.filefilter    
-// This package defines an interface (IOFileFilter) that combines both FileFilter and FilenameFilter.
-org.apache.commons.io.input    
-// This package provides implementations of input classes, such as InputStream and Reader.
-org.apache.commons.io.monitor    
-// This package provides a component for monitoring file system events (directory and file create, update and delete events).
-org.apache.commons.io.output    
-// This package provides implementations of output classes, such as OutputStream and Writer.
-org.apache.commons.io.serialization    
-// This package provides a framework for controlling the deserialization of classes.</code></pre>
-<p>上面的这所只言片语，说实话我是什么都看不懂的，如果不是对Commons IO的体系有足够的了解，是肯定看不懂的。就像给我们一开始看那个Java io的体系图，我们也肯定是看的一脸懵逼的吖~~</p>
-<p>而且上面的并不是一些类而已，只是一些包，每个包中还有非常多的类，每个类中又有非常多的方法。所以说不可能一个一个去学习的，只能寻找自己需要的去学，这里就看一下别人的博客,毕竟我对这个玩意是一点也不了解。</p>
-<p><a href="https://blog.csdn.net/langgufu314/article/details/84721816" target="_blank" rel="noopener"><strong>Apache Commons IO入门教程</strong></a></p>
-<p>这个博客写了一点，但是我感觉写的并不怎么样，看了也没什么收获。下面我就直接上一些这个类的常用方法的代码吧。</p>
-<h2 id="文件或者文件夹的大小"><a href="#文件或者文件夹的大小" class="headerlink" title="文件或者文件夹的大小"></a>文件或者文件夹的大小</h2><pre><code class="java">public class TestCommonIo {
-    public static void main(String[] args) {
-        long len1 = FileUtils.sizeOf(new File(&quot;test&quot;));
-        long len2 = FileUtils.sizeOf(new File(&quot;./Exercise/src&quot;));
-        System.out.println(len1);
-        System.out.println(len2);
-    }
+          <h1 id="函数式接口与方法引用"><a href="#函数式接口与方法引用" class="headerlink" title="函数式接口与方法引用"></a>函数式接口与方法引用</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前我们说到了Java8中的一个新的特性，就是lambda表达式的使用，不过当时只是简单的了解了一下，没有与Java8中其他的新的特性做一个全面的了解。这里我们要到的Java中的函数式接口和方法引用就是Java8种新增加的东西，而且这两个新东西和lambda表达的式的联系还非常的密切。</p>
+<h2 id="什么是函数式接口"><a href="#什么是函数式接口" class="headerlink" title="什么是函数式接口"></a>什么是函数式接口</h2><p>之前说了和其他的编程语言不同的是，Java是一门非常面向对象的语言，对象在Java的世界中就是最重要的玩意。其他语言中的lambda表达式都是一种函数，而<strong>Java中的lambda表达式不是函数</strong>，之前我们说过了是一种<strong>依赖于接口</strong>的一个玩意。作用和匿名内部类非常的相似。（其实lambda这个玩意就是Java抄袭其他的语言的，其他的语言基本上很早就有了，而且大家都非常喜欢用，那Java可不要趁一波“热度“嘛。不过热度也不能瞎趁，其他的语言之中，函数的地位其实才是老大，比如说python就是一门函数式的原因，Java是一门对象为中心的语言，那么lambda表达式代表的就是一个对象。）上面扯多了，不瞎扯这个玩意了。先回到正题。</p>
+<p>不过lambda表达式依赖的接口是有一定的条件的。他必须是只一个函数需要我们来实现。比如说新建一个线程的<code>Runnable</code>接口中只有一个函数<code>run()</code>需要我们实现。这样的接口就可以使用<code>lambda</code>。使用的方法如下。</p>
+<pre><code class="java">Runnable a = () -&gt; System.out.println(&quot;Hello World&quot;);</code></pre>
+<p>其实这样的接口就是所谓的<code>函数式接口</code>，也就是所有的只有一个抽象函数需要实现的接口就是函数式接口。Java8种函数式接口的上面有一个注解(就像重写父类的方法的注解<code>@override</code>一样)叫做<code>@FucntionalInterface</code>。比如我们要写一个函数式接口</p>
+<pre><code class="java">@FunctionalInterface
+interface A{
+    void func();
 }</code></pre>
-<p>上面的第一个就是文件的大小，第二个是文件夹的大小，使用的方法是一样的。对于计算一个文件的大小，这还是非常简单的，使用length()方法就可以了，不过计算文件夹的代码确实要进行递归的操作，可以说要考虑的东西很多，而且也很繁琐。</p>
-<p>我们可以看一下这个方法的源码</p>
-<pre><code class="java">public static long sizeOf(final File file) {
-
-    if (!file.exists()) {
-        final String message = file + &quot; does not exist&quot;;
-        throw new IllegalArgumentException(message);
-    }
-
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file); // private method; expects directory
-    } else {
-        return file.length();
-    }
-
-}</code></pre>
-<p>可以看到源码中专门写了一个函数来计算文件夹的大小</p>
-<pre><code class="java">private static long sizeOfDirectory0(final File directory) {
-    final File[] files = directory.listFiles();
-    if (files == null) {  // null if security restricted
-        return 0L;
-    }
-    long size = 0;
-
-    for (final File file : files) {
-        try {
-            if (!isSymlink(file)) {
-                size += sizeOf0(file); // internal method
-                if (size &lt; 0) {
-                    break;
-                }
-            }
-        } catch (final IOException ioe) {
-            // Ignore exceptions caught when asking if a File is a symlink.
-        }
-    }
-
-    return size;
+<p>当然这个<code>@FunctionalInterface</code>不加也是可以的，就像你函数重写不加<code>@override</code>也是对的，毕竟这个玩意只是一个注解。不过还是要明白加上去的含义是什么的。</p>
+<p>那么我们现在就可以说清楚Java当中的lambda表达式是一个什么东西了。<strong><code>lambda表达式就是函数式接口是实例。</code></strong>lambda表达式的存在必须要依赖于函数式接口，不过虽然lambda表达式是一个对象，但是他的作用相当于是一个函数。就像c++当中的仿函数一样，虽然是一个对象，但是是可以调用的，作用也是相当于一个对象。其实C++中的lambda表达式虽然说是一个函数，不过实际上也是一个对象——<code>std::function</code>，所有的可调用的变量都可以是这个<code>std::function</code>，其本质上也是一个类，也就是仿函数<code>Function Class</code>。</p>
+<h2 id="函数式接口的作用"><a href="#函数式接口的作用" class="headerlink" title="函数式接口的作用"></a>函数式接口的作用</h2><p>那么说了那么多没用的废话，这个函数式接口的作用到底是什么呢？仅仅是给了一个定义？？</p>
+<p>我们都知道<code>OOP</code>是面向对象编程的意思。其实今年来又兴起了一种的新的编程的方式——<code>OOF</code>面向函数编程。函数式接口的存在使得Java也可以进行<code>OOF</code>的编程方式。我们可以将函数式接口作为参数，然后使用lambda表达式进行参数的传递。</p>
+<pre><code class="java">@FunctionalInterface
+interface A{
+    void func(String str);
 }
 
-private static long sizeOf0(final File file) {
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file);
+public void test1(String str, A a) {
+    a.func(str);
+}</code></pre>
+<p>看上面的代码，我们定义了一个函数式接口，然后将这个接口作为函数test1()的参数传入。然后再我们使用test1()函数的时候就可以指定不同的函数来做不同的事情。比如说</p>
+<pre><code class="java">@Test
+public void test2() {
+    String str = &quot;Hello World&quot;;
+    test1(str, new A() {
+        @Override
+        public void func(String str) {
+            System.out.println(str.toUpperCase());
+        }
+    });
+}</code></pre>
+<p>使用这种方式，我们使用了一个匿名内部类传递了我们需要是使用的函数，使得给定的字符串变成全是大写的。不过之前我们说的是可以使用lambda表达式的方式进行参数式的传递，下面就使用lambda表达式来试一下。</p>
+<pre><code class="java">test1(str, s -&gt; System.out.println(s.toLowerCase()));</code></pre>
+<p>使用lambda表达式的话只需要一行的代码而且非常的简洁，这里lambda表达式的优点就充分的体现出来了。</p>
+<p>不过说实话，这个写法还是非常的扯的，因为我们还定义了一个接口，要是每一个函数都要去定义一个相应的接口，那岂不是要烦死了。不过我们发现了一个问题，这些接口似乎都是通用的。比如说上面的这个接口中需要实现的方法是接受一个参数<code>String</code>，没有返回值的。那么其余的需要这种接口的函数都可以使用这个接口。那么我们需要的接口就是有限的，按理来说标准库是会提供这些接口给我们使用而不是让我们自己去定义的。</p>
+<h2 id="四大核心函数式接口"><a href="#四大核心函数式接口" class="headerlink" title="四大核心函数式接口"></a>四大核心函数式接口</h2><p>果然，Java替我们提供了丰富的函数式接口，都在<code>java.util.function</code>这个包下。不过有四个接口是非常重要的，被称为四大核心函数借口，下面就来一一介绍一下。</p>
+<table>
+<thead>
+<tr>
+<th>函数式接口</th>
+<th>参数类型</th>
+<th>返回值类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Consumer<t></t></td>
+<td>T</td>
+<td>void</td>
+</tr>
+<tr>
+<td>Supplier<t></t></td>
+<td>none</td>
+<td>void</td>
+</tr>
+<tr>
+<td>Function&lt;T, R&gt;</td>
+<td>T</td>
+<td>R</td>
+</tr>
+<tr>
+<td>Predicate<t></t></td>
+<td>T</td>
+<td>boolean</td>
+</tr>
+</tbody></table>
+<p> 下面来一一介绍一下上面的四个接口。</p>
+<blockquote>
+<ul>
+<li><code>Consumer&lt;T&gt;</code> 消费型接口<ul>
+<li>名副其实，所谓的消费型接口就是接口里面的函数是需要提供一个参数，但是没有任何的返回值。就像我们消费了这个东西一样。</li>
+<li>接口里面的抽象方法的格式为<code>void accept(T t)</code></li>
+<li>上面我们使用的那个接口其实就是一个<code>Consumer&lt;String&gt;</code>的一个接口。</li>
+</ul>
+</li>
+<li><code>Supplier&lt;T&gt;</code>接口型接口<ul>
+<li>和上面的消费型接口相反，这个接口里面的函数不需要任何的参数，但是会返回一个东西。这个就是典型的雷锋行为啊。</li>
+<li>接口里面的抽象方法的格式为<code>T get()</code></li>
+</ul>
+</li>
+<li><code>Function&lt;T&gt;</code>函数型接口<ul>
+<li>这个接口应该是最常用的一个接口。他有一个参数，还有一个返回值，参数和返回值的类型不需要是相同的。</li>
+<li>接口里面的格式为<code>R apply(T t)</code></li>
+</ul>
+</li>
+<li><code>Predicate&lt;T&gt;</code>断定型接口<ul>
+<li>这个接口是给定一个参数，然后返回真假。也是比较常用的一个接口。</li>
+<li>接口里面的函数的格式为<code>boolean test(T t)</code></li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>需要注意的是，上面我给出的每个接口里面的函数的格式并不是瞎给的。至少调用的话不是瞎给的，我们使用这个接口，都需要调用接口中的函数，函数名就是上面的那样，是固定的。</p>
+<p>比如我们上面举的例子就可以使用第一个<code>Consumer&lt;String&gt;</code>这样的一个接口。</p>
+<pre><code class="java">public void test11(String str, Consumer&lt;String&gt; consumer) {
+    consumer.accept(str);
+}
+
+@Test
+public void test3() {
+    String str = &quot;Hello Wrold&quot;;
+    test11(str, s -&gt; System.out.println(s.toLowerCase()));
+}</code></pre>
+<p>遮掩我们就可以是用Java已经给我们定义好的接口了，可谓是非常的方便了。</p>
+<p>其他的接口也是可以来简单的写个小例子来示范一下的。</p>
+<pre><code class="java">public void testSpplier(String str, Supplier&lt;Integer&gt; supplier) {
+    System.out.println(str + supplier.get());
+}
+
+@Test
+public void test3() {
+    testSpplier(&quot;Hello&quot;, () -&gt; new Random().nextInt(100));
+}
+
+public void testFunction(String str, Function&lt;String, String&gt; function) {
+    System.out.println(str + function.apply(str));
+}
+
+@Test
+public void test4() {
+    String str = &quot;Hello&quot;;
+    testFunction(str, s -&gt; s.toUpperCase());
+}
+
+public void testPredicate(int a, Predicate&lt;Integer&gt; predicate) {
+    if (predicate.test(a)) {
+        System.out.println(&quot;&quot; + a + &quot; is a great num!&quot;);
     } else {
-        return file.length(); // will be 0 if file does not exist
+        System.out.println(&quot;&quot; + a + &quot;is a bad num!&quot;);
+    }
+}
+
+@Test
+public void test5() {
+    int a = 10;
+    testPredicate(a, s -&gt; (s &amp; 1) == 0);
+}</code></pre>
+<p>上面就是这些接口的使用的方法的一些示例。不过，说实话这个例子都是这种蛮沙雕的例子，完全是没有什么必要的。不过之二十为了演示函数式接口的使用的形式而已。</p>
+<h2 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h2><p>上面的函数式接口基本上就讲完了，其实也没有什么需要注意的地方。用起来也非常的容易理解。下面要说的Java8种的一个想你的特性——方法引用。这个东西也是和lambda表达式相关的，也是为了简化我们的代码。</p>
+<p>方法引用的意思就是我们可以在需要lambda的地方，使用我们已经定义过的相同的形式的方法。这么说可能是非常难以理解，下面直接上代码进行演示好了。</p>
+<pre><code class="java">public class MethodReference {
+    @Test
+    public void test1() {
+        Consumer&lt;String&gt; consumer = s -&gt; System.out.println(s);
+        consumer.accept(&quot;Hello World&quot;);
     }
 }</code></pre>
-<p>简单的看一下确实也是使用递归的方法来计算文件夹的大小的。</p>
-<h2 id="列出文件"><a href="#列出文件" class="headerlink" title="列出文件"></a>列出文件</h2><pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, null);
-    for (File file : files) {
-        System.out.println(file.getName());
+<p>我写了如上的代码，但是非常智能的idea给我的<code>System.out.println()</code>标记了打了一个提示，说<code>lambda can be replaced with method reference</code>。那我就听他的话，是用万能的<code>alt + enter</code>快捷键，idea将我的代码修改了</p>
+<pre><code class="java">public class MethodReference {
+    @Test
+    public void test1() {
+        Consumer&lt;String&gt; consumer = System.out::println;
+        consumer.accept(&quot;Hello World&quot;);
     }
 }</code></pre>
-<p><code>listFiles</code>函数的第一个参数是待列的文件夹，第二个参数是文件过滤器（这里使用的是非空过滤器），第三个参数是文件夹过滤器（使用null就是表示不列出文件夹）</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, DirectoryFileFilter.INSTANCE);
-    for (File file : files) {
-        System.out.println(file.getName());
+<p>这就是所谓方法引用。<code>System.out.println()</code>这个方法是<code>System.out</code>的一个方法。这个方法已经定义过了。当我们在lambda中使用的时候（值使用这个函数，其他不用），就可以使用方法引用的方式来替代lambda表达式。</p>
+<pre><code class="java">@Test
+public void test2() {
+    Comparator&lt;Integer&gt; comparator = (a, b) -&gt; Integer.compare(a, b);
+    System.out.println(comparator.compare(3, 4));
+}</code></pre>
+<p>上面的<code>Comparator</code>也是Java中的一个函数式接口，他的实现函数的格式为<code>int compare(T a, T b)</code></p>
+<p>上面的<code>Integer.compare</code>方法也是我们定义过了的方法。所以说上面的lambda表达式也可以修改成为方法引用。</p>
+<pre><code class="java">@Test
+public void test2() {
+    Comparator&lt;Integer&gt; comparator = Integer::compare;
+    System.out.println(comparator.compare(3, 4));
+}</code></pre>
+<p>上面就是使用方法引用的形式。</p>
+<p>不过应该发现了一个问题，上面的<code>System.out::println</code>的<code>::</code>左面是一个<code>PrintWriter</code>对象，但是<code>Integer::compare</code>的左面是一个类。学过C++的应该都知道<code>::</code>的左面应该是类的。虽然Java可能不是的，不过我们也要搞清楚，左面到底应该是什么，是对象还是类？</p>
+<p>不过还是比较容易分析的。<code>println</code>是一个实例方法。而<code>compare</code>是一个对象的方法。众所周知类是不可以调用实例方法的，那么就是说实例方法的左面需要是类，而静态方法的左面类和对象都是可以的吗？就像函数调用那样子一样吗？</p>
+<p>那我们来做一些测试。我们将<code>System.out::println</code>换成了<code>PrintStream::println</code>之后发现报错了。不过也容易理解，没有<code>System.out</code>，我们都不知道往哪儿去输出。</p>
+<p>我们再来测试一下使用左面是对象，右面是静态方法的情况。</p>
+<pre><code class="java">@Test
+public void test2() {
+    Integer i = new Integer(3);
+    Comparator&lt;Integer&gt; comparator = i::compare;
+    System.out.println(comparator.compare(3, 4));
+}</code></pre>
+<p>又失败了。不过这是报错是出乎我们的意料的。对象是可以调用静态方法的啊，那为什么这种失败了呢？这是不是就是意味着方法引用只有如下的两种形式？</p>
+<p><code>对象::实例方法</code>和<code>类::静态方法</code>。</p>
+<p>因为其余的两种形式我们都测试过了。不过经过查阅资料，其上还有一种方式是可行的。<code>类::实例方法</code>也是可行的。</p>
+<p>哈？这个也是可行的？不是上面我们已经测试过了吗？不是不可行的嘛？</p>
+<p>其实实例方法的引用是有点儿特殊的。上面的<code>对象::实例方法</code>和<code>类::静态方法</code>都是比较简单。只要满足参数相同，返回值相同就是可以调用的。但是使用<code>类::实例方法</code>不一样。他的参数必须要是<code>调用对象的参数，方法的其他参数</code>。举个例子来说吧。</p>
+<pre><code class="java">@Test
+public void test3() {
+    BiPredicate&lt;String, String&gt; biPredicate = (x, y) -&gt; x.equals(y);
+    System.out.println(biPredicate.test(&quot;hello&quot;, &quot;Hello&quot;));
+
+    biPredicate = String::equals;
+    System.out.println(biPredicate.test(&quot;Hello&quot;, &quot;Hello&quot;));
+}</code></pre>
+<p>比如上上面的代码都是正确的。上面的那个<code>BiPredicate</code>也是<code>java.util.function</code>下面的一个接口。他的实现函数的形式为<code>boolean test(T t, U u)</code></p>
+<p>上面的那个lambda比较容易理解。不过下面的方法引用是不是有点奇怪了？是用的是<code>类::实例方法</code>的形式。关键是<code>equals()</code>方法在类中的声明如下</p>
+<pre><code class="java">public boolean equals(String s);</code></pre>
+<p>参数是不匹配的。这就是我们需要注意的地方。当函数式接口方法的第一个参数是需要引用方法的调用者，并且第二 个参数是需要引用方法的参数(或无参数)时，可以使用<code>类::实例方法</code>的形式。</p>
+<p>也就是<code>PrintStream::println</code>这个函数可以实现的函数式接口为<code>Biconsumer&lt;PrintStream, String&gt;</code>,第一个参数是<code>println</code>函数的调用对象(比如说<code>System.out</code>)。第二个参数是<code>String</code>，就是输出的内容。(也可以是其他可以输出的类型)。</p>
+<h2 id="构造器引用和数组引用"><a href="#构造器引用和数组引用" class="headerlink" title="构造器引用和数组引用"></a>构造器引用和数组引用</h2><p>除了方法引用之外还有构造器引用和数组引用，其实都是一样的不需要再说那么多了也可以轻松的理解。</p>
+<p>下面来举一个简单的小例子就行了。</p>
+<pre><code class="java">@Test
+public void test4() {
+    Supplier&lt;A&gt; supplier = () -&gt; new A();
+    supplier = A::new;
+
+    Function&lt;Integer, A&gt; function = i -&gt; new A(i);
+    function = A::new;
+}
+
+class A {
+    A() {
+
+    }
+
+    A(int a) {
+
     }
 }</code></pre>
-<p>使用这个方法就可以列出所有的文件，包括文件夹以及文件夹里面的内容。还有一种常用的文件过滤器是后缀名过滤。比如说我只想要后缀为Java的非空的文件，可以这样写。</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), 
-            FileFilterUtils.and(new SuffixFileFilter(&quot;java&quot;), EmptyFileFilter.NOT_EMPTY), 
-            DirectoryFileFilter.INSTANCE);
+<p>其实构造器也是一个方法，如果使用方法引用的话，按道理来说应该写成<code>A::A</code>，不过人家构造器是特殊的方法，当然要有特殊的形式，使用的是<code>xx::new</code>的形式。</p>
+<p>还有一种引用是数组引用。这中引用就是比较特殊的了，不过和构造器引用却是比较类似的。比如下面的代码</p>
+<pre><code class="java">@Test
+public void test5() {
+    Function&lt;Integer, String[]&gt; function = s -&gt; new String[s];
 
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
+    function = String[]::new;
+
+    System.out.println(function.apply(6));
 }</code></pre>
-<p>可以使用<code>FileFilterUtils.and</code>,<code>FileFilterUtils.or</code>或者<code>FileFilterUtils.or</code>来组织过滤器之间的逻辑，比如上面的就是以java为后缀名的并且非空的文件。</p>
-<h2 id="读取内容"><a href="#读取内容" class="headerlink" title="读取内容"></a>读取内容</h2><pre><code class="java">static void test3() {
-    try {
-        String msg = FileUtils.readFileToString(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        System.out.println(msg);
-
-        byte[] b = FileUtils.readFileToByteArray(new File(&quot;hony&quot;));
-        System.out.println(new String(b, StandardCharsets.UTF_8));
-
-        List&lt;String&gt; lines = FileUtils.readLines(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        for (String line : lines) {
-            System.out.println(line);
-        }
-
-        LineIterator lineIterator = FileUtils.lineIterator(new File(&quot;hony&quot;), &quot;UTF-8&quot;);
-        while (lineIterator.hasNext()) {
-            System.out.println(lineIterator.nextLine());
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}</code></pre>
-<p>读取文件中的内容主要有上面的四种方式，无论哪一种都是比我们使用原始的Java IO流方便多了。</p>
-<p>第一种是直接将文件中的内容读取到一个String对象中。第二种则是读取到字节数组中。</p>
-<p>第三种是将文件的每一行都放入到一个List中。第四种方式倒是有点儿特殊，是使用迭代器的方式进行遍历文件的。</p>
-<h2 id="写出内容"><a href="#写出内容" class="headerlink" title="写出内容"></a>写出内容</h2><pre><code class="java">static void test4() {
-    try {
-        FileUtils.write(new File(&quot;happy.txt&quot;),
-                &quot;I am happy1!&quot;, StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy2!&quot;, StandardCharsets.UTF_8, true);
-        FileUtils.writeByteArrayToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy3!&quot;.getBytes(StandardCharsets.UTF_8), true);
-
-        List&lt;String&gt; datas = new ArrayList&lt;&gt;();
-        datas.add(&quot;sher&quot;);
-        datas.add(&quot;hony&quot;);
-        datas.add(&quot;sherhony&quot;);
-
-        FileUtils.writeLines(new File(&quot;happy.txt&quot;),
-                datas, &quot;\r\n&quot;, true);
-
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}</code></pre>
-<p>写出到文件中同样有以上的好几种方式。上面函数的第四个参数都是代表<strong>是否一追加的形式写入</strong>到文件当中，在Java原始流当中也是使用的这种方式。不过下面的<code>FileUtils.writeLines</code>方法的第三个参数不再是编码了，而是分隔符，也就是说写入的这些data之间用什么隔开，这里我是用的是windows下的换行符。</p>
-<h2 id="拷贝"><a href="#拷贝" class="headerlink" title="拷贝"></a>拷贝</h2><p>拷贝包括拷贝文件或者说的是拷贝文件夹，拷贝文件的操作我们已经做过了，但是拷贝文件夹的操作是有点儿复杂，需要递归的操作。不过这个commons io提供给我们一个十分方便地方法。</p>
-<pre><code class="java">static void test5() {
-    try {
-        FileUtils.copyFile(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;Exercise/src/test-copy.jpg&quot;));
-        FileUtils.copyFileToDirectory(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;D:/&quot;));
-        FileUtils.copyDirectory(new File(&quot;Exercise/out&quot;), new File(&quot;Exercise/out-copy&quot;));
-        FileUtils.copyDirectoryToDirectory(new File(&quot;Exercise/out&quot;),
-                new File(&quot;Exercise/src&quot;));
-        String url = &quot;http://i1.hdslb.com/bfs/archive/9cc5e3fcc7d6c48e5a0d8d3dd8bbb6ed11937f89.jpg&quot;;
-        FileUtils.copyURLToFile(new URL(url), new File(&quot;Exercise/src/miaonei.jpg&quot;));
-        String baidu = &quot;http://www.baidu.com&quot;;
-        String wangyi = &quot;http://www.163.com&quot;;
-        String bd = IOUtils.toString(new URL(baidu), StandardCharsets.UTF_8);
-        String wy = IOUtils.toString(new URL(wangyi), &quot;GBK&quot;);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/baidu.txt&quot;), bd,
-                StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/wangyi.txt&quot;), wy,
-                &quot;GBK&quot;);
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}</code></pre>
-<p>上面是拷贝的常见的操作。可以看到这个方法是什么的方便的。不过需要注意的是，从网络流中拷贝东西（也就是下载东西）的时候，如果是文字的话（也就网页的代码），可以使用<code>IOUtils.toString</code>方法，这个方法可以指定字符的编码。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面就是Commons IO中简单的常用的一些操作，不过Commons IO这么强大的库怎么可能就这么一点点功能，只不过其余的功能太过与强大，而且并不是经常用到，所以现在可以不用了解。现在就是简单的看看这个类，知道有这么个玩意就行了。</p>
+<p>这就是数组引用，和构造器引用是有点儿类似的，简单的了解一下就好了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面介绍的主要是函数式接口和方法引用。这两个东西都是跟随lambda在Java8中被引用的。虽然他们不是Java8种比较重要的特性，不过还是需要做一些了解的。Java8种最重要的特性是lambda和StreamAPI。其中lambda我们已经简单的认识过了，下面还需要了解一下<code>StreamAPI</code>的使用。</p>
 
         </div>
         <!-- .entry-content -->
@@ -579,36 +632,19 @@ private static long sizeOf0(final File file) {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/09/27/IO应用——文件分割/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                IO应用——文件分割</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/09/26/Java中的IO-06/" rel="next">
+            <a href="/2019/10/05/说说枚举/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/57.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/57.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                Java中的IO-06</h3>
+                说说枚举</h3>
                 <hr>
               </div>
             </a>

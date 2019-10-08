@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Apache Commons IO简介 | Sher的小博客</title>
+  <title itemprop="name">强大的StreamAPI | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/60.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/60.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Apache Commons IO简介</h1>
+      强大的StreamAPI</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-9-26<span class="bull">
+        2019-10-7<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,182 +376,473 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Apache-Commons-IO简介"><a href="#Apache-Commons-IO简介" class="headerlink" title="Apache Commons IO简介"></a>Apache Commons IO简介</h1><hr>
-<p>之前一直学的都是Java中IO的知识，使用起来基本上都是那个一个样，说实话我确实是有点儿感到厌倦了。于是世界上著名的开源组织阿帕奇(Apache)将Java中的IO进行了封装写了Commons IO这个玩意。这个是需要从阿帕奇的光网上面去下载的，因为这个并不是jdk自带的库。下载完之后还自带了源码以及官方文档，不过都是英文的，，这就非常考验我的能力了。</p>
-<p>先看一下这个Commons IO 由哪些东西组成。</p>
-<pre><code class="java">org.apache.commons.io    
-// This package defines utility classes for working with streams, readers, writers and files.
-org.apache.commons.io.comparator    
-// This package provides various Comparator implementations for Files.
-org.apache.commons.io.filefilter    
-// This package defines an interface (IOFileFilter) that combines both FileFilter and FilenameFilter.
-org.apache.commons.io.input    
-// This package provides implementations of input classes, such as InputStream and Reader.
-org.apache.commons.io.monitor    
-// This package provides a component for monitoring file system events (directory and file create, update and delete events).
-org.apache.commons.io.output    
-// This package provides implementations of output classes, such as OutputStream and Writer.
-org.apache.commons.io.serialization    
-// This package provides a framework for controlling the deserialization of classes.</code></pre>
-<p>上面的这所只言片语，说实话我是什么都看不懂的，如果不是对Commons IO的体系有足够的了解，是肯定看不懂的。就像给我们一开始看那个Java io的体系图，我们也肯定是看的一脸懵逼的吖~~</p>
-<p>而且上面的并不是一些类而已，只是一些包，每个包中还有非常多的类，每个类中又有非常多的方法。所以说不可能一个一个去学习的，只能寻找自己需要的去学，这里就看一下别人的博客,毕竟我对这个玩意是一点也不了解。</p>
-<p><a href="https://blog.csdn.net/langgufu314/article/details/84721816" target="_blank" rel="noopener"><strong>Apache Commons IO入门教程</strong></a></p>
-<p>这个博客写了一点，但是我感觉写的并不怎么样，看了也没什么收获。下面我就直接上一些这个类的常用方法的代码吧。</p>
-<h2 id="文件或者文件夹的大小"><a href="#文件或者文件夹的大小" class="headerlink" title="文件或者文件夹的大小"></a>文件或者文件夹的大小</h2><pre><code class="java">public class TestCommonIo {
+          <h1 id="强大的StreamAPI"><a href="#强大的StreamAPI" class="headerlink" title="强大的StreamAPI"></a>强大的StreamAPI</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其实之前已经说了不少的有关Java8的新的特性的话题了，比如说最重要的lambda表达式，还有之前说的那个函数式接口与方法引用都是Java8中的一大更新。不过Java8中两大最重要的改变，第一个是lambda表达式，第二个就是我们接下来要说的<code>强大的StreamAPI</code>了。Stream API ( java.util.stream) 把真正的函数式编程风格引入到Java中。这 是目前为止对Java类库最好的补充，因为Stream API可以极大提供Java程 序员的生产力，让程序员写出高效率、干净、简洁的代码。</p>
+<h2 id="StreamAPI的基础知识"><a href="#StreamAPI的基础知识" class="headerlink" title="StreamAPI的基础知识"></a>StreamAPI的基础知识</h2><p>那么<code>StreamAPI</code>到底是一个什么玩意呢？所谓的<code>Stream</code>就是流的意思，大抵就是处理数据用的玩意。Stream 是 Java8 中处理集合的关键抽象概念，它可以指定你希望对集合进 行的操作，可以执行非常复杂的查找、过滤和映射数据等操作。 使用 Stream API 对集合数据进行操作，就类似于使用 SQL 执行的数据库查询。 也可以使用 Stream API 来并行执行操作。简言之，Stream API 提供了一种 高效且易于使用的处理数据的方式。这么说可能是有点儿懵逼的感觉，Stream是一种处理集合数据的算法或者说结构吗？不全是。那么？Stream到底是什么呢？ </p>
+<p><strong>Stream是数据渠道，用于操作数据源（集合、数组等）所生成的元素序列。 “集合讲的是数据，Stream讲的是计算！”</strong></p>
+<p>关于<code>Stream</code>有三大需要注意的地方。</p>
+<ul>
+<li><code>Stream</code>自己不会储存元素，他只是用来处理元素用的。</li>
+<li><code>Stream</code>不会改变源对象，他之后将源对象经过处理之后返回一个新的<code>Stream</code></li>
+<li><code>Stream</code>的操作是延迟执行的，他只会在需要结果的时候才去执行。</li>
+</ul>
+<p>关于<code>Stream</code>的操作，主要分为一下的三个步骤：</p>
+<ul>
+<li><p>创建一个Stream；从一个数据源中获取一个需要处理的流。这个数据源多半是集合。</p>
+</li>
+<li><p>中间操作；对这个流进行处理。</p>
+</li>
+<li><p>终止操作；结束对这个流的操作。</p>
+</li>
+</ul>
+<h2 id="创建Stream"><a href="#创建Stream" class="headerlink" title="创建Stream"></a>创建Stream</h2><p>StreamAPI这个玩意不像之前的东西，这个东西就是要按照规矩来一步一步的来学，毕竟他就是一个API而已。那么我们先从如何创建一个Stream开始说起。</p>
+<p>前面说了，最常用与stream的就是Java中的集合。那么第一种方式就是。</p>
+<h3 id="从集合中创建一个Stream"><a href="#从集合中创建一个Stream" class="headerlink" title="从集合中创建一个Stream"></a>从集合中创建一个Stream</h3><p>集合的最终父类是<code>Collection</code>，在Java8种这个接口被扩展了。增加了两个新的方法。</p>
+<pre><code class="java">default Stream&lt;E&gt; stream() // 返回一个顺序流 
+default Stream&lt;E&gt; parallelStream() // 返回一个并行流</code></pre>
+<p>也就是说有了一个集合，我们就可以通过<code>stream</code>或者<code>parallelStream</code>方法返回一个stream对象。比如说。</p>
+<pre><code class="java">public class Demo {
+    public static List&lt;Student&gt; getList() {
+        List&lt;Student&gt; list = new ArrayList&lt;&gt;();
+        list.add(new Student(&quot;sher1&quot;, 18, 88.3, 110));
+        list.add(new Student(&quot;sher2&quot;, 28, 188.3, 2110));
+        list.add(new Student(&quot;sher3&quot;, 38, 288.3, 3110));
+        list.add(new Student(&quot;sher4&quot;, 48, 388.3, 4110));
+        list.add(new Student(&quot;sher5&quot;, 58, 488.3, 5110));
+        list.add(new Student(&quot;sher6&quot;, 68, 588.3, 6110));
+        list.add(new Student(&quot;sher7&quot;, 78, 688.3, 7110));
+        list.add(new Student(&quot;sher8&quot;, 88, 788.3, 8110));
+
+        return list;
+    }
     public static void main(String[] args) {
-        long len1 = FileUtils.sizeOf(new File(&quot;test&quot;));
-        long len2 = FileUtils.sizeOf(new File(&quot;./Exercise/src&quot;));
-        System.out.println(len1);
-        System.out.println(len2);
+        List&lt;Student&gt; list = getList();
+        Stream&lt;Student&gt; studentStream = list.stream();
+        Stream&lt;Student&gt; parallelStream = list.parallelStream();
+
     }
 }</code></pre>
-<p>上面的第一个就是文件的大小，第二个是文件夹的大小，使用的方法是一样的。对于计算一个文件的大小，这还是非常简单的，使用length()方法就可以了，不过计算文件夹的代码确实要进行递归的操作，可以说要考虑的东西很多，而且也很繁琐。</p>
-<p>我们可以看一下这个方法的源码</p>
-<pre><code class="java">public static long sizeOf(final File file) {
-
-    if (!file.exists()) {
-        final String message = file + &quot; does not exist&quot;;
-        throw new IllegalArgumentException(message);
-    }
-
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file); // private method; expects directory
-    } else {
-        return file.length();
-    }
-
+<p>通过上面的方式就可以创建出一个<code>Stream</code>。至于取得这个Stream之后的操作如何，这里不说。（没用使用官方文档的套路说，是因为官方文档中对Stream的说明都太高大上了，我都不知道Stream是啥，你给我整那么多代码干啥）</p>
+<p>上面创建了两个流。第一个是顺序流，也是最常用的。第二个是并行流。</p>
+<p>这里我们可以使用<code>forEach</code>方法来对流中的元素进行一次遍历。</p>
+<pre><code class="java">studentStream.forEach(System.out::println);
+System.out.println(&quot;======================&quot;);
+parallelStream.forEach(s -&gt; System.out.println(s));</code></pre>
+<p><code>forEach</code>函数需要的参数是一个<code>Consumer</code>。上面的第一种方式是使用方法引用，第二种方式是使用lambda表达式。这个算是对之前学习的内容的一个简单的复习。这里来看一下他们的输出。</p>
+<pre><code class="java">Student{mName=&#39;sher1&#39;, mAge=18, mScore=88.3, phone=110}
+Student{mName=&#39;sher2&#39;, mAge=28, mScore=188.3, phone=2110}
+Student{mName=&#39;sher3&#39;, mAge=38, mScore=288.3, phone=3110}
+Student{mName=&#39;sher4&#39;, mAge=48, mScore=388.3, phone=4110}
+Student{mName=&#39;sher5&#39;, mAge=58, mScore=488.3, phone=5110}
+Student{mName=&#39;sher6&#39;, mAge=68, mScore=588.3, phone=6110}
+Student{mName=&#39;sher7&#39;, mAge=78, mScore=688.3, phone=7110}
+Student{mName=&#39;sher8&#39;, mAge=88, mScore=788.3, phone=8110}
+=========================================================
+Student{mName=&#39;sher6&#39;, mAge=68, mScore=588.3, phone=6110}
+Student{mName=&#39;sher5&#39;, mAge=58, mScore=488.3, phone=5110}
+Student{mName=&#39;sher8&#39;, mAge=88, mScore=788.3, phone=8110}
+Student{mName=&#39;sher7&#39;, mAge=78, mScore=688.3, phone=7110}
+Student{mName=&#39;sher3&#39;, mAge=38, mScore=288.3, phone=3110}
+Student{mName=&#39;sher4&#39;, mAge=48, mScore=388.3, phone=4110}
+Student{mName=&#39;sher2&#39;, mAge=28, mScore=188.3, phone=2110}
+Student{mName=&#39;sher1&#39;, mAge=18, mScore=88.3, phone=110}</code></pre>
+<p>顺序流中的数据和原来集合中的元素的顺序是一致的，但是并行流我们运行了几次之后发现顺序都是会发生变化的。可见并行流中对于数据的处理是没有顺序的。更严谨的说，他对数据的处理是并行的。这里多线程还没有说，如果讲了多线程之后就是特别的容易理解的了。</p>
+<h3 id="从数组中创建一个流"><a href="#从数组中创建一个流" class="headerlink" title="从数组中创建一个流"></a>从数组中创建一个流</h3><p>数组中似乎没有<code>stream</code>这个方法。不过Java8种更新了一个和数组的使用密切相关的类——<code>Arrays</code>。我们可以使用如下的方式从数组中获取一个流。</p>
+<pre><code class="java">static &lt;T&gt; Stream&lt;T&gt; stream(T[] array) //返回一个流</code></pre>
+<p>代码测试如下</p>
+<pre><code class="java">@Test
+public void test2() {
+    int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    String[] strArr = {&quot;sher&quot;, &quot;hony&quot;, &quot;sherhony&quot;};
+    IntStream stream = Arrays.stream(arr);
+    Stream&lt;String&gt; stringStream = Arrays.stream(strArr);
+    stream.forEach(System.out::println);
+    stringStream.forEach(System.out::println);
 }</code></pre>
-<p>可以看到源码中专门写了一个函数来计算文件夹的大小</p>
-<pre><code class="java">private static long sizeOfDirectory0(final File directory) {
-    final File[] files = directory.listFiles();
-    if (files == null) {  // null if security restricted
-        return 0L;
-    }
-    long size = 0;
-
-    for (final File file : files) {
-        try {
-            if (!isSymlink(file)) {
-                size += sizeOf0(file); // internal method
-                if (size &lt; 0) {
-                    break;
-                }
-            }
-        } catch (final IOException ioe) {
-            // Ignore exceptions caught when asking if a File is a symlink.
+<p>其实上面的代码很容易发现一个奇怪的地方。为啥int数组返回的是<code>IntStream</code>而不是<code>Stream&lt;Integer&gt;</code>。我们上面的自定义的类型和<code>String</code>类型都是<code>Stream&lt;T&gt;</code>的形式。当我使用<code>Stream&lt;Integer&gt;</code>来代替<code>IntStream</code>的时候，发现报错了。我们发现，这个函数处理int的时候并没有涉及装箱拆箱的操作，而是这个方法对<code>int[] short[] double[]</code>这三个基本数据类型参数做了重载。如果是<code>short[] float[] char[]</code>这种数组的话，是没有办法直接使用<code>Arrays.stream</code>方法的。可以转为<code>Short[]</code>等才能够使用这个方法。</p>
+<pre><code class="java">public static IntStream stream(int[] array)
+public static LongStream stream(long[] array)
+public static DoubleStream stream(double[] array)</code></pre>
+<h3 id="通过Stream的of-方法"><a href="#通过Stream的of-方法" class="headerlink" title="通过Stream的of()方法"></a>通过Stream的of()方法</h3><p>上面是两种创建流的方式最常用的方式。下面再次来介绍一下通过Stream的of()方法来创建一个流。方法如下：</p>
+<pre><code class="java">public static&lt;T&gt; Stream&lt;T&gt; of(T... values) // 返回一个流</code></pre>
+<pre><code class="java">@Test
+public void test3() {
+    Stream&lt;Integer&gt; integerStream = Stream.of(1, 2, 3, 4, 5, 6, 7);
+    integerStream.forEach(System.out::println);
+}</code></pre>
+<h3 id="创建一个无限流"><a href="#创建一个无限流" class="headerlink" title="创建一个无限流"></a>创建一个无限流</h3><p>上面的三个方法都是创建了一个有限流。我们也可以通过一下的两种方式创建一个无限流。</p>
+<pre><code class="java">//迭代 
+public static&lt;T&gt; Stream&lt;T&gt; iterate(final T seed, final UnaryOperator&lt;T&gt; f)
+// 生成 
+public static&lt;T&gt; Stream&lt;T&gt; generate(Supplier&lt;T&gt; s) </code></pre>
+<p>先来说第一个方式迭代。所谓迭代就是通过一个递推的方式来产生一个无限流。比如说产生所有的奇数流就可以这样写。</p>
+<pre><code class="java">@Test
+public void test4() {
+    Stream&lt;Integer&gt; iterate = Stream.iterate(1, x -&gt; x + 2);
+    iterate.limit(10).forEach(System.out::println);
+}</code></pre>
+<p>上面使用的<code>limit(10)</code>就是把流限制在10个，不然无限流就会无限运行下去。</p>
+<p>也可以使用<code>generate</code>方法，比如说产生无限个随机数的流。</p>
+<pre><code class="java">@Test
+public void test5() {
+    Stream&lt;Double&gt; generate = Stream.generate(Math::random);
+    generate.limit(10).forEach(System.out::println);
+}</code></pre>
+<h2 id="Stream的中间操作"><a href="#Stream的中间操作" class="headerlink" title="Stream的中间操作"></a>Stream的中间操作</h2><p>上面我们已经基本掌握了创建一个<code>Stream</code>的方式，现在要学的是Stream中最重要的一块——中间操作。</p>
+<p>多个中间操作可以连接起来形成一个流水线，除非流水线上触发终止 操作，否则中间操作不会执行任何的处理！而在终止操作时一次性全 部处理，称为“惰性求值”</p>
+<p>那么上面我们只是使用了创建流的方式为什么我们可以看到流中的数据呢？那是因为我们确实使用了终止操作，<code>forEach</code>就是一个终止操作，安装流中的顺序来遍历流中的元素。其实上面无限流中说到的限制流中元素的个数的操作就是一种中间操作。中间操作也分为多种，下面来一种一种介绍。</p>
+<h3 id="筛选与切片"><a href="#筛选与切片" class="headerlink" title="筛选与切片"></a>筛选与切片</h3><table>
+<thead>
+<tr>
+<th align="center"><strong>方法</strong></th>
+<th align="center"><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>filter(Predicate p)</strong></td>
+<td align="center"><strong>接收 Lambda ，从流中排除某些元素</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>distinct()</strong></td>
+<td align="center"><strong>筛选，通过流所生成元素的 hashCode() 和 equals() 去除重复元素</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>limit(long maxSize)</strong></td>
+<td align="center"><strong>截断流，使其元素不超过给定数量</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>skip(long n)</strong></td>
+<td align="center"><strong>跳过元素，返回一个扔掉了前 n 个元素的流。若流中元素不足 n 个，则返回一 个空流。与 limit(n) 互补</strong></td>
+</tr>
+</tbody></table>
+<p>下面来对上面的代码就以上面的那个<code>List&lt;Student&gt;</code>做代码演示</p>
+<p><strong>输出所有年龄大于40岁的</strong></p>
+<pre><code class="java">@Test
+public void test6() {
+    List&lt;Student&gt; list = getList();
+    Stream&lt;Student&gt; stream = list.stream();
+    stream.filter(x -&gt; x.getAge() &gt; 40).forEach(System.out::println);
+}</code></pre>
+<p><strong>去掉重复的学生</strong></p>
+<pre><code class="java">@Test
+public void test6() {
+    List&lt;Student&gt; list = getList();
+    Stream&lt;Student&gt; stream = list.stream();
+    stream.distinct().forEach(System.out::println);
+}</code></pre>
+<p><strong>注意：一个流在经过终止操作了就不能够再使用。</strong></p>
+<p><strong>输出前五个学生</strong></p>
+<pre><code class="java">@Test
+public void test6() {
+    List&lt;Student&gt; list = getList();
+    Stream&lt;Student&gt; stream = list.stream();
+    stream.limit(5).forEach(System.out::println);
+}</code></pre>
+<p><strong>跳过前五个学生</strong></p>
+<pre><code class="java">@Test
+public void test6() {
+    List&lt;Student&gt; list = getList();
+    Stream&lt;Student&gt; stream = list.stream();
+    stream.skip.forEach(System.out::println);
+}</code></pre>
+<p>上面的方法都比较简单，下面来看看下一个操作。</p>
+<h3 id="映射"><a href="#映射" class="headerlink" title="映射"></a>映射</h3><table>
+<thead>
+<tr>
+<th align="center"><strong>方法</strong></th>
+<th align="center"><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>map(Function f)</strong></td>
+<td align="center"><strong>接收一个函数作为参数，该函数会被应用到每个元 素上，并将其映射成一个新的元素。</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>mapToDouble(ToDoubleFunction f)</strong></td>
+<td align="center"><strong>接收一个函数作为参数，该函数会被应用到每个元 素上，产生一个新的 DoubleStream。</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>mapToInt(ToIntFunction f)</strong></td>
+<td align="center"><strong>接收一个函数作为参数，该函数会被应用到每个元 素上，产生一个新的 IntStream。</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>mapToLong(ToLongFunction f)</strong></td>
+<td align="center"><strong>接收一个函数作为参数，该函数会被应用到每个元 素上，产生一个新的 LongStream。</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>flatMap(Function f)</strong></td>
+<td align="center"><strong>接收一个函数作为参数，将流中的每个值都换成另 一个流，然后把所有流连接成一个流</strong></td>
+</tr>
+</tbody></table>
+<p>所谓的map就是映射的意思。高中是都学过映射的概念，就是将一个值以某种法则变成另一个值。</p>
+<pre><code class="java">@Test
+public void test7() {
+    Stream&lt;Integer&gt; integerStream = Stream.of(1, 2, 3, 4, 5, 6, 7);
+    integerStream.map(x -&gt; {
+        if (x % 2 == 0) {
+            return 0;
+        } else {
+            return x;
         }
-    }
+    }).forEach(System.out::println);
+}</code></pre>
+<p>上面的方法可以将流中的所有的偶数变成0。对于这个例子来说也可以写成<code>mapToInt</code>，<code>mapToDouble</code>，<code>mapToLong</code>这三种形式，只不过是返回值的类型不同罢了。</p>
+<p>对于<code>flatMap</code>的使用就是比较复杂了的。他是将每个值都换成另一个流，然后将所有的流连接成为一个流。</p>
+<p>比如如下的代码</p>
+<pre><code class="java">@Test
+public void test8() {
+    List&lt;List&lt;Integer&gt;&gt; list = new ArrayList&lt;&gt;();
+    List&lt;Integer&gt; list1 = new ArrayList&lt;&gt;();
+    list1.add(1);
+    list1.add(1);
+    list1.add(2);
+    List&lt;Integer&gt; list2= new ArrayList&lt;&gt;();
+    list2.add(2);
+    list2.add(3);
+    List&lt;Integer&gt; list3 = new ArrayList&lt;&gt;();
+    list3.add(6);
+    list.add(list1);
+    list.add(list2);
+    list.add(list3);
 
-    return size;
+    Stream&lt;List&lt;Integer&gt;&gt; stream = list.stream();
+    stream.forEach(x -&gt;{
+        x.forEach(System.out::println);
+    });
+}</code></pre>
+<p>这个流中的元素都是<code>List</code>，如果我们想要取得所有的数据的话就需要对流中的元素再次使用<code>forEach</code>。这两个<code>forEach</code>是不一样的。一个<code>forEach</code>是流对象的，而另一个是集合对象的方法。</p>
+<p>如果我们使用的是<code>flatMap</code>方法就可以将流中的数据转成一个流，然后将这些流合并成一个流，这样我们就可以只使用一个<code>forEach</code>就可以对这个流进行遍历了。</p>
+<pre><code class="java">list.stream().flatMap(List::stream).forEach(System.out::println);</code></pre>
+<p>只需要使用这一行的代码，其中使用两个方法引用。<code>List::stream</code>是将一个<code>List</code>转为<code>Stream</code>用的。这也是对方法引用的一个复习了。</p>
+<p>上面的映射的操作应该是<code>StreamAPI</code>的核心操作，特别是<code>map</code>方法就是最重要的一个操作。前面的<code>filter</code>方法也是一个非常重要的方法。</p>
+<h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><table>
+<thead>
+<tr>
+<th align="center"><strong>方法</strong></th>
+<th align="center"><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>sorted()</strong></td>
+<td align="center"><strong>产生一个新流，其中按自然顺序排序</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>sorted(Comparator com)</strong></td>
+<td align="center"><strong>产生一个新流，其中按比较器顺序排</strong></td>
+</tr>
+</tbody></table>
+<p>如果要使用第一种方式，流中的数据的类型必要要实现<code>Comparable</code>接口（里面有个<code>compareTo</code>方法），不然是不可以使用第一种方式的。(这都应该是Java中的基础中的基础了吧)</p>
+<p>如果是使用第二种方式的话，只要实现这个函数式接口就行了。</p>
+<pre><code class="java">@Test
+public void test9() {
+    List&lt;Student&gt; list = getList();
+    Stream&lt;Student&gt; stream = list.stream();
+    stream.sorted(Comparator.comparing(Student::getAge)).forEach(System.out::println);
+}</code></pre>
+<p>如果需要得是降序的话，就只能写成这种形式了</p>
+<pre><code class="java">stream.sorted((x, y) -&gt; -Integer.compare(x.getAge(), y.getAge()))
+        .forEach(System.out::println);</code></pre>
+<p>上面基本上就是最常用的中间操作了，下面要来介绍的是终止操作。</p>
+<h2 id="终止操作"><a href="#终止操作" class="headerlink" title="终止操作"></a>终止操作</h2><p>上面的操作中我们使用的所有的终止操作都是<code>forEach</code>方法来遍历，其实<code>Stream</code>的终止操作也有很多，而且也分为不同的类型。下面就来一一介绍吧。</p>
+<h3 id="匹配和查找"><a href="#匹配和查找" class="headerlink" title="匹配和查找"></a>匹配和查找</h3><table>
+<thead>
+<tr>
+<th align="center"><strong>方法</strong></th>
+<th align="center"><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>allMatch(Predicate p)</strong></td>
+<td align="center"><strong>检查是否匹配所有元素</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>anyMatch(Predicate p)</strong></td>
+<td align="center"><strong>检查是否至少匹配一个元素</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>noneMatch(Predicate p)</strong></td>
+<td align="center"><strong>检查是否没有匹配所有元素</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>findFirst()</strong></td>
+<td align="center"><strong>返回第一个元素</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>findAny()</strong></td>
+<td align="center"><strong>返回当前流中的任意元素</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>count()</strong></td>
+<td align="center"><strong>返回流中元素总数</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>max(Comparator c)</strong></td>
+<td align="center"><strong>返回流中最大值</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>min(Comparator c)</strong></td>
+<td align="center"><strong>返回流中最小值</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>forEach(Consumer c)</strong></td>
+<td align="center"><strong>内部迭代(使用 Collection 接口需要用户去做迭代， 称为外部迭代。相反，Stream API 使用内部迭 代——它帮你把迭代做了)</strong></td>
+</tr>
+</tbody></table>
+<p>上面的值也都是很容易理解，不需要其他过多的说明。</p>
+<h3 id="归约"><a href="#归约" class="headerlink" title="归约"></a>归约</h3><table>
+<thead>
+<tr>
+<th align="center"><strong>方法</strong></th>
+<th align="center"><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>reduce(T iden, BinaryOperator b)</strong></td>
+<td align="center"><strong>可以将流中元素反复结合起来，得到一 个值。返回 T</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>reduce(BinaryOperator b)</strong></td>
+<td align="center"><strong>可以将流中元素反复结合起来，得到一 个值。返回 Optional<t></t></strong></td>
+</tr>
+</tbody></table>
+<p>这个操作一般情况下是和map操作结合起来用的，比如要求所有的学生的年龄之和。</p>
+<pre><code class="java">@Test
+public void test11() {
+    List&lt;Student&gt; list = getList();
+    Stream&lt;Student&gt; stream = list.stream();
+    Optional&lt;Integer&gt; reduce = stream.map(Student::getAge).reduce(Integer::sum);
+    reduce.ifPresent(System.out::println);
+}</code></pre>
+<p>至于第一个函数的第一个参数就是初始值。用法如下。</p>
+<pre><code class="java">@Test
+public void test11() {
+    List&lt;Student&gt; list = getList();
+    Stream&lt;Student&gt; stream = list.stream();
+//        Optional&lt;Integer&gt; reduce = stream.map(Student::getAge).reduce(Integer::sum);
+    Integer reduce = stream.map(Student::getAge).reduce(a, (x, y) -&gt; x * y);
+    System.out.println(reduce);
+}</code></pre>
+<p>这里返回的类型是<code>T</code>，不是<code>Optional&lt;T&gt;</code>。</p>
+<h3 id="收集"><a href="#收集" class="headerlink" title="收集"></a>收集</h3><table>
+<thead>
+<tr>
+<th align="center"><strong>方法</strong></th>
+<th align="center"><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>collect(Collector c)</strong></td>
+<td align="center"><strong>将流转换为其他形式。接收一个 Collector 接口的实现，用于给Stream中元素做汇总 的方法</strong></td>
+</tr>
+</tbody></table>
+<pre><code class="java">函数名  返回值
+
+toList List&lt;T&gt; 
+把流中元素收集到List 
+List&lt;Employee&gt; emps= list.stream().collect(Collectors.toList()); 
+
+toSet Set&lt;T&gt; 
+把流中元素收集到Set
+Set&lt;Employee&gt; emps= list.stream().collect(Collectors.toSet()); 
+
+toCollection Collection&lt;T&gt;
+把流中元素收集到创建的集合 
+Collection&lt;Employee&gt; emps =list.stream().collect(Collectors.toCollection(ArrayList::new)); 
+
+counting Long 
+计算流中元素的个数
+long count = list.stream().collect(Collectors.counting());
+
+summingInt Integer 
+对流中元素的整数属性求和 
+int total=list.stream().collect(Collectors.summingInt(Employee::getSalary));
+
+averagingInt Double
+计算流中元素Integer属性的平均值
+double avg = list.stream().collect(Collectors.averagingInt(Employee::getSalary));
+
+summarizingInt IntSummaryStatistics
+收集流中Integer属性的统计值。如：平 均值
+int SummaryStatisticsiss= list.stream().collect(Collectors.summarizingInt(Employee::getSalary));
+
+joining String 
+连接流中每个字符串 
+String str= list.stream().map(Employee::getName).collect(Collectors.joining()); 
+
+maxBy Optional&lt;T&gt; 
+根据比较器选择最大值 
+Optional&lt;Emp&gt;max= list.stream().collect(Collectors.maxBy(comparingInt(Employee::getSalary))); 
+
+minBy Optional&lt;T&gt; 
+根据比较器选择最小值 
+Optional&lt;Emp&gt; min = list.stream().collect(Collectors.minBy(comparingInt(Employee::getSalary)));
+
+reducing 
+归约产生的类型从一个作为累加器的初始值开始， 利用BinaryOperator与流中元素逐 个结合，从而归约成单个值 
+int total=list.stream().collect(Collectors.reducing(0, Employee::getSalar, Integer::sum)); 
+
+collectingAndThen 
+转换函数返回的类型 包裹另一个收集器，对其结果转 换函数 
+int how= list.stream().collect(Collectors.collectingAndThen(Collectors.toList(), List::size));
+
+groupingBy Map&lt;K, List&lt;T&gt;&gt;
+根据某属性值对流分组，属性为K， 结果为V
+Map&lt;Emp.Status, List&lt;Emp&gt;&gt; map= list.stream().collect(Collectors.groupingBy(Employee::getStatus)); 
+
+partitioningBy Map&lt;Boolean, List&lt;T&gt;&gt; 
+根据true或false进行分区 
+Map&lt;Boolean,List&lt;Emp&gt;&gt; vd = list.stream().collect(Collectors.partitioningBy(Employee::getManage));</code></pre>
+<p>上面是常用的一些方法。下面都有代码演示。</p>
+<pre><code class="java">@Test
+public void test12() {
+    List&lt;Student&gt; list = getList();
+    Stream&lt;Student&gt; stream = list.stream();
+    ArrayList&lt;Student&gt; collect = stream.filter(x -&gt; x.getAge() &gt; 40)
+            .collect(Collectors.toCollection(ArrayList::new));
+    for (Student student : collect) {
+        System.out.println(student);
+    }
 }
 
-private static long sizeOf0(final File file) {
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file);
-    } else {
-        return file.length(); // will be 0 if file does not exist
-    }
-}</code></pre>
-<p>简单的看一下确实也是使用递归的方法来计算文件夹的大小的。</p>
-<h2 id="列出文件"><a href="#列出文件" class="headerlink" title="列出文件"></a>列出文件</h2><pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, null);
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
-}</code></pre>
-<p><code>listFiles</code>函数的第一个参数是待列的文件夹，第二个参数是文件过滤器（这里使用的是非空过滤器），第三个参数是文件夹过滤器（使用null就是表示不列出文件夹）</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, DirectoryFileFilter.INSTANCE);
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
-}</code></pre>
-<p>使用这个方法就可以列出所有的文件，包括文件夹以及文件夹里面的内容。还有一种常用的文件过滤器是后缀名过滤。比如说我只想要后缀为Java的非空的文件，可以这样写。</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), 
-            FileFilterUtils.and(new SuffixFileFilter(&quot;java&quot;), EmptyFileFilter.NOT_EMPTY), 
-            DirectoryFileFilter.INSTANCE);
+@Test
+public void test13() {
+    List&lt;Student&gt; list = getList();
+    Stream&lt;Student&gt; stream = list.stream();
+    Integer collect = stream.collect(Collectors.reducing(0, Student::getAge, Integer::sum));
+    System.out.println(collect);
+}
 
-    for (File file : files) {
-        System.out.println(file.getName());
+@Test
+public void test14() {
+    List&lt;Student&gt; list = getList();
+    Stream&lt;Student&gt; stream = list.stream();
+    Integer collect = stream.collect(Collectors.collectingAndThen(Collectors.toList(), List::size));
+    System.out.println(collect);
+}
+
+@Test
+public void test15() {
+    List&lt;Student&gt; list = getList();
+    Stream&lt;Student&gt; stream = list.stream();
+    Map&lt;Integer, List&lt;Student&gt;&gt; collect = stream.collect(Collectors.groupingBy(Student::getAge));
+    for (Integer i : collect.keySet()) {
+        System.out.println(&quot;i = &quot; + i);
+        System.out.println(collect.get(i).get(0));
     }
-}</code></pre>
-<p>可以使用<code>FileFilterUtils.and</code>,<code>FileFilterUtils.or</code>或者<code>FileFilterUtils.or</code>来组织过滤器之间的逻辑，比如上面的就是以java为后缀名的并且非空的文件。</p>
-<h2 id="读取内容"><a href="#读取内容" class="headerlink" title="读取内容"></a>读取内容</h2><pre><code class="java">static void test3() {
-    try {
-        String msg = FileUtils.readFileToString(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        System.out.println(msg);
+}
 
-        byte[] b = FileUtils.readFileToByteArray(new File(&quot;hony&quot;));
-        System.out.println(new String(b, StandardCharsets.UTF_8));
-
-        List&lt;String&gt; lines = FileUtils.readLines(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        for (String line : lines) {
-            System.out.println(line);
+@Test
+public void test16() {
+    List&lt;Student&gt; list = getList();
+    Stream&lt;Student&gt; stream = list.stream();
+    Map&lt;Boolean, List&lt;Student&gt;&gt; collect = stream.collect(Collectors.partitioningBy(x -&gt; x.getAge() &gt; 40));
+    for (Boolean b : collect.keySet()) {
+        System.out.println(b);
+        for (Student s : collect.get(b)) {
+            System.out.println(s);
         }
-
-        LineIterator lineIterator = FileUtils.lineIterator(new File(&quot;hony&quot;), &quot;UTF-8&quot;);
-        while (lineIterator.hasNext()) {
-            System.out.println(lineIterator.nextLine());
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
     }
 }</code></pre>
-<p>读取文件中的内容主要有上面的四种方式，无论哪一种都是比我们使用原始的Java IO流方便多了。</p>
-<p>第一种是直接将文件中的内容读取到一个String对象中。第二种则是读取到字节数组中。</p>
-<p>第三种是将文件的每一行都放入到一个List中。第四种方式倒是有点儿特殊，是使用迭代器的方式进行遍历文件的。</p>
-<h2 id="写出内容"><a href="#写出内容" class="headerlink" title="写出内容"></a>写出内容</h2><pre><code class="java">static void test4() {
-    try {
-        FileUtils.write(new File(&quot;happy.txt&quot;),
-                &quot;I am happy1!&quot;, StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy2!&quot;, StandardCharsets.UTF_8, true);
-        FileUtils.writeByteArrayToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy3!&quot;.getBytes(StandardCharsets.UTF_8), true);
-
-        List&lt;String&gt; datas = new ArrayList&lt;&gt;();
-        datas.add(&quot;sher&quot;);
-        datas.add(&quot;hony&quot;);
-        datas.add(&quot;sherhony&quot;);
-
-        FileUtils.writeLines(new File(&quot;happy.txt&quot;),
-                datas, &quot;\r\n&quot;, true);
-
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}</code></pre>
-<p>写出到文件中同样有以上的好几种方式。上面函数的第四个参数都是代表<strong>是否一追加的形式写入</strong>到文件当中，在Java原始流当中也是使用的这种方式。不过下面的<code>FileUtils.writeLines</code>方法的第三个参数不再是编码了，而是分隔符，也就是说写入的这些data之间用什么隔开，这里我是用的是windows下的换行符。</p>
-<h2 id="拷贝"><a href="#拷贝" class="headerlink" title="拷贝"></a>拷贝</h2><p>拷贝包括拷贝文件或者说的是拷贝文件夹，拷贝文件的操作我们已经做过了，但是拷贝文件夹的操作是有点儿复杂，需要递归的操作。不过这个commons io提供给我们一个十分方便地方法。</p>
-<pre><code class="java">static void test5() {
-    try {
-        FileUtils.copyFile(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;Exercise/src/test-copy.jpg&quot;));
-        FileUtils.copyFileToDirectory(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;D:/&quot;));
-        FileUtils.copyDirectory(new File(&quot;Exercise/out&quot;), new File(&quot;Exercise/out-copy&quot;));
-        FileUtils.copyDirectoryToDirectory(new File(&quot;Exercise/out&quot;),
-                new File(&quot;Exercise/src&quot;));
-        String url = &quot;http://i1.hdslb.com/bfs/archive/9cc5e3fcc7d6c48e5a0d8d3dd8bbb6ed11937f89.jpg&quot;;
-        FileUtils.copyURLToFile(new URL(url), new File(&quot;Exercise/src/miaonei.jpg&quot;));
-        String baidu = &quot;http://www.baidu.com&quot;;
-        String wangyi = &quot;http://www.163.com&quot;;
-        String bd = IOUtils.toString(new URL(baidu), StandardCharsets.UTF_8);
-        String wy = IOUtils.toString(new URL(wangyi), &quot;GBK&quot;);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/baidu.txt&quot;), bd,
-                StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/wangyi.txt&quot;), wy,
-                &quot;GBK&quot;);
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}</code></pre>
-<p>上面是拷贝的常见的操作。可以看到这个方法是什么的方便的。不过需要注意的是，从网络流中拷贝东西（也就是下载东西）的时候，如果是文字的话（也就网页的代码），可以使用<code>IOUtils.toString</code>方法，这个方法可以指定字符的编码。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面就是Commons IO中简单的常用的一些操作，不过Commons IO这么强大的库怎么可能就这么一点点功能，只不过其余的功能太过与强大，而且并不是经常用到，所以现在可以不用了解。现在就是简单的看看这个类，知道有这么个玩意就行了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>StreamAPI</code>是Java8种新增的非常顶的API，对于这种API式的东西就是多用多学习，其他也是没有什么好的捷径了。</p>
 
         </div>
         <!-- .entry-content -->
@@ -579,36 +870,19 @@ private static long sizeOf0(final File file) {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/09/27/IO应用——文件分割/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                IO应用——文件分割</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/09/26/Java中的IO-06/" rel="next">
+            <a href="/2019/10/06/函数式接口与方法引用/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/58.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/58.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                Java中的IO-06</h3>
+                函数式接口与方法引用</h3>
                 <hr>
               </div>
             </a>

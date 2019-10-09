@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Sher的小博客</title>
+  <title itemprop="name">Java中的多线程-01 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,452 +340,307 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 0px;"></div>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://i.loli.net/2019/10/09/JaLREC3VzhXGpeu.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://i.loli.net/2019/10/09/JaLREC3VzhXGpeu.jpg">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      Java中的多线程-01</h1>
+      <p class="entry-census">
+        <span>
+          <a href="sheriby.github.io">
+            <img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true">
+          </a>
+        </span>
+        <span>
+          <a href="sheriby.github.io">Hony Sher</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2019-10-9<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
 <div id="content" class="site-content">
-  
-  <div class="notice" style="margin-top:60px">
-    <i class="iconfont icon-notification">
-    </i>
-    <div class="notice-content">欢迎来带到Sher的小博客！</div>
-  </div>
-  
-  <div class="top-feature-row">
-  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
-  <i class="fa fa-anchor" aria-hidden="true">
-  </i>
-  START:DASH!!</h1>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/theme-sakura/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/sakura.md.png">
-        </div>
-        <div class="info">
-          <h3>Sakura</h3>
-          <p>本站 hexo 主题</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="http://space.bilibili.com/37532334" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/bilibili.jpg">
-        </div>
-        <div class="info">
-          <h3>Bilibili</h3>
-          <p>Sher的b站视频</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/wangshiwu.jpg">
-        </div>
-        <div class="info">
-          <h3>Sher的万事屋</h3>
-          <p>技术服务</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-</div>
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
-      <i class="fa fa-envira" aria-hidden="true"></i>
-      Discovery</h1>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="Java中的多线程-01"><a href="#Java中的多线程-01" class="headerlink" title="Java中的多线程-01"></a>Java中的多线程-01</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面我们学习了Java8中一些新的特性，不过那些基本上都是支线剧情。主线剧情我们已经走完了Java中IO，现在就要开始另一个主线剧情了——<code>Java中的多线程</code>。这也是非常重要的一个部分。下面就来简单的学习一下吧。</p>
+<h2 id="什么是多线程"><a href="#什么是多线程" class="headerlink" title="什么是多线程"></a>什么是多线程</h2><p>说到多线程，这又得说到我们说设计模式的时候说到的那个单例模式了。正常情况下，饿汉式单例模式是不会出现问题的，但是一旦进入了多线程的环境的时候，代码就会出现很大的问题。那么究竟是为什么会出问题呢？多线程到底又是什么呢？</p>
+<p>计算机中有很多的进程，比如说现在我的电脑中开着很多软件。qq是一个进程，微信也是一个进程。每一个程序都是一个进程。我们的计算机就是多进程的。每个进程都有多个线程。比如QQ中和不同的人聊天，每一个聊天窗口就可以看出是一个线程（其实聊天窗口也应该是多线程的）。如果QQ是单线程的，我们每次只能和一个人聊天，而不能同时和多个人聊天，这该多无聊。（不对啊，有人找我用QQ聊过天吗？笑cry）</p>
+<p>把上面的例子类比到我们的Java程序中来。也就是说如果我们的Java程序一次只可以干一件事情，那么就是单线程的，如果同时干多件事情，那么就是多线程的。简单一点来说就是，如果我们可以只用一条线就可以将代码中所有的操作连接在一起，那么就是单线程，若是出现了分叉，那就是多线程的。不过众所周知，Java中程序运行的都是按照从上到下的顺序来执行的，怎么可以同时执行多个操作呢？</p>
+<p>我们当然是不可能通过之前是方式来创建多线程的操作的，所以Java提供了一个类<code>java.lang.Thread</code>，通过这个类，就可以实现多线程的操作。</p>
+<h2 id="java-lang-Thread"><a href="#java-lang-Thread" class="headerlink" title="java.lang.Thread"></a>java.lang.Thread</h2><p>上面我们说到了多线程的实现和这个类有关，那么我们就来学习一下这个类的有关的信息。</p>
+<pre><code class="java">java.lang.Object 
+    java.lang.Thread </code></pre>
+<pre><code class="java">public class Thread
+extends Object
+implements Runnable</code></pre>
+<blockquote>
+<ul>
+<li><em>线程</em>是程序中执行的线程。Java虚拟机允许应用程序同时执行多个执行线程。</li>
+<li>每个线程都有优先权。 具有较高优先级的线程优先于优先级较低的线程执行。  每个线程可能也可能不会被标记为守护程序。  当在某个线程中运行的代码创建一个新的<code>Thread</code>对象时，新线程的优先级最初设置为等于创建线程的优先级，并且当且仅当创建线程是守护进程时才是守护线程。  </li>
+<li>当Java虚拟机启动时，通常有一个非守护进程线程（通常调用某些指定类的名为<code>main</code>的方法）。  Java虚拟机将继续执行线程，直到发生以下任一情况： <ul>
+<li>已经调用了<code>Runtime</code>类的<code>exit</code>方法，并且安全管理器已经允许进行退出操作。   </li>
+<li>所有不是守护进程线程的线程都已经死亡，无论是从调用返回到<code>run</code>方法还是抛出超出<code>run</code>方法的<code>run</code>  。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>至于这个类的构战方法和实例方法现在暂且不看了。其实上面的东西也没有什么看的必要。不过官方文档下面给我们的信息是非常重要的。在<code>jdk1.5</code>之前，我们可以使用两种方式创建线程。一种方式是继承<code>Thread</code>类，另一种方式是实现<code>Runnable</code>接口。</p>
+<h2 id="创建一个线程"><a href="#创建一个线程" class="headerlink" title="创建一个线程"></a>创建一个线程</h2><h3 id="继承Thread类"><a href="#继承Thread类" class="headerlink" title="继承Thread类"></a>继承<code>Thread</code>类</h3><p>现在我们想要使用多线程的方式输出<code>0-100</code>之中所有的偶数。首先是第一中方式，继承<code>Thread</code>类。</p>
+<p>但我们需要创建一个线程的时候，需要一下的几个步骤。</p>
+<blockquote>
+<ul>
+<li>写一个类继承<code>Thread</code>类</li>
+<li>重写类中的<code>run()</code>方法。</li>
+<li>创建这个类的实例</li>
+<li>调用类中的<code>start()</code>方法。</li>
+</ul>
+</blockquote>
+<pre><code class="java">public class Demo1 {
+    public static void main(String[] args) {
+        Thread thread = new Mythread();
+        thread.start();
+        System.out.println(&quot;Main Function End!&quot;);
+    }
+}
+
+class Mythread extends Thread {
+    @Override
+    public void run() {
+        for (int i = 0; i &lt; 100; i++) {
+            if (i % 2 == 0) {
+                System.out.println(i);
+            }
+        }
+    }
+}</code></pre>
+<p>比如说上面的代码就是按照上面的步骤创建的一个多线程。那么如何证明这个是多线程呢？Java程序中原来就是一个单线程执行的，这个线程是主线程。主线程从main函数开始执行。执行到<code>run</code>之后，开启了一个新的新的线程。此时这个新的线程和主线程是同时开始运行的。所以此时我们执行这个代码，输出的结果可能就是<code>Main Functin End</code>先开始输出了。</p>
+<p>不过为什么我们重写的<code>run</code>方法，要启动线程却要调用<code>start</code>方法呢？我们是否可以直接调用<code>run</code>方法？确实是可以直接调用<code>run</code>方法的，不过这个就不是多线程了，而就是一个普通的类的调用。此时<code>Main Function End</code>肯定是最后输出的。所谓的<code>start</code>方法其实是<code>java.lang.Thread</code>这个类的专门用来启动线程的方法，我们不通过这个<code>start</code>方法是没有办法启动一个线程的。至于<code>run</code>方法，在<code>java.lang.Thread</code>类中其实也是有实现的，不过按道理来说应该是一个抽象函数，为什么会有实现呢？这里可以以后再说。</p>
+<p>现在我们要是两个线程去输出结果，现在应该怎么办呢？很简单，再次调用一下<code>start</code>方式不就可以了？不过很遗憾，这个方式是大错特错的。这样做会抛出一个<code>java.lang.IllegalThreadStateException</code>异常，一个线程只能够被启动一次。其实之后我们就会明白了，一个线程就像一个人，调用<code>start</code>就相当于出生了，<code>run</code>方法执行完毕就相当于死亡了。你想要一个线程起死回生这明显是不可能的事情。不过我们可以再生一个线程。（正如你的爸妈觉得你太笨了，是没办法把你塞会娘胎里重新生一次，不过他们可以选择再生一个，蛤蛤蛤）。</p>
+<p>不过现在还是有问题，我们搞不清楚现在是谁输出的啊？其实我们可以通过<code>getName()</code>方法得到线程的名字。我们可以让主线程也参与到输出中来。不过如何获取主线程的名字？我们可以使用<code>Thread.currentThread().getName()</code>方法获取运行当前的代码的代码的线程名字。对于前面的<code>Thread</code>及其子类说，可以直接使用<code>getName()</code>方式。（相当于this.getName())</p>
+<pre><code class="java">public class Demo1 {
+    public static void main(String[] args) {
+        Thread thread = new Mythread();
+        thread.start();
+        Thread thread2 = new Mythread();
+        thread2.start();
+
+        for (int i = 0; i &lt; 100; i++) {
+            if (i % 2 == 0) {
+                System.out.println(Thread.currentThread().getName()+&quot;: &quot;+i);
+            }
+        }
+
+    }
+}
+
+class Mythread extends Thread {
+    @Override
+    public void run() {
+        for (int i = 0; i &lt; 100; i++) {
+            if (i % 2 == 0) {
+                System.out.println(getName()+&quot;: &quot;+i);
+            }
+        }
+    }
+}</code></pre>
+<p>上面其实就是三线程的代码了。观察其中的一段输出结果。</p>
+<pre><code class="java">main: 18
+Thread-1: 38
+Thread-0: 20
+Thread-1: 40
+main: 20
+Thread-1: 42
+Thread-0: 22
+Thread-1: 44</code></pre>
+<p><code>Thread-0</code>和<code>Thread-1</code>是自动给我们直接创建的线程的编号。当然我们也可以通过<code>setName()</code>方式给我们的线程起一个名字。不过这个操作我们必须要在这个线程调用<code>start</code>方法之前使用。给主线程起名字就和上面得到主线程的名字一样，可以使用<code>Thread.currentThraed().setName()</code>。不过除了上面的方法之外，我们还可以直接在构战函数中给定线程的名字。因为我发现<code>Thread</code>类有如下的构造函数。</p>
+<pre><code class="java">Thread(String name) 
+// 分配一个新的 Thread对象。 </code></pre>
+<p>不过构造函数式无法继承的。我们需要在<code>MyThread</code>中写一个<code>Mythread(String name)</code>构造函数，不过空参构造函数也是必须的。</p>
+<pre><code class="java">Mythread(String name) {
+    super(name);
+}
+
+Mythread() {
+    super();
+}</code></pre>
+<p>上面是关于线程名字设置的一些bb，不过现在让我回到输出的内容中来。我们发现这三个线程的输出是有交互的。这足以说明这三个线程是并行的了，也就是这三个线程是同时进行的。</p>
+<blockquote>
+<p>*<em>注意： *</em></p>
+<p>上面我说这三个线程的同时进行的。其实这是一个误解。其实同一个时间上其实还是只有一个线程被执行。因为我们的CPU同一个时间段只可以执行一个操作。那我们为什么说他们是并行的呢？那是因为CPU切换的速度非常快，他可能是执行这个线程一点点时间，然后去执行另外的线程，然后再次切回到这个线程。这个切换的时间非常的短。正是因为时间非常的短，我们才会说这个是可以看成是多线程的。正如我们看的电影，其实就是一张张图片连续切换。有的是一秒六十帧，有的是八十帧，还有的是一百二十帧。正是因为切换的速度非常的快，我们才感觉这个是连续的。如果每秒就放几张 。。。emm，这不是PPT吗？</p>
+</blockquote>
+<h3 id="实现Runnable接口"><a href="#实现Runnable接口" class="headerlink" title="实现Runnable接口"></a>实现<code>Runnable</code>接口</h3><p>上面我们使用的方式是继承的方式来实现创建线程。不过这可能会带来一个比较大的问题。众所周知，Java中的类都是单继承了。如果我们继承了<code>Thread</code>这个类，那么我们就无法继承其他的类。比如上面我们的<code>Mythread</code>如果应该是<code>MyTinythread</code>的子类，但是因为继承<code>Thread</code>就无法继承<code>MyTinythread</code>了。所以说使用继承的方式来实现多线程倒是有点限制。不过Java中接口是没有个数限制的，你要是本事大，你实现一百个接口也没有人管你。所以现在我们需要使用接口的方式来实现多线程的操作。</p>
+<p>因为说实在的，上面我们创建多线程的操作。除了写个<code>run</code>函数，其余的操作都是没有用的操作。我们甚至可以使用匿名内部类的方式来创建一个多线程，比如。</p>
+<pre><code class="java">new Thread(){
+            @Override
+            public void run() {
+                System.out.println(&quot;Hello World&quot;);
+            }
+        }.start();</code></pre>
+<p>经过我们之前的学习，匿名内部类这个玩意是和接口有点儿关系的。这个接口应该是只有一个<code>void run()</code>方法来需要我们实现的。这个接口就是<code>Runnable</code>接口。</p>
+<pre><code class="java">public class Demo2 {
+    public static void main(String[] args) {
+        MyThread myThread = new MyThread();
+        Thread thread = new Thread(myThread);
+        thread.start();
+
+    }
+}
+
+class MyThread implements Runnable {
+
+    @Override
+    public void run() {
+        for (int i = 0; i &lt; 100; i++) {
+            if (i % 2 == 0) {
+                System.out.println(Thread.currentThread().getName() + &quot;: &quot; + i);
+            }
+        }
+    }
+}</code></pre>
+<p>我们可以通过上面的方式来创建一个多线程。</p>
+<p>要注意的是，虽然我们的<code>MyThread</code>类实现了<code>Runnable</code>接口并且实现了其中的<code>run</code>方法。我们是不可以使用<code>myThread.start()</code>方法来启动这个线程的。因为<code>MyThread</code>没有启动线程的能力。而接口也只是一个协议，这只是告诉别人，我实现了一个方法<code>void run()</code>。并没有其他的信息。我们想要启动线程，还是要借助<code>java.lang.Thread</code>类。</p>
+<p>我们发现<code>java.lang.Thread</code>中还是有这样的构造函数。</p>
+<pre><code class="java">Thread(Runnable target) 
+// 分配一个新的 Thread对象。  
+Thread(Runnable target, String name) 
+// 分配一个新的 Thread对象。  </code></pre>
+<p>不过现在问题也来了，我们实现了这个接口，但是我们调用<code>start</code>方法启动的不应该是<code>Thread</code>中的<code>run</code>（上面我们推测应该是一个抽象方法的）吗？和接口中的<code>run</code>又有什么联系呢？我们来看一下源码就好了。</p>
+<pre><code class="java">@Override
+public void run() {
+    if (target != null) {
+        target.run();
+    }
+}</code></pre>
+<p>可以看到如果我们没有传递<code>Runnable</code>接口的话，这个函数确实是什么都不会做。如果我们使用继承的方式的话，这个函数应该是被覆盖了的，当时我们猜测父类中的函数应该是抽象函数就是没有考虑到构造函数中还可以使用<code>Runnable</code>接口。如果使用<code>Runnable</code>接口的话，<code>target</code>就不会是<code>null</code>。然后就会调用接口中的<code>run</code>方法。</p>
+<p>下面我们继续来探讨一下上面谈过的问题。</p>
+<p>第一个设置线程的名字。可以通过上面的第二个构造函数来传递名字参数。（此时不需要我们写其他的构造函数了）。不过也可以通过在调用<code>start</code>方法前，使用<code>thread.setName()</code>的方式。</p>
+<p>第二个获取线程的名字。依旧可以使用<code>getName()</code>的方式。不过需要注意的是，在<code>MyThread</code>中，我们不可以使用<code>getName()</code>的方式来获取线程的名字了。因为此时这个类已经不是<code>Thread</code>的子类，也不存在<code>getName()</code>这个方法了。如果在这个类中，我们需要使用像获取主线程的名字那样的形式<code>Thread.currentThread().getName()</code>的方式。</p>
+<p>第三个就是如果我们此时还想要开始一个同样的线程应该如何？继续new一个<code>MyThread</code>??当然不是，我们说过线程有生有死，不能起死回生。但是<code>MyThread</code>并不是一个线程。我们想要重新创建一个线程的话，只需要new一个<code>Thread</code>，然后继续将<code>MyThread</code>作为一个<code>Runnable</code>参数传递出去就行了。</p>
+<pre><code class="java">public class Demo2 {
+    public static void main(String[] args) {
+        MyThread myThread = new MyThread();
+        Thread thread1 = new Thread(myThread);
+        thread1.setName(&quot;线程一&quot;);
+        thread1.start();
+        Thread thread2 = new Thread(myThread);
+        thread2.setName(&quot;线程二&quot;);
+        thread2.start();
+
+        Thread.currentThread().setName(&quot;主线程&quot;);
+
+        for (int i = 0; i &lt; 100; i++) {
+            if (i % 2 == 0) {
+                System.out.println(Thread.currentThread().getName() + &quot;: &quot; + i);
+            }
+        }
+    }
+}
+
+class MyThread implements Runnable {
+
+    @Override
+    public void run() {
+        for (int i = 0; i &lt; 100; i++) {
+            if (i % 2 == 0) {
+                System.out.println(Thread.currentThread().getName() + &quot;: &quot; + i);
+            }
+        }
+    }
+}</code></pre>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面只是简单的介绍了一下两种创建线程的方式，至于其他更加深入的就要等到下次再讲了。</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/WechatPayQr.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2019/10/07/强大的StreamAPI/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/60.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/60.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                强大的StreamAPI</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-  <div class="post-thumb">
-    <a href="/2019/07/18/排序算法（四）希尔排序/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/12.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-18 09:07</div>
-      <a href="/2019/07/18/排序算法（四）希尔排序/" class="post-title">
-        <h3>排序算法（四）希尔排序</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/排序/">排序<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>希尔排序算法的简单介绍和代码实现</p>
-        <div class="post-bottom">
-          <a href="/2019/07/18/排序算法（四）希尔排序/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="sheriby.github.io" class="profile gravatar"><img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
+            </h3>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/17/排序算法（三）插入排序法/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(4).jpg.webp">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-17 22:07</div>
-      <a href="/2019/07/17/排序算法（三）插入排序法/" class="post-title">
-        <h3>排序算法（三）插入排序法</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/排序/">排序<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>插入排序算法的简单介绍和代码实现</p>
-        <div class="post-bottom">
-          <a href="/2019/07/17/排序算法（三）插入排序法/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/17/排序算法（二）选择排序法/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(7).jpg.webp">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-17 20:07</div>
-      <a href="/2019/07/17/排序算法（二）选择排序法/" class="post-title">
-        <h3>排序算法（二）选择排序法</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/排序/">排序<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>选择排序算法的简单介绍和代码实现</p>
-        <div class="post-bottom">
-          <a href="/2019/07/17/排序算法（二）选择排序法/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/17/排序算法（一）冒泡排序法/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(5).jpg.webp">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-17 19:07</div>
-      <a href="/2019/07/17/排序算法（一）冒泡排序法/" class="post-title">
-        <h3>排序算法(一） 冒泡排序法</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/排序/">排序<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>冒泡排序算法的简单介绍和代码实现</p>
-        <div class="post-bottom">
-          <a href="/2019/07/17/排序算法（一）冒泡排序法/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/17/利用赫夫曼编码来压缩数据/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/18.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-17 16:07</div>
-      <a href="/2019/07/17/利用赫夫曼编码来压缩数据/" class="post-title">
-        <h3>利用赫夫曼编码来压缩数据</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2019/07/17/利用赫夫曼编码来压缩数据/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/17/MarkDown的基本使用/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/16.jpeg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-17 14:07</div>
-      <a href="/2019/07/17/MarkDown的基本使用/" class="post-title">
-        <h3>MarkDown的基本使用</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2019/07/17/MarkDown的基本使用/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/17/第一个博客HelloWorld/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/15.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-17 13:07</div>
-      <a href="/2019/07/17/第一个博客HelloWorld/" class="post-title">
-        <h3>第一个博客 HelloWorld</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2019/07/17/第一个博客HelloWorld/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/17/hello-world/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/18.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-17 13:07</div>
-      <a href="/2019/07/17/hello-world/" class="post-title">
-        <h3>Hello World</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2019/07/17/hello-world/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2018/12/12/Hexo-Theme-Sakura/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://static.2heng.xin/wp-content/uploads//2019/02/wallhaven-672007-1-1024x576.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2018-12-12 22:12</div>
-      <a href="/2018/12/12/Hexo-Theme-Sakura/" class="post-title">
-        <h3>Hexo-Theme-Sakura</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/web/">web<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>hexo-sakura主题使用教程</p>
-        <div class="post-bottom">
-          <a href="/2018/12/12/Hexo-Theme-Sakura/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-
-
-    </main>
-      <!-- 首页默认取最最新文章集 -->
-    <!-- 
-      <nav class="navigator">
-        
-        <a class="extend prev" rel="prev" href="/page/4/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
-      </nav>
-     -->
-  </div>
-  
+        <hr>
+        <p><i class="iconfont icon-write"></i>一枚小菜鸡</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
 
     </div>    
     <div class="ins-search">

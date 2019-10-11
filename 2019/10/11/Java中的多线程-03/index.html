@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Java中的IO-04 | Sher的小博客</title>
+  <title itemprop="name">Java中的多线程-03 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/45.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/45.png">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/65.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/65.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Java中的IO-04</h1>
+      Java中的多线程-03</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-9-25<span class="bull">
+        2019-10-11<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,107 +376,144 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Java中的IO-04"><a href="#Java中的IO-04" class="headerlink" title="Java中的IO-04"></a>Java中的IO-04</h1><h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>之前已经介绍过很多的IO流了。比如四大抽象流<code>InputStream</code>，<code>OutputStream</code>，<code>Reader</code>,<code>Writer</code>。前面的两个是<strong>字节流</strong>，后面的两个是<strong>字符流</strong>。所谓的字节流与字符流之间的最大的区别就是，<strong>字节流是写给计算机看的，而字符流写写给我们人看的。</strong>Java当中所有的IO流基本上都继承于这个四大抽象流，而且基本上都以他们结尾。之前还说过一个特殊的流<code>OutputStreamWriter</code>，<code>InputStreamReader</code>。这两个流却是有点儿特殊，他们的前面是字节流，后面却是字符流。之前我们说他是处理字符相关的流，不过实际上他是<strong>将字节流转换成字符流的特殊流</strong>。因而我们可以指定编码(字节流转换成为字符流的一种方式)来进行字节到字符的转换。如果我们要处理一些字符文件的话，之前学的<code>FileReader</code>，<code>FileWriter</code>无疑是一个最合适的选择。如果要是处理一些字节文件比如图片或者视频什么的，我们需要使用字节流<code>FileInputStream</code>，<code>FileOutputStream</code>。不过单独使用这些流的话，效率可能是一个问题。所以缓冲区是必须的，Java IO 中给我们提供了<strong>缓冲的包装流</strong>。<code>BufferedInputStream</code>,<code>BufferedOutputStream</code>,<code>BufferedReader</code>,<code>BufferedWriter</code>。这四个流是对前面的四个基本的抽象流的包装，如果不是什么特殊情况的话，我们可以每次都加上这个缓冲层。</p>
-<h2 id="ByteArrayInputStream-ByteArrayOutputStream"><a href="#ByteArrayInputStream-ByteArrayOutputStream" class="headerlink" title="ByteArrayInputStream, ByteArrayOutputStream"></a>ByteArrayInputStream, ByteArrayOutputStream</h2><p>字节流我们只是介绍了一种，也就是从文件中读取字节。不过并不是所有的情况下我们都要从文件中读取字节的。比如说我们获取一个字节数组，我们想使用流来处理一下这个字节数组，好像我们现在学过的流中没有这样的功能。</p>
-<p>于是现在我们引入了处理数组的新的流，<code>ByteArrayInputStream</code>和 <code>ByteArrayOutputStream</code>。</p>
-<p>下面就是我们正常的官方文档的学习环节。</p>
-<pre><code class="java">java.lang.Object 
-    java.io.InputStream 
-        java.io.ByteArrayInputStream </code></pre>
-<pre><code class="java">public class ByteArrayInputStream
-extends InputStream</code></pre>
-<blockquote>
-<ul>
-<li>A <code>ByteArrayInputStream</code>包含一个内部缓冲区，其中包含可以从流中读取的字节。内部计数器跟踪<code>read</code>方法要提供的下一个字节。</li>
-<li>关闭<code>ByteArrayInputStream</code>没有任何效果。  在关闭流之后，可以调用此类中的方法，而不生成<code>IOException</code> 。 </li>
-</ul>
-</blockquote>
-<pre><code class="java">ByteArrayInputStream(byte[] buf) 
-// 创建一个 ByteArrayInputStream ，使其使用 buf作为其缓冲区数组。  
-ByteArrayInputStream(byte[] buf, int offset, int length) 
-// 创建 ByteArrayInputStream使用 buf作为其缓冲器阵列。  </code></pre>
-<pre><code class="java">int available() 
-// 返回可从此输入流读取（或跳过）的剩余字节数。  
-void close() 
-// 关闭 ByteArrayInputStream没有任何效果。  
-void mark(int readAheadLimit) 
-// 设置流中当前标记的位置。  
-boolean markSupported() 
-// 测试 InputStream是否支持标记/复位。  
-int read() 
-// 从该输入流读取下一个数据字节。  
-int read(byte[] b, int off, int len) 
-// 将 len字节的数据读入此输入流中的字节数组。  
-void reset() 
-// 将缓冲区重置为标记位置。  
-long skip(long n) 
-// 从此输入流跳过 n个字节的输入。  </code></pre>
-<p>其实上面的这些方法，和这些属性都是可以一眼就看懂的，和其他的流是没什么区别的。</p>
-<p>看一下官方文档的第一点，我们可以知道使用<code>ByteArrayInputStream</code>内部有一个缓冲区，那是否可以使用<code>BufferedInputStream</code>来包装呢？这个肯定是可以用的，毕竟这个也是<code>InputStream</code>的子类吖。</p>
-<p>第二点是关于这个流的关闭的，官方文档告诉我们，这个流的关闭是不会做任何事情的，也就是说我们可以选择不关闭。但是为了IO流中操作的有机的统一和规范。虽然关闭没有用，我们还是推荐来关闭一下子的。</p>
-<h3 id="代码举例"><a href="#代码举例" class="headerlink" title="代码举例"></a>代码举例</h3><pre><code class="java">public class ByteArrayInputStreamDemo {
+          <h1 id="Java中的多线程-03"><a href="#Java中的多线程-03" class="headerlink" title="Java中的多线程-03"></a>Java中的多线程-03</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面说到了多线程之间同步的问题了。不过使用的例子确实几个线程输出数字，不是非常的形象。这里我们可以将情景改一下，改成火车站几个不同的窗口进行售票。如果不同的窗口售出同一张票或者说售出不存在的票问题就大了。其实代码和之前的还是一样的，只不过多加了一个情景罢了。</p>
+<h2 id="买票"><a href="#买票" class="headerlink" title="买票"></a>买票</h2><p>经过情景的变化，我将代码也进行了修改。</p>
+<pre><code class="java">public class Demo3 {
     public static void main(String[] args) {
-        byte[] b = &quot;sher is a wonderful boy!&quot;.getBytes();
-        ByteArrayInputStream bais = new ByteArrayInputStream(b);
-        StringBuilder sb = new StringBuilder();
-        int temp = 0;
-        while ((temp = bais.read()) != -1){
-            sb.append((char) temp);
-        }
-        System.out.println(sb.toString());
+        Client client = new Client();
+        Thread thread1 = new Thread(client, &quot;售票窗口一&quot;);
+        Thread thread2 = new Thread(client, &quot;售票窗口二&quot;);
+        Thread thread3 = new Thread(client, &quot;售票窗口三&quot;);
+
+        thread1.start();
+        thread2.start();
+        thread3.start();
     }
-}</code></pre>
-<p>其实上面的我的用法不没有是把这个作为一个IO流来使用，所以也没有使用IO流的<code>try catch finally</code>的标准操作。而且这个流也是不会抛出<code>IOException</code>的。</p>
-<p>下面随便写一个有关<code>ByteArrayOutputStream</code>的代码举例</p>
-<pre><code class="java">public class ByteArrayOutputStreamDemo {
-    public static void main(String[] args) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        while (baos.size() &lt;= 10){
+}
+
+class Client implements Runnable {
+
+    private int ticket = 100;
+
+    @Override
+    public void run() {
+        while (ticket &gt; 0) {
             try {
-                baos.write(System.in.read());
-            } catch (IOException e) {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            System.out.println(Thread.currentThread().getName() + &quot;: &quot; + ticket);
+            ticket--;
         }
-        byte[] b = baos.toByteArray();
-        System.out.println(new String(b));
-
     }
 }</code></pre>
-<p>这里也没有使用标准的IO流操作方式，毕竟这个流是有点儿特殊了。</p>
-<h2 id="CharArrayWriter-CharArrayReader"><a href="#CharArrayWriter-CharArrayReader" class="headerlink" title="CharArrayWriter, CharArrayReader"></a>CharArrayWriter, CharArrayReader</h2><p>和上面的字节数组类似的，字符流中也有相应的流是和字符数组相关的。其实他们之间的道理是一样的，这里就不再赘述了。</p>
-<pre><code class="java">public class CharArrayWriterDemo {
-    public static void main(String[] args) {
-        char[] ch = &quot;sher is the best boy!&quot;.toCharArray();
-        CharArrayWriter c = new CharArrayWriter();
-
-        try {
-            c.write(ch);
-            c.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(c.toString());
-    }
+<p>其中上面的<code>Thread.sleep</code>是为了模拟网络的延迟，只一次我将网络的延迟降低了一点点。我们发现有很多的票没有卖出去，还有很多的票卖出去了好多张。关键是有点窗口还卖出去的负数的票。这个问题就很大了。</p>
+<p>前面我们也说过了这是由于线程之间不同步导致的，我们需要采取一定的手段使得线程同步。最简单的方式就是将线程之间产生纠葛的地方转为单线程来执行。Java中提供了这样的一个工具。</p>
+<h2 id="线程同步机制"><a href="#线程同步机制" class="headerlink" title="线程同步机制"></a>线程同步机制</h2><p>我们可以通过<code>synchronized</code>关键字，添加线程同步代码块。格式为</p>
+<pre><code class="java">synchronized(同步监视器){
+    ...// 需要同步的内容
 }</code></pre>
-<pre><code class="java">public class CharArrayReaderDemo {
-    public static void main(String[] args) {
-        char [] ch = &quot;abcdefg&quot;.toCharArray();
-        CharArrayReader char1 = new CharArrayReader(ch);
-        StringBuilder sb = new StringBuilder();
-        int temp = 0;
-        while (true){
-            try {
-                if (((temp = char1.read()) == -1)) break;
-            } catch (IOException e) {
-                e.printStackTrace();
+<p>通过上面的格式就可以构建出一个同步代码块，此时代码块中只能是单线程执行。不过这是如何实现的呢？那个同步监视器又是什么鬼？</p>
+<p>别看同步监视器这个名字多么的高大上。其实任何的对象都可以作为同步监视器来使用。线程想要进入同步代码块的时候将取得同步监视器。此时外面的想要进入代码块的线程因为没有取得同步监视器所以会在代码块的外面进行等待。这也就是我们之前说的，等待锁同步的时候，线程会进入阻塞状态。这个锁就是通常意义上面的同步监视器。当线程离开同步代码块的时候将返回同步监视器。这样其他的线程就可以进入代码块。因为一次只能进入一个线程的缘故，同步代码块中的内容可以认为是单线程执行的。</p>
+<p>不过需要注意的是，同步监视器必须要是多个线程唯一的。如果每个线程的锁都是一样的，那么就起不到同步线程的作用了。在上面的例子中，我们可以使用如下的方式。</p>
+<pre><code class="java">class Client implements Runnable {
+
+    private int mTicket = 100;
+    private final Object mObject = new Object();
+
+    @Override
+    public synchronized void run() {
+        synchronized (mObject) {
+            while (mTicket &gt; 0) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Thread.yield();
+                System.out.println(Thread.currentThread().getName() + &quot;: &quot; + mTicket);
+                mTicket--;
             }
-            sb.append((char)temp);
         }
-        System.out.println(sb.toString());
     }
 }</code></pre>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>其实这些流都不是常见的流，基本上我们是用不到的。不过稍微做一下了解也是好的呢、</p>
+<p>这里使用的<code>private final Object mObject</code>就是一个同步监视器，而且是满足同步的需求的。所有的线程都是共用的这一个同步监视器。不过如果是使用继承<code>Thread</code>方式创建的线程要使用<code>private static final Object mObject</code>的方式，原理和上面的<code>mTicket</code>是相似的。</p>
+<p>不过同步监视器要求是对象就可以。我们可以使用一个<code>Dog</code>类的对象作为同步监视器。不过有一个最方便的对象就是<code>this</code>，因为this对象也是唯一的。不过并不是所有的时候都可以使用<code>this</code>作为同步监视器的。比如使用继承<code>Thread</code>方式创建线程的话，每一个线程都有自己单独的一个<code>this</code>，此时就不可以把<code>this</code>作为同步监视器。不过，此时也有一个特别的对象可以作为同步监视器。在Java中，类其实也可以说是一个对象。每一个类都对应了一个<code>Class</code>对象，就是<code>类名.class</code>，这个对象是类唯一的，所以说是可以作为同步监视器的。关于这个类的具体的知识要等到之后谈到反射的时候才能够详细的说说了。</p>
+<pre><code class="java">class Mythread extends Thread {
+
+    Mythread(String name) {
+        super(name);
+    }
+
+    Mythread() {
+        super();
+    }
+
+    private static int num = 1;
+
+    @Override
+    public void run() {
+        synchronized (Mythread.class) {
+            while (num &lt;= 100) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(getName()+&quot;: &quot;+num);
+                num += 2;
+            }
+        }
+    }
+}</code></pre>
+<p>上面就是使用反射对象作为同步监视器。</p>
+<p>使用同步监视器虽然是解决了线程的同步问题，但是由于锁的存在，多线程之间会存在阻塞，所以被锁住的代码的执行效率甚至是还不然单线程的。所以说我们要尽量的减少同步代码块的大小。不过是要在保证数据的安全的情况下的。比如上<code>Client</code>类中，我们使用同步代码块将整个方法都包住了。那么可不可以少包那个while呢？比较那么地方也没有对数据进行操作。我稍微的实验了一下，结果是没有任何的问题的。但是分析一下。加入说现在还有最后的一张票。一个线程已经进入同步代码块，但是还没有进行<code>num--</code>的操作，此时另一个线程也进入了while，虽然进不了同步代码块，但是等到上面的线程走了，也会进入同步代码块中，所以说这样是不安全的。不过这个代码块也不是越大越好，太大了是完全没有多线程的效率的。我们要保证一个合适的位置。比如我们之前说过的单例模式。其中使用二次判断的方法，既安全也提高了多线程的效率。这个方法是多线程中经常会碰到的。</p>
+<p>除了同步代码块之外，还可以使用同步方法。其实所谓的同步方法和同步代码块都是一样的。只要是方法内的所有的内容都是需要同步的话，我们就可以将这个方法声明为同步方法。</p>
+<pre><code class="java">public synchronized void method(){
+    ...// method content
+}
+
+public static synchronized void method{
+    ...// method content
+}</code></pre>
+<p>其实也就是类型之前加了一个<code>synchronized</code>关键词。不过给静态方法加锁和给非静态方法加锁还有点儿不一样。给非静态方法加锁相当于这样。</p>
+<pre><code class="java">public void method(){
+    synchronized(this){
+        ...// methon content
+    }
+}</code></pre>
+<p>而给静态方法加锁相当于</p>
+<pre><code class="java">public static void method(){
+    synchronized(ClassName.class){
+        ...// methond content
+    }
+}</code></pre>
+<p>一个加的是对象锁，一个加的是类锁，这点需要注意一下。</p>
+<h2 id="释放锁"><a href="#释放锁" class="headerlink" title="释放锁"></a>释放锁</h2><p>线程取得锁之后什么时候会释放锁，这也是一个需要清楚的问题，正如我们需要明白线程的生命周期一样。</p>
+<p>当线程在同步代码块或者方法中遇到了错误或异常，或者是已经执行完毕之后，会释放持有的锁。不过当线程在同步代码块中执行<code>wait</code>方法的时候也会释放持有的锁，当前线程会暂停，等待其他的线程调用<code>notify</code>方法来唤醒这个线程。这两个方法等到之后再说吧。</p>
+<p>更多的情况是不会释放锁的。比如说调用<code>sleep</code>方法或者是调用<code>yield</code>方法，线程都只是暂停下来，但是不会将手中的锁释放。还有一点就是当其他的线程使用之前我们不推荐使用的方法<code>suspend</code>将线程挂起之后也是不会释放锁的，线程会暂停执行，知道调用了<code>resume</code>方法。</p>
+<h2 id="JDK5之后的锁"><a href="#JDK5之后的锁" class="headerlink" title="JDK5之后的锁"></a>JDK5之后的锁</h2><p>从JDK 5.0开始，Java提供了更强大的线程同步机制——通过显式定义同 步锁对象来实现同步。同步锁使用Lock对象充当。</p>
+<p><code>java.util.concurrent.locks.Lock</code>接口是控制多个线程对共享资源进行访问的 工具。锁提供了对共享资源的独占访问，每次只能有一个线程对Lock对象 加锁，线程开始访问共享资源之前应先获得Lock对象</p>
+<p><code>ReentrantLock</code> 类实现了 Lock ，它拥有与 synchronized 相同的并发性和 内存语义，在实现线程安全的控制中，比较常用的是``ReentrantLock`，可以 显式加锁、释放锁</p>
+<p>使用的方式如下。</p>
+<pre><code class="java">class A implements Runnable {
+
+    private final ReentrantLock mLock = new ReentrantLock();
+    private int num = 100;
+
+    @Override
+    public void run() {
+        mLock.lock();
+        while (num &gt; 0) {
+            System.out.println(num);
+            num--;
+        }
+        mLock.unlock();
+    }
+}</code></pre>
+<p>这种方式相比于<code>synchronized</code>的就是要手动的开锁和关锁。使用这种方式的话，JVM会使用更少的时间来调度各个线程，所以说这种方式有更好的性能。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面简单的谈及了Java中线程同步的方式，还有线程同步中需要注意的问题。不过线程同步这一块还有一个比较重要的问题，那就是死锁的问题还没有说。</p>
 
         </div>
         <!-- .entry-content -->
@@ -504,36 +541,19 @@ long skip(long n)
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/09/25/Java中的IO-05/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/46.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/46.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                Java中的IO-05</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/09/24/Java中的IO-03/" rel="next">
+            <a href="/2019/10/10/Java中的多线程-02/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/62.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/62.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                Java中的IO-03</h3>
+                Java中的多线程-02</h3>
                 <hr>
               </div>
             </a>

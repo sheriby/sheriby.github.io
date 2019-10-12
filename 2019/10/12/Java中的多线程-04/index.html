@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Apache Commons IO简介 | Sher的小博客</title>
+  <title itemprop="name">Java中的多线程-04 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/66.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/66.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Apache Commons IO简介</h1>
+      Java中的多线程-04</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-9-26<span class="bull">
+        2019-10-12<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,182 +376,168 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Apache-Commons-IO简介"><a href="#Apache-Commons-IO简介" class="headerlink" title="Apache Commons IO简介"></a>Apache Commons IO简介</h1><hr>
-<p>之前一直学的都是Java中IO的知识，使用起来基本上都是那个一个样，说实话我确实是有点儿感到厌倦了。于是世界上著名的开源组织阿帕奇(Apache)将Java中的IO进行了封装写了Commons IO这个玩意。这个是需要从阿帕奇的光网上面去下载的，因为这个并不是jdk自带的库。下载完之后还自带了源码以及官方文档，不过都是英文的，，这就非常考验我的能力了。</p>
-<p>先看一下这个Commons IO 由哪些东西组成。</p>
-<pre><code class="java">org.apache.commons.io    
-// This package defines utility classes for working with streams, readers, writers and files.
-org.apache.commons.io.comparator    
-// This package provides various Comparator implementations for Files.
-org.apache.commons.io.filefilter    
-// This package defines an interface (IOFileFilter) that combines both FileFilter and FilenameFilter.
-org.apache.commons.io.input    
-// This package provides implementations of input classes, such as InputStream and Reader.
-org.apache.commons.io.monitor    
-// This package provides a component for monitoring file system events (directory and file create, update and delete events).
-org.apache.commons.io.output    
-// This package provides implementations of output classes, such as OutputStream and Writer.
-org.apache.commons.io.serialization    
-// This package provides a framework for controlling the deserialization of classes.</code></pre>
-<p>上面的这所只言片语，说实话我是什么都看不懂的，如果不是对Commons IO的体系有足够的了解，是肯定看不懂的。就像给我们一开始看那个Java io的体系图，我们也肯定是看的一脸懵逼的吖~~</p>
-<p>而且上面的并不是一些类而已，只是一些包，每个包中还有非常多的类，每个类中又有非常多的方法。所以说不可能一个一个去学习的，只能寻找自己需要的去学，这里就看一下别人的博客,毕竟我对这个玩意是一点也不了解。</p>
-<p><a href="https://blog.csdn.net/langgufu314/article/details/84721816" target="_blank" rel="noopener"><strong>Apache Commons IO入门教程</strong></a></p>
-<p>这个博客写了一点，但是我感觉写的并不怎么样，看了也没什么收获。下面我就直接上一些这个类的常用方法的代码吧。</p>
-<h2 id="文件或者文件夹的大小"><a href="#文件或者文件夹的大小" class="headerlink" title="文件或者文件夹的大小"></a>文件或者文件夹的大小</h2><pre><code class="java">public class TestCommonIo {
-    public static void main(String[] args) {
-        long len1 = FileUtils.sizeOf(new File(&quot;test&quot;));
-        long len2 = FileUtils.sizeOf(new File(&quot;./Exercise/src&quot;));
-        System.out.println(len1);
-        System.out.println(len2);
-    }
-}</code></pre>
-<p>上面的第一个就是文件的大小，第二个是文件夹的大小，使用的方法是一样的。对于计算一个文件的大小，这还是非常简单的，使用length()方法就可以了，不过计算文件夹的代码确实要进行递归的操作，可以说要考虑的东西很多，而且也很繁琐。</p>
-<p>我们可以看一下这个方法的源码</p>
-<pre><code class="java">public static long sizeOf(final File file) {
+          <h1 id="Java中的多线程-04"><a href="#Java中的多线程-04" class="headerlink" title="Java中的多线程-04"></a>Java中的多线程-04</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上面我们说到了线程同步的时候需要注意的事项了。学会了使用三种方式——使用<code>synchronized</code>同步代码块，同步代码方法，以后使用jdk5新增的<code>ReentrantLock</code>的方式，手动为同步代码块加锁和解锁。我们还知道了同步代码块的范围是需要注意的。太大了的话，效率会非常的低。如果范围太小了的话，又不能保证多线程的安全性。最后我们也提到了单例模式中的双重验证的方式，不过没有细讲。这里就先说说这个。</p>
+<h2 id="单例模式中的双重验证"><a href="#单例模式中的双重验证" class="headerlink" title="单例模式中的双重验证"></a>单例模式中的双重验证</h2><pre><code class="java">class Singleton02{
+    private static volatile Singleton02 INSTANCE;
 
-    if (!file.exists()) {
-        final String message = file + &quot; does not exist&quot;;
-        throw new IllegalArgumentException(message);
+    private Singleton02() {
     }
 
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file); // private method; expects directory
-    } else {
-        return file.length();
-    }
-
-}</code></pre>
-<p>可以看到源码中专门写了一个函数来计算文件夹的大小</p>
-<pre><code class="java">private static long sizeOfDirectory0(final File directory) {
-    final File[] files = directory.listFiles();
-    if (files == null) {  // null if security restricted
-        return 0L;
-    }
-    long size = 0;
-
-    for (final File file : files) {
-        try {
-            if (!isSymlink(file)) {
-                size += sizeOf0(file); // internal method
-                if (size &lt; 0) {
-                    break;
+    public static Singleton02 getInstance() {
+        if (INSTANCE == null) {
+            // 给以下的代码快加上线程锁，只有一个线程可以进入到这个代码块
+            synchronized (Singleton02.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new Singleton02();
                 }
             }
-        } catch (final IOException ioe) {
-            // Ignore exceptions caught when asking if a File is a symlink.
+        }
+        return INSTANCE;
+    }
+}</code></pre>
+<p>这里如果我们使用得是这样的锁.</p>
+<pre><code class="java">public static Singleton02 getInstance() {
+        // 给以下的代码快加上线程锁，只有一个线程可以进入到这个代码块
+    synchronized (Singleton02.class) {
+        if (INSTANCE == null) {
+            INSTANCE = new Singleton02();
         }
     }
+    return INSTANCE;
+}</code></pre>
+<p>这个是绝对可以保证线程安全的。但是后面的线程并不会去修改内容，只是读取内容，所以说后面的线程就没有必要在锁外去等待，这种锁的效率是非常的低的。</p>
+<pre><code class="java">    public static Singleton02 getInstance() {
+        if (INSTANCE == null) {
+            synchronized (Singleton02.class) {
+                INSTANCE = new Singleton02();
+            }
+        }
+        return INSTANCE;
+    }</code></pre>
+<p>如果使用的是这样的锁，这就是完全错误的，很容易看出来可能有多个线程都进入<code>if</code>中了，从而也就会创建出了多个线程，这就不是所谓的单例模式了。</p>
+<p>像上面的这种使用双重验证的方式来增加多线程的效率的方法其实是非常的好用的。</p>
+<h2 id="线程死锁"><a href="#线程死锁" class="headerlink" title="线程死锁"></a>线程死锁</h2><p>线程的同步虽然很好用，但是不能瞎用。随意的嵌套锁可能会导致线程的死锁。所谓的死锁可以用筷子来举例子。两个人需要吃饭，但是只有一双筷子。按道理来说应该是一个一个来吃。但是一个人获取了筷子A，另一个人获取了筷子B。此时他们都在那儿等待另一个放开筷子，从而自己可以得到两个筷子。这种情况下两种线程都会进入阻塞状态。程序将会失去相应，但是此时不会报任何的错误，也不会抛出任何的异常。</p>
+<p>比如如下的代码中就会出现死锁的情况。</p>
+<pre><code class="java">public class Demo5 {
+    private static final Object lock1 = new Object();
+    private static final Object lock2 = new Object();
 
-    return size;
+    public static void main(String[] args) {
+        new Thread(()-&gt;{
+            synchronized (lock1) {
+                System.out.println(&quot;thread1 get lock1&quot;);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (lock2) {
+                    System.out.println(&quot;thread1 get lock2&quot;);
+                }
+            }
+            System.out.println(&quot;thread1 end&quot;);
+        }).start();
+
+        new Thread(() -&gt;{
+            synchronized (lock2) {
+                System.out.println(&quot;thread2 get lock2&quot;);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (lock1) {
+                    System.out.println(&quot;thread2 get lock1&quot;);
+                }
+            }
+            System.out.println(&quot;thread2 end&quot;);
+        }).start();
+    }
+}</code></pre>
+<p>我使用匿名内部类的形式创建了两个线程，其中还使用了<code>lambda</code>表达式。可以清晰的看到两个线程都存在锁的嵌套的问题。第一个线程是先去获取第一个锁然后获取第二个锁才能做完事情。第二个线程恰好是相反的。当他们都获取一个锁的时候，都想要获取另一个锁，导致了线程的阻塞。这就是多线程中的死锁的问题。死锁问题的原因其实非常的简单就是锁的嵌套。因此在使用的同步的时候我们要尽量不要去使用锁的嵌套。使用锁嵌套进可能会导致死锁问题，而且最为关键的是死锁问题不是每次都能表现出来的。比如说上面的代码中如果我没有使用<code>sleep</code>的话，绝大多数的情况下都是正常运行的。而且基本上都是线程一先结束然后线程二结束。</p>
+<p>解决死锁问题的答案很简单就是将嵌套的锁分开。</p>
+<pre><code class="java">public class Demo5 {
+    private static final Object lock1 = new Object();
+    private static final Object lock2 = new Object();
+
+    public static void main(String[] args) {
+        new Thread(() -&gt; {
+            synchronized (lock1) {
+                System.out.println(&quot;thread1 get lock1&quot;);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            synchronized (lock2) {
+                System.out.println(&quot;thread1 get lock2&quot;);
+            }
+            System.out.println(&quot;thread1 end&quot;);
+        }).start();
+
+        new Thread(() -&gt; {
+            synchronized (lock2) {
+                System.out.println(&quot;thread2 get lock2&quot;);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            synchronized (lock1) {
+                System.out.println(&quot;thread2 get lock1&quot;);
+            }
+            System.out.println(&quot;thread2 end&quot;);
+        }).start();
+    }
+}
+</code></pre>
+<p>不过问题就是在于，我们是否可以清楚的知道我们写的代码是否会出现死锁的问题。比如说如下的代码。</p>
+<pre><code class="java">public class Demo6 {
+    public static void main(String[] args) {
+        CA a = new CA();
+        CB b = new CB();
+        new Thread(() -&gt; {
+            a.foo(b);
+        }).start();
+        b.bar(a);
+    }
 }
 
-private static long sizeOf0(final File file) {
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file);
-    } else {
-        return file.length(); // will be 0 if file does not exist
-    }
-}</code></pre>
-<p>简单的看一下确实也是使用递归的方法来计算文件夹的大小的。</p>
-<h2 id="列出文件"><a href="#列出文件" class="headerlink" title="列出文件"></a>列出文件</h2><pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, null);
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
-}</code></pre>
-<p><code>listFiles</code>函数的第一个参数是待列的文件夹，第二个参数是文件过滤器（这里使用的是非空过滤器），第三个参数是文件夹过滤器（使用null就是表示不列出文件夹）</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, DirectoryFileFilter.INSTANCE);
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
-}</code></pre>
-<p>使用这个方法就可以列出所有的文件，包括文件夹以及文件夹里面的内容。还有一种常用的文件过滤器是后缀名过滤。比如说我只想要后缀为Java的非空的文件，可以这样写。</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), 
-            FileFilterUtils.and(new SuffixFileFilter(&quot;java&quot;), EmptyFileFilter.NOT_EMPTY), 
-            DirectoryFileFilter.INSTANCE);
-
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
-}</code></pre>
-<p>可以使用<code>FileFilterUtils.and</code>,<code>FileFilterUtils.or</code>或者<code>FileFilterUtils.or</code>来组织过滤器之间的逻辑，比如上面的就是以java为后缀名的并且非空的文件。</p>
-<h2 id="读取内容"><a href="#读取内容" class="headerlink" title="读取内容"></a>读取内容</h2><pre><code class="java">static void test3() {
-    try {
-        String msg = FileUtils.readFileToString(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        System.out.println(msg);
-
-        byte[] b = FileUtils.readFileToByteArray(new File(&quot;hony&quot;));
-        System.out.println(new String(b, StandardCharsets.UTF_8));
-
-        List&lt;String&gt; lines = FileUtils.readLines(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        for (String line : lines) {
-            System.out.println(line);
+class CA {
+    public synchronized void foo(CB b) {
+        System.out.println(&quot;CA.foo&quot;);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        b.last();
+    }
 
-        LineIterator lineIterator = FileUtils.lineIterator(new File(&quot;hony&quot;), &quot;UTF-8&quot;);
-        while (lineIterator.hasNext()) {
-            System.out.println(lineIterator.nextLine());
+    public synchronized void last() {
+        System.out.println(&quot;CA.last&quot;);
+    }
+}
+
+class CB {
+    public synchronized void bar(CA a) {
+        System.out.println(&quot;CB.bar&quot;);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-    } catch (IOException e) {
-        e.printStackTrace();
+        a.last();
+    }
+
+    public synchronized void last() {
+        System.out.println(&quot;CB.last&quot;);
     }
 }</code></pre>
-<p>读取文件中的内容主要有上面的四种方式，无论哪一种都是比我们使用原始的Java IO流方便多了。</p>
-<p>第一种是直接将文件中的内容读取到一个String对象中。第二种则是读取到字节数组中。</p>
-<p>第三种是将文件的每一行都放入到一个List中。第四种方式倒是有点儿特殊，是使用迭代器的方式进行遍历文件的。</p>
-<h2 id="写出内容"><a href="#写出内容" class="headerlink" title="写出内容"></a>写出内容</h2><pre><code class="java">static void test4() {
-    try {
-        FileUtils.write(new File(&quot;happy.txt&quot;),
-                &quot;I am happy1!&quot;, StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy2!&quot;, StandardCharsets.UTF_8, true);
-        FileUtils.writeByteArrayToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy3!&quot;.getBytes(StandardCharsets.UTF_8), true);
-
-        List&lt;String&gt; datas = new ArrayList&lt;&gt;();
-        datas.add(&quot;sher&quot;);
-        datas.add(&quot;hony&quot;);
-        datas.add(&quot;sherhony&quot;);
-
-        FileUtils.writeLines(new File(&quot;happy.txt&quot;),
-                datas, &quot;\r\n&quot;, true);
-
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}</code></pre>
-<p>写出到文件中同样有以上的好几种方式。上面函数的第四个参数都是代表<strong>是否一追加的形式写入</strong>到文件当中，在Java原始流当中也是使用的这种方式。不过下面的<code>FileUtils.writeLines</code>方法的第三个参数不再是编码了，而是分隔符，也就是说写入的这些data之间用什么隔开，这里我是用的是windows下的换行符。</p>
-<h2 id="拷贝"><a href="#拷贝" class="headerlink" title="拷贝"></a>拷贝</h2><p>拷贝包括拷贝文件或者说的是拷贝文件夹，拷贝文件的操作我们已经做过了，但是拷贝文件夹的操作是有点儿复杂，需要递归的操作。不过这个commons io提供给我们一个十分方便地方法。</p>
-<pre><code class="java">static void test5() {
-    try {
-        FileUtils.copyFile(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;Exercise/src/test-copy.jpg&quot;));
-        FileUtils.copyFileToDirectory(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;D:/&quot;));
-        FileUtils.copyDirectory(new File(&quot;Exercise/out&quot;), new File(&quot;Exercise/out-copy&quot;));
-        FileUtils.copyDirectoryToDirectory(new File(&quot;Exercise/out&quot;),
-                new File(&quot;Exercise/src&quot;));
-        String url = &quot;http://i1.hdslb.com/bfs/archive/9cc5e3fcc7d6c48e5a0d8d3dd8bbb6ed11937f89.jpg&quot;;
-        FileUtils.copyURLToFile(new URL(url), new File(&quot;Exercise/src/miaonei.jpg&quot;));
-        String baidu = &quot;http://www.baidu.com&quot;;
-        String wangyi = &quot;http://www.163.com&quot;;
-        String bd = IOUtils.toString(new URL(baidu), StandardCharsets.UTF_8);
-        String wy = IOUtils.toString(new URL(wangyi), &quot;GBK&quot;);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/baidu.txt&quot;), bd,
-                StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/wangyi.txt&quot;), wy,
-                &quot;GBK&quot;);
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}</code></pre>
-<p>上面是拷贝的常见的操作。可以看到这个方法是什么的方便的。不过需要注意的是，从网络流中拷贝东西（也就是下载东西）的时候，如果是文字的话（也就网页的代码），可以使用<code>IOUtils.toString</code>方法，这个方法可以指定字符的编码。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面就是Commons IO中简单的常用的一些操作，不过Commons IO这么强大的库怎么可能就这么一点点功能，只不过其余的功能太过与强大，而且并不是经常用到，所以现在可以不用了解。现在就是简单的看看这个类，知道有这么个玩意就行了。</p>
+<p>虽然上面的代码写的是没有任何的实际的意义的。但是也是可以说明很多的问题的。我们只是在两个类中使用了几个同步方法，不过却意外的发生了死锁的问题。仔细看一下代码其实很容易的看出。两个嵌套的锁就是两个类的<code>this</code>。虽然我们没有写出<code>synchronized</code>代码块的嵌套。但是两个不同类的同步的方法就已经相当于是同步的嵌套了。然后主方法中有两个线程，一个占用了一个<code>this</code>，这样就会导致线程的死锁。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面主要就是说了一个死锁的问题，其实本来要在后面接着写线程通信之间的问题的。但是感觉线程通信这一块应该有蛮多的东西可以吹的，如果接在这个后面应该会蛮长的，那么就下一个里面再写吧。不过这次写的这个确实有点儿少了。</p>
 
         </div>
         <!-- .entry-content -->
@@ -579,36 +565,19 @@ private static long sizeOf0(final File file) {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/09/27/IO应用——文件分割/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                IO应用——文件分割</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/09/26/Java中的IO-06/" rel="next">
+            <a href="/2019/10/11/Java中的多线程-03/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/65.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/65.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                Java中的IO-06</h3>
+                Java中的多线程-03</h3>
                 <hr>
               </div>
             </a>

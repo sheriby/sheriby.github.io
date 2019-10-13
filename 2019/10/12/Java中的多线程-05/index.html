@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Sher的小博客</title>
+  <title itemprop="name">Java中的多线程-05 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,519 +340,267 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 0px;"></div>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/67.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/67.jpg">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      Java中的多线程-05</h1>
+      <p class="entry-census">
+        <span>
+          <a href="sheriby.github.io">
+            <img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true">
+          </a>
+        </span>
+        <span>
+          <a href="sheriby.github.io">Hony Sher</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2019-10-12<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
 <div id="content" class="site-content">
-  
-  <div class="notice" style="margin-top:60px">
-    <i class="iconfont icon-notification">
-    </i>
-    <div class="notice-content">欢迎来带到Sher的小博客！</div>
-  </div>
-  
-  <div class="top-feature-row">
-  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
-  <i class="fa fa-anchor" aria-hidden="true">
-  </i>
-  START:DASH!!</h1>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/theme-sakura/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/sakura.md.png">
-        </div>
-        <div class="info">
-          <h3>Sakura</h3>
-          <p>本站 hexo 主题</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="http://space.bilibili.com/37532334" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/bilibili.jpg">
-        </div>
-        <div class="info">
-          <h3>Bilibili</h3>
-          <p>Sher的b站视频</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/wangshiwu.jpg">
-        </div>
-        <div class="info">
-          <h3>Sher的万事屋</h3>
-          <p>技术服务</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-</div>
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
-      <i class="fa fa-envira" aria-hidden="true"></i>
-      Discovery</h1>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="Java中的多线程-05"><a href="#Java中的多线程-05" class="headerlink" title="Java中的多线程-05"></a>Java中的多线程-05</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本来是想接着上面的那个写的，不过想到每次都写的非常的长也是没什么道理可言的。这次就多拆分一下下。</p>
+<h2 id="线程间的通信"><a href="#线程间的通信" class="headerlink" title="线程间的通信"></a>线程间的通信</h2><p>前面我们已经说了不少的多线程了，但是多个线程之间到底是如何通信呢？这个问题我们之前就提出来了。我们使用多个线程都拥有的实例变量，并且使用了线程同步的机制，使得我们可以使用多个线程一起输出0~100。这算是线程通信的一个方面。但是如果我们需要的是要两个线程一个一个输出该如何做呢？有人说那好办，我让一个线程输出玩之后使用<code>yield</code>方法，放弃他的资源，让另一个线程进入。如此下去不就可以实现多线程轮流输出了嘛。但是我们很明白的是，<code>yield</code>方法虽然会放弃当前线程的资源，但是这并不意味这另一个线程就会抢到执行的机会。放弃资源的线程还是有机会抢到线程的，所以说这个方式是错误的。</p>
+<p>至于如何实现这个功能，就需要新的方法。那就是我们之前说过的方法。<code>wait()</code>与<code>notify()</code>方法。</p>
+<p>下面是有关的方法的说明。</p>
+<pre><code class="java">wait()：
+    // 令当前线程挂起并放弃CPU、同步资源并等待，使别的线程可访问并修改共享资源，
+    // 而当 前线程排队等候其他线程调用notify()或notifyAll()方法唤醒，
+    // 唤醒后等待重新获得对监视器的所有 权后才能继续执行
+
+notify()：
+    // 唤醒正在排队等待同步资源的线程中优先级最高者结束等待
+notifyAll()：
+    // 唤醒正在排队等待资源的所有线程结束等待.</code></pre>
+<blockquote>
+<p><strong>注意：</strong></p>
+<ul>
+<li>注意上面的方法都提到了同步资源这个事。因为这几个方法只有在同步代码块或者说值同步方法中才可以调用。如果不在其中的话，会抛出<code>java.lang.IllegalMonitorStateException</code>。</li>
+<li>和<code>yield</code>，<code>sleep</code>方法不同的是，上面的三个方法是由同步监视器来调用的。而同步监视器可以是任何的对象。这就说明了上面的三个方法肯定是<code>Object</code>中声明的方法。</li>
+</ul>
+</blockquote>
+<p>那么我们回到之前的问题中，如何让两个线程一个接着一个的输出<code>0-100</code>中的所有的数。</p>
+<pre><code class="java">class WaitThread implements Runnable{
+    private int i = 1;
+    private final Object mObject = new Object();
+
+    @Override
+    public void run() {
+        while (true) {
+            synchronized (mObject) {
+                mObject.notify();
+                if (i &lt;= 100) {
+                    System.out.println(Thread.currentThread().getName()+&quot;: &quot;+i);
+                    ++i;
+                } else {
+                    break;
+                }
+                try {
+                    mObject.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}</code></pre>
+<p>这里我们没有使用<code>this</code>作为同步监视器，就是为了更好的说明<code>wait</code>和<code>notify</code>的方法是由同步监视器来调用的。如果是把<code>this</code>作为同步监视器的话，那么我们只需要使用<code>wait()</code>和<code>notify()</code>，可以省略了调用的对象<code>this</code>。</p>
+<p>首先线程一进入了同步代码块，第九行使用了<code>mObject.notify()</code>唤醒一个因为<code>wait()</code>而进入阻塞状态的线程。但是此时没有线程因为<code>wait</code>进入阻塞状态，所以此时改行代码是无效的。等到输出了1之后，使用了<code>mObject.wait()</code>方法，该线程进入了阻塞状态。<strong>注意这个阻塞状态是<code>sleep</code>的阻塞状态是不一样的，此时线程会暂停，但是线程还是会释放同步监视器。</strong>因为线程一释放了同步监视器，线程二得到了同步监视器，进入了同步代码块。此时执行了<code>mObject.notify()</code>，刚才因为使用了<code>wait()</code>方法而进入阻塞状态的线程一被唤醒。但是唤醒之后是不会立马执行的。线程一会等在原地等待得到了锁。等到线程二也执行到了<code>mObject.wait()</code>方法，线程二暂停，线程一得到了锁，继续执行之后的代码。然后重复操作。</p>
+<p>通过上面的操作就可以实现交互输出的功能。不过有一点需要注意的是，使用<code>wait</code>方法之后，线程虽然释放了锁，但是线程还是处于同步代码块中。</p>
+<p>上面我们已经说明了<code>wait</code>和<code>notify</code>方法的使用。还有一个<code>notifyAll</code>方法我们还没有进行说明。其实和名字也是可以简单的的看出了的。<code>notify</code>是从因<code>wait</code>阻塞中的线程中随机取一个唤醒。上面的问题中其实只有一个线程，所以说唤醒的肯定是唤醒另一个线程。<code>notifyAll</code>方法是将所以的因为<code>wait</code>方法而进入阻塞状态的所有的线程。不过需要注意的是，所谓的唤醒并不是直接就执行了，而是进入抢夺锁的线程池中抢夺锁，抢到了锁之后从之前因为<code>wait</code>阻塞的断点处继续执行。</p>
+<h2 id="生产者与消费者"><a href="#生产者与消费者" class="headerlink" title="生产者与消费者"></a>生产者与消费者</h2><blockquote>
+<p>生产者(Productor)将产品交给店员(Clerk)，而消费者(Customer)从店员处 取走产品，店员一次只能持有固定数量的产品(比如:20），如果生产者试图 生产更多的产品，店员会叫生产者停一下，如果店中有空位放产品了再通 知生产者继续生产；如果店中没有产品了，店员会告诉消费者等一下，如 果店中有产品了再通知消费者来取走产品</p>
+</blockquote>
+<p>上面是多线程中的一个经典的例题。这个问题中会出现一下的两个问题。</p>
+<ul>
+<li>生产者比消费者快时，消费者会漏掉一些数据没有取到。 </li>
+<li>消费者比生产者快时，消费者会取相同的数据</li>
+</ul>
+<p>如何解决这个问题，我们就需要使用上面学的线程通信的知识来解决。</p>
+<p>首先是雇员的实现，雇员有从生产者中那儿取得产品，像消费者送产品的职责。</p>
+<pre><code class="java">class Clerk {
+    private int product = 0;
+
+    public synchronized void addProductor() {
+        if (product &gt;= 20) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            product++;
+            System.out.println(&quot;ADD---&gt;product = &quot; + product);
+            notifyAll();
+        }
+    }
+
+    public synchronized void getProductor() {
+        if (this.product &lt;= 0) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println(&quot;GET---&gt;product = &quot; + product);
+            product--;
+            notifyAll();
+        }
+    }
+}</code></pre>
+<p>添加产品和取得产品的方法中都是相似的。里面都有<code>wait</code>方法和<code>notifyAll</code>方法。当生产的产品达到20件的时候，生产者的线程将会被阻塞，但是当产品小于20的时候，会调用<code>notifyAll</code>方法唤醒之前沉睡的生产者线程，不过为什么是<code>notifyAll</code>呢？那是因为生产者可能是不止一个的。消费者也是同样的道理。通过这种方式我们就解决了上面我们提出的问题。</p>
+<pre><code class="java">class Productor implements Runnable {
+
+    private Clerk mClerk;
+
+    public Productor(Clerk clerk) {
+        this.mClerk = clerk;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Thread.sleep(new Random().nextInt(100));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            mClerk.addProductor();
+        }
+    }
+}
+
+class Consumer implements Runnable {
+
+    private Clerk mClerk;
+
+    public Consumer(Clerk clerk) {
+        this.mClerk = clerk;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Thread.sleep(new Random().nextInt(1000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            this.mClerk.getProductor();
+        }
+    }
+}</code></pre>
+<pre><code class="java">public class Demo8 {
+    public static void main(String[] args) {
+        Clerk clerk = new Clerk();
+        Thread thread = new Thread(new Productor(clerk));
+        Thread thread1 = new Thread(new Consumer(clerk));
+        Thread thread2 = new Thread(new Consumer(clerk));
+        thread.start();
+        thread1.start();
+        thread2.start();
+    }
+}</code></pre>
+<p>上面的代码中，我并没有设置什么时候停止运行，也就是生产者会一直生产，消费者也会一直消费下去。</p>
+<p>一般来书生产者是有一个终止条件的，之前学爬虫的时候也学到了使用多线程的方式进行爬虫。虽然没有谈及线程通信，但是用到了生产者与消费者的模式。其中生产者一直爬取所需要的url，而消费者可以通过url进行下载数据。通过多线程加上这样效率高的模式，爬虫的效率可以提升好几倍。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面就是<code>wait</code>和<code>notify[All]</code>方法的使用，以及使用这两个方法进行简单的线程之间的通信。至此，多线程的学习基本上就要告一段落了。</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/WechatPayQr.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2019/10/12/Java中的多线程-04/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/66.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/66.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                Java中的多线程-04</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-  <div class="post-thumb">
-    <a href="/2019/09/24/Java中的IO-03/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-9-24 19:09</div>
-      <a href="/2019/09/24/Java中的IO-03/" class="post-title">
-        <h3>Java中的IO-03</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/JAVA-IO/">JAVA IO<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java当中的IO流的操作</p>
-        <div class="post-bottom">
-          <a href="/2019/09/24/Java中的IO-03/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="sheriby.github.io" class="profile gravatar"><img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
+            </h3>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/09/23/Java中的IO-02/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/43.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-9-23 10:09</div>
-      <a href="/2019/09/23/Java中的IO-02/" class="post-title">
-        <h3>java中的IO-02</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java-IO/">Java IO<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java中的IO流</p>
-        <div class="post-bottom">
-          <a href="/2019/09/23/Java中的IO-02/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/09/22/Java中的IO-01/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/42.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-9-22 18:09</div>
-      <a href="/2019/09/22/Java中的IO-01/" class="post-title">
-        <h3>Java中的IO-01</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/java基础/">java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单地学习java的中的IO流的操作</p>
-        <div class="post-bottom">
-          <a href="/2019/09/22/Java中的IO-01/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/08/05/再谈最长回文子串——马拉车算法/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/40.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-8-5 19:08</div>
-      <a href="/2019/08/05/再谈最长回文子串——马拉车算法/" class="post-title">
-        <h3>再谈最长回文子串——马拉车算法</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/算法/">算法<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>最长回文子串问题的另一种有名的解法</p>
-        <div class="post-bottom">
-          <a href="/2019/08/05/再谈最长回文子串——马拉车算法/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/08/02/再谈动态规划/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/39.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-8-2 07:08</div>
-      <a href="/2019/08/02/再谈动态规划/" class="post-title">
-        <h3>再谈动态规划</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/算法/">算法<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>动态规划算法的几道经典的题目</p>
-        <div class="post-bottom">
-          <a href="/2019/08/02/再谈动态规划/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/31/最长回文子串问题/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/38.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-31 09:07</div>
-      <a href="/2019/07/31/最长回文子串问题/" class="post-title">
-        <h3>最长回文子串问题</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/算法/">算法<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>leetcode的第五题——最长回文子串问题</p>
-        <div class="post-bottom">
-          <a href="/2019/07/31/最长回文子串问题/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/26/设计模式（二）工厂模式/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/36.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-26 16:07</div>
-      <a href="/2019/07/26/设计模式（二）工厂模式/" class="post-title">
-        <h3>设计模式（二）工厂模式</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/设计模式/">设计模式<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>工厂设计模式的基本介绍和简单实现</p>
-        <div class="post-bottom">
-          <a href="/2019/07/26/设计模式（二）工厂模式/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/26/图和图的BFS与DFS/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/35.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-26 12:07</div>
-      <a href="/2019/07/26/图和图的BFS与DFS/" class="post-title">
-        <h3>图和图的BFS与DFS</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/数据结构与算法/">数据结构与算法<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>数据结构——图的基本介绍以及图的深度优先广度优先遍历算法的介绍</p>
-        <div class="post-bottom">
-          <a href="/2019/07/26/图和图的BFS与DFS/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/25/设计模式（一）单例模式/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/34.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-25 19:07</div>
-      <a href="/2019/07/25/设计模式（一）单例模式/" class="post-title">
-        <h3>设计模式（一）单例模式</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/设计模式/">设计模式<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>设计模式之单例模式的实现</p>
-        <div class="post-bottom">
-          <a href="/2019/07/25/设计模式（一）单例模式/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/25/AVL-Tree/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/33.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-25 13:07</div>
-      <a href="/2019/07/25/AVL-Tree/" class="post-title">
-        <h3>AVL Tree</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/算法/">算法<em>·</em></a>
-          
-            <a href="/tags/二叉树/">二叉树<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>BST(二叉查找树)与AVL(平衡二叉查找树)的基本介绍和实现</p>
-        <div class="post-bottom">
-          <a href="/2019/07/25/AVL-Tree/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-
-
-    </main>
-      <!-- 首页默认取最最新文章集 -->
-    <!-- 
-      <nav class="navigator">
-        
-        <a class="extend prev" rel="prev" href="/page/2/">Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/">Next</a>
-      </nav>
-     -->
-  </div>
-  
-    <div id="pagination"><a href="/page/4/" class="">Previous</a></div>
-  
+        <hr>
+        <p><i class="iconfont icon-write"></i>一枚小菜鸡</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
 
     </div>    
     <div class="ins-search">

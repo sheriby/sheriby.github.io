@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Sher的小博客</title>
+  <title itemprop="name">HastSet, HashMap(一) Hash简介 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,517 +340,191 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 0px;"></div>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/70.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/70.jpg">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      HastSet, HashMap(一) Hash简介</h1>
+      <p class="entry-census">
+        <span>
+          <a href="sheriby.github.io">
+            <img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true">
+          </a>
+        </span>
+        <span>
+          <a href="sheriby.github.io">Hony Sher</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2019-10-15<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
 <div id="content" class="site-content">
-  
-  <div class="notice" style="margin-top:60px">
-    <i class="iconfont icon-notification">
-    </i>
-    <div class="notice-content">欢迎来带到Sher的小博客！</div>
-  </div>
-  
-  <div class="top-feature-row">
-  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
-  <i class="fa fa-anchor" aria-hidden="true">
-  </i>
-  START:DASH!!</h1>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/theme-sakura/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/sakura.md.png">
-        </div>
-        <div class="info">
-          <h3>Sakura</h3>
-          <p>本站 hexo 主题</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="http://space.bilibili.com/37532334" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/bilibili.jpg">
-        </div>
-        <div class="info">
-          <h3>Bilibili</h3>
-          <p>Sher的b站视频</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/wangshiwu.jpg">
-        </div>
-        <div class="info">
-          <h3>Sher的万事屋</h3>
-          <p>技术服务</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-</div>
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
-      <i class="fa fa-envira" aria-hidden="true"></i>
-      Discovery</h1>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="HastSet-HashMap-一"><a href="#HastSet-HashMap-一" class="headerlink" title="HastSet, HashMap(一)"></a>HastSet, HashMap(一)</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前我们学习<code>C++ STL</code>的时候也学到了<code>set</code>和<code>map</code>这两种数据结构。不过这里两种数据结构的实现似乎完全的不一样。C++中的是使用红黑书来实现的，而Java中的<code>HashSet</code>和<code>HashMap</code>明显是使用<code>Hash</code>这种结构来实现的。其实使用树还是hash在两种语言中都是有实现的。C++中的使用<code>Hash</code>实现的被称为<code>unordered_set</code>和<code>unordered_map</code>，而Java中使用红黑树来实现的被称为<code>TreeSet</code>和<code>TreeMap</code>。说实话C++中的这种起名方式是真的难听，而且不直观，他用的是是否有序来命令，Java中是使用底层的结构来命名。Java中使用<code>TreeSet/Map</code>其实是比较少的，因为如果要将一中数据放进去，那么这个类必须要实现排序的接口——<code>Comparable</code>。</p>
+<h2 id="Hash是什么？"><a href="#Hash是什么？" class="headerlink" title="Hash是什么？"></a>Hash是什么？</h2><p>红黑树是什么玩意，这里我们就不详细的去了解了。但是如果连<code>Hash</code>都不知道的话，那么是没办法明白<code>HashMap</code>的。不过我们还是从<code>HashSet</code>开始说起。众所周知<code>Set</code>这个数据结构的要求是无序的，而且是不可以重复的。我们之前学过的存储结构有数组和链表。我们是否可以像<code>ArrayList</code>那样使一个数组来实现<code>Set</code>这个结构呢？当然是可以的。我们可以按顺序放，每次放入新的元素的时候就和前面的所有的元素比较一下。当我们放入了一万个元素的时候，需要和前面的一万个元素进行比较。这种效率简直是无与伦比的垃圾。如果是使用链表呢？？emm，，我想这个时候效率可能是更加的垃圾了。</p>
+<p>那么该怎么办呢？</p>
+<p>不如来类比一下现实中的例子。假设我们的文件夹中有一万首歌，现在我们需要找一首歌的名字是《青花瓷》。按寻常的方法来做，那就是一首歌一首歌的找。(我为什么不能直接搜索呢？。。你搜索也就以电脑给你一个一个找的啊)。但是我们知道了这首歌是周杰伦的歌。如果我们存放歌曲的时候都按照歌手放一个文件夹的话，我们就可以直接进入到周杰伦的文件夹中去寻找，此时文件夹中歌曲的数目肯定是大大减小了，我们就可以更快的找到我们需要的歌曲了。(你怎么知道歌曲的歌手的？？因为歌曲名和歌手之前存在一种映射。。这里不考虑同名的歌多人唱的情况)。其实也很容易理解，我们讲放在书架上的书有序的排列，那么我们下次想要找到所需要的书的时候就会更加的简单。</p>
+<p>不过如何将上面分类的思路运用到数据结构上面来呢？也就是说我们应该用什么样的标准来将数据进行分类呢？</p>
+<p>现在我们假设用一个长度为<code>8</code>的数组，需要将数据有顺序的放入这八个数组中。要用什么样的标准呢？上面我们提高了一个非常重要的点——歌曲名和歌手是一一对应的，我们知道了歌曲名那么就可以知道歌手。如果不是一一对应的，我们到底该去哪一个文件夹中去寻找呢？不过数据应该和什么类型的东西对应呢？很容易想到——整型。如果一个数据可以和一个整型相对应。也就是通过一个方法可以将一个类变成一串整型数据，那就搞定了。这个方法正是我们之前说过的<code>hashCode</code>方法。假如说对象<code>A</code>对应的整型是<code>17</code>。我们可以通过最简单的取模的算法（<code>HashSet</code>中肯定不是这么简单）将这个对象<code>A</code>放入数组的一号位。如果遇到了对象<code>B</code>对应的整型是<code>20</code>，但是二号位中没有数据，那么就直接落座。不过又来了个对象<code>C</code>对应的整型是<code>9</code>，它也应该放在一号位上，但是一号位已经是有<code>A</code>对象了的。那么该怎么办呢？这时候就需要比较一下他们对应的整型了。发现一个是<code>17</code>，另一个是<code>9</code>，不相等。那么<code>C</code>就直接挂在<code>A</code>的后面？通过什么方式？？当然是通过链表的方式啦。现在假如又来了个对象<code>D</code>对应的整型也是<code>17</code>。<code>A</code>和<code>D</code>对应的整型是相等的，但是他们自身不想等。这是不矛盾的。产生整型的算法只需要是函数那样，一个x又一个对应的y，但是一个y可能有好几个对应的x。此时和<code>A</code>比较发现对应的整型相等，此时还需要调用<code>equals</code>方法，如果这个方法还是返回<code>true</code>，那么就将<code>D</code>丢掉。如果是<code>false</code>，那么<code>D</code>就开始和链表中的下一个<code>C</code>进行比较。</p>
+<p>通过上面的方式，我们实际上就构建出来一个哈希表，也就是经常说的散列。这个哈希表的样子是，一个数组中每一个元素都是一个链表，可以说这个结构是我们之前学的数组和链表的结合体。至于为什么叫散列，其实也是比较直观的，每一列都是不相连的。</p>
+<p>使用散列的时候，每次我们想要插入一个数据的时候，首先是通过散列函数计算出他对应的整型，然后通过特定的算法计算出他所在的列。然后通过上满详细说的那种方式，选择插入还是放弃该数据。效率是提高了，但是使用的空间也更多了。</p>
+<p>再次需要注意的是，如果两个对象的时候，也就是<code>equals</code>返回<code>false</code>的时候，<code>hashCode</code>方法返回的值必须都要是相等的。但是<code>hashCode</code>相等的时候，两个对象不一定是相等的。至于上面的规则是谁来实现的？那当然不是Java编译器来替我们时间，我们需要重写<code>equals</code>和<code>hashCode</code>方法来保证实现。之前说过的<code>equals ==</code>的时候也讲过了这个东西。</p>
+<h2 id="HashSet、HashMap"><a href="#HashSet、HashMap" class="headerlink" title="HashSet、HashMap"></a>HashSet、HashMap</h2><p>其实，<code>HashSet</code>这个东西也是非常的少用的。我们这里主要说的还是<code>HashMap</code>，如果<code>HashMap</code>懂了，那么<code>HashSet</code>自然也就懂了。至于为什么呢？请看下面的代码。</p>
+<pre><code class="java">/**
+ * Constructs a new, empty set; the backing {@code HashMap} instance has
+ * default initial capacity (16) and load factor (0.75).
+ */
+public HashSet() {
+    map = new HashMap&lt;&gt;();
+}</code></pre>
+<p>可以看到<code>HashSet</code>里面使用就是一个<code>HashMap</code>来实现的，那么我们就直接看一下<code>HashMap</code>就行了。</p>
+<h3 id="HashMap的声明"><a href="#HashMap的声明" class="headerlink" title="HashMap的声明"></a>HashMap的声明</h3><pre><code class="java">public class HashMap&lt;K,V&gt;
+extends AbstractMap&lt;K,V&gt;
+implements Map&lt;K,V&gt;, Cloneable, Serializable
+
+public abstract class AbstractMap&lt;K,V&gt;
+extends Object
+implements Map&lt;K,V&gt;</code></pre>
+<blockquote>
+<p>上面的<code>Cloneable</code>和<code>Serializable</code>这两个接口，我们之前都是已经说过了的。至于父类<code>AbstractMap</code>这个类都是没有那么重要的，这个类只是提供了<code>Map</code>接口的骨架实现，以尽量减少实现此接口所需的工作量。</p>
+<p>那么最重要的就是<code>Map&lt;K, V&gt;</code>这个接口。</p>
+</blockquote>
+<pre><code class="java">void clear() 
+从该地图中删除所有的映射（可选操作）。  
+boolean containsKey(Object key) 
+如果此映射包含指定键的映射，则返回 true 。  
+boolean containsValue(Object value) 
+如果此地图将一个或多个键映射到指定的值，则返回 true 。  
+Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet() 
+返回此地图中包含的映射的Set视图。  
+boolean equals(Object o) 
+将指定的对象与此映射进行比较以获得相等性。  
+V get(Object key) 
+返回到指定键所映射的值，或 null如果此映射包含该键的映射。   
+int hashCode() 
+返回此地图的哈希码值。  
+boolean isEmpty() 
+如果此地图不包含键值映射，则返回 true 。  
+Set&lt;K&gt; keySet() 
+返回此地图中包含的键的Set视图。  
+V put(K key, V value) 
+将指定的值与该映射中的指定键相关联（可选操作）。  
+void putAll(Map&lt;? extends K,? extends V&gt; m) 
+将指定地图的所有映射复制到此映射（可选操作）。  
+V remove(Object key) 
+如果存在（从可选的操作），从该地图中删除一个键的映射。  
+int size() 
+返回此地图中键值映射的数量。  
+Collection&lt;V&gt; values() 
+返回此地图中包含的值的Collection视图。 </code></pre>
+<p>上面是<code>Map</code>中的抽象方法。其中<code>Map</code>中还有一个接口<code>Entry</code>，这是一个重要的接口。</p>
+<pre><code class="java">boolean equals(Object o) 
+将指定的对象与此条目进行比较以获得相等性。  
+K getKey() 
+返回与此条目相对应的键。  
+V getValue() 
+返回与此条目相对应的值。  
+int hashCode() 
+返回此映射条目的哈希码值。  
+V setValue(V value) 
+用指定的值替换与该条目相对应的值（可选操作）。  </code></pre>
+<p>其中，我们使用<code>entrySet</code>可以返回<code>Map</code>中的键值对，返回的是<code>Set&lt;Map.Entry&lt;K, V&gt;</code>类型。可以使用<code>getKey</code>，<code>getValue</code>方法获取键值对。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面是对<code>Hash</code>做了一个初步的了解，下面就开始稍微看一下<code>HashMap</code>的源码吧。</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/WechatPayQr.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2019/10/14/ArrayList/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/69.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/69.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                ArrayList</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-  <div class="post-thumb">
-    <a href="/2019/07/20/动态规划算法简介/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/26.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-20 09:07</div>
-      <a href="/2019/07/20/动态规划算法简介/" class="post-title">
-        <h3>动态规划算法简介</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/算法/">算法<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>动态规划算法的基本介绍</p>
-        <div class="post-bottom">
-          <a href="/2019/07/20/动态规划算法简介/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="sheriby.github.io" class="profile gravatar"><img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
+            </h3>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/19/MySQL基本增删改查/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/25.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-19 20:07</div>
-      <a href="/2019/07/19/MySQL基本增删改查/" class="post-title">
-        <h3>MySQL基本的增删改查操作</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/MySQL/">MySQL<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>MySQL JDBC的基本使用</p>
-        <div class="post-bottom">
-          <a href="/2019/07/19/MySQL基本增删改查/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/19/0.1+0.2 == 0.3 浅谈计算机中的浮点数/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="http://www.005.tv/uploads/allimg/190610/63-1Z610154314E1.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-19 15:07</div>
-      <a href="/2019/07/19/0.1+0.2 == 0.3 浅谈计算机中的浮点数/" class="post-title">
-        <h3>0.1+0.2 == 0.3? 浅谈计算机中的浮点数</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/计算机基础/">计算机基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>计算机中浮点数的存储，以及关于浮点数需要注意的一些地方</p>
-        <div class="post-bottom">
-          <a href="/2019/07/19/0.1+0.2 == 0.3 浅谈计算机中的浮点数/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/19/浅谈Java中的equals与==陷阱/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/10.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-19 13:07</div>
-      <a href="/2019/07/19/浅谈Java中的equals与==陷阱/" class="post-title">
-        <h3>浅谈Java中的equals与==陷阱</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单说说从C++转到Java当中遇到的equals和==陷阱</p>
-        <div class="post-bottom">
-          <a href="/2019/07/19/浅谈Java中的equals与==陷阱/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/19/排序算法（八）堆排序/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/17.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-19 09:07</div>
-      <a href="/2019/07/19/排序算法（八）堆排序/" class="post-title">
-        <h3>排序算法（八）堆排序</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/排序/">排序<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>堆排序算法的基本介绍和代码实现</p>
-        <div class="post-bottom">
-          <a href="/2019/07/19/排序算法（八）堆排序/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/18/排序算法（七）基数排序/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/11.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-18 21:07</div>
-      <a href="/2019/07/18/排序算法（七）基数排序/" class="post-title">
-        <h3>排序算法（七）基数排序</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/排序/">排序<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>基数排序算法基本介绍和代码实现</p>
-        <div class="post-bottom">
-          <a href="/2019/07/18/排序算法（七）基数排序/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/18/排序算法（六）归并排序/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/19.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-18 16:07</div>
-      <a href="/2019/07/18/排序算法（六）归并排序/" class="post-title">
-        <h3>排序算法（六）归并排序</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/排序/">排序<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>归并排序算法的基本介绍和代码实现</p>
-        <div class="post-bottom">
-          <a href="/2019/07/18/排序算法（六）归并排序/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/18/排序算法（五）快速排序/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/13.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-18 13:07</div>
-      <a href="/2019/07/18/排序算法（五）快速排序/" class="post-title">
-        <h3>排序算法（五）快速排序</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/排序/">排序<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>快速排序的简单的介绍</p>
-        <div class="post-bottom">
-          <a href="/2019/07/18/排序算法（五）快速排序/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/18/排序算法（四）希尔排序/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/12.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-18 09:07</div>
-      <a href="/2019/07/18/排序算法（四）希尔排序/" class="post-title">
-        <h3>排序算法（四）希尔排序</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/排序/">排序<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>希尔排序算法的简单介绍和代码实现</p>
-        <div class="post-bottom">
-          <a href="/2019/07/18/排序算法（四）希尔排序/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/07/17/排序算法（三）插入排序法/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(4).jpg.webp">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-7-17 22:07</div>
-      <a href="/2019/07/17/排序算法（三）插入排序法/" class="post-title">
-        <h3>排序算法（三）插入排序法</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/排序/">排序<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>插入排序算法的简单介绍和代码实现</p>
-        <div class="post-bottom">
-          <a href="/2019/07/17/排序算法（三）插入排序法/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-
-
-    </main>
-      <!-- 首页默认取最最新文章集 -->
-    <!-- 
-      <nav class="navigator">
-        
-        <a class="extend prev" rel="prev" href="/page/4/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/">Next</a>
-      </nav>
-     -->
-  </div>
-  
-    <div id="pagination"><a href="/page/6/" class="">Previous</a></div>
-  
+        <hr>
+        <p><i class="iconfont icon-write"></i>一枚小菜鸡</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
 
     </div>    
     <div class="ins-search">

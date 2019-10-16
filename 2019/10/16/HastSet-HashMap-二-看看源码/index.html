@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">ArrayList | Sher的小博客</title>
+  <title itemprop="name">HastSet, HashMap(二) 看看源码 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/69.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/69.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/71.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/71.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      ArrayList</h1>
+      HastSet, HashMap(二) 看看源码</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-10-14<span class="bull">
+        2019-10-16<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,296 +376,353 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上面我们说完了Java中最重要的一个类——<code>String</code>，现在我们要说的同样是一个非常重要的类，也是最常用的一个集合<code>ArrayList</code>。现在我们就来简单的学习一下这个类的使用方式，然后简单的看一下这个类的源码。</p>
-<h2 id="ArrayList漫谈"><a href="#ArrayList漫谈" class="headerlink" title="ArrayList漫谈"></a>ArrayList漫谈</h2><h3 id="ArrayList声明"><a href="#ArrayList声明" class="headerlink" title="ArrayList声明"></a>ArrayList声明</h3><p>先来看看<code>ArrayList</code>的声明。</p>
-<pre><code class="java">public class ArrayList&lt;E&gt; extends AbstractList&lt;E&gt;
-        implements List&lt;E&gt;, RandomAccess, Cloneable, java.io.Serializable
-
-public abstract class AbstractList&lt;E&gt; extends AbstractCollection&lt;E&gt; implements List&lt;E&gt;
-
-public abstract class AbstractCollection&lt;E&gt; implements Collection&lt;E&gt;
-
-public interface Collection&lt;E&gt; extends Iterable&lt;E&gt;
-
-public interface List&lt;E&gt;
-extends Collection&lt;E&gt;</code></pre>
-<p>上面是<code>ArrayList</code>的声明，和与其有关的类或者接口的一些声明。现在就简单的介绍一下就完事了。</p>
-<blockquote>
-<ul>
-<li><p><code>List&lt;E&gt;</code>，<code>Collection&lt;E&gt;</code>：是两个基本的接口。其中<code>Collection</code>是Java中存储单列数据集合的接口，而<code>List</code>是存储有序的单列数据的集合，无序的接口是<code>Set</code>。使用双列数据也就是键值对的形式的接口是<code>Map</code>，其中<code>Map</code>和<code>Collection</code>是并列的。</p>
-</li>
-<li><p><code>RandomAccess</code>是一个标记接口，表示这个集合是支持随机访问的，因为<code>ArrayList</code>的底层是使用数组来实现的，而<code>LinkedList</code>的底层是使用链表来实现的，不可以使用<code>RandomAccess</code>接口。</p>
-<p>上面既然说了<code>RandomAccess</code>是一个标记接口，就代表这个接口是没有方法需要实现的。此接口的主要目的是允许通用算法改变其行为，以便在应用于随机访问列表或顺序访问列表时提供更好的性能。而<code>Serializable</code>也是我们常见的标记接口。</p>
-</li>
-<li><p><code>Cloneable</code>其实也是一个标记接口，因为这个接口中其实没有方法需要实现的。这个接口代表这个类可以通过<code>clone</code>方法进行克隆。但是这个接口可以说又不是一个标记接口，因为实现这个接口我们都需要重写<code>Object</code>中的<code>clone</code>方法。我们来看一下<code>Object</code>中的<code>clone</code>方法。</p>
-<pre><code class="java">@HotSpotIntrinsicCandidate
-protected native Object clone() throws CloneNotSupportedException;</code></pre>
-<p>注释<code>HotSpotIntrinsicCandidate</code>代表着该方法在<code>HotSpot</code>中有更加高效的实现，该高效的实现是基于<code>CPU</code>指令的。<code>native</code>关键词代表着这个方法不是使用Java代码实现的，据悉Java中大多数的<code>native</code>方法都是使用<code>C++</code>来实现的。<code>native</code>方法是没有方法体的。</p>
-<p>另外需要注意的是这个方法是一个<code>protected</code>方法，外界是无法调用的。所以说我们实现了<code>Cloneable</code>接口之后还是要重写这个方法，将这个方法变成<code>public</code>的方法。</p>
-<pre><code class="java">@Override
-public Object clone() throws CloneNotSupportedException {
-    return super.clone();
+          <h1 id="HastSet-HashMap-二-看看源码"><a href="#HastSet-HashMap-二-看看源码" class="headerlink" title="HastSet, HashMap(二) 看看源码"></a>HastSet, HashMap(二) 看看源码</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上面我们已经对<code>Hash</code>的工作原理，以及<code>HashSet</code>和<code>HashMap</code>的基本的介绍了。那么现在我们就直接从<code>HashMap</code>的原码开始看起吧。</p>
+<h2 id="HashMap源码"><a href="#HashMap源码" class="headerlink" title="HashMap源码"></a>HashMap源码</h2><p>先看一下<code>HashMap</code>的空参构造函数。</p>
+<pre><code class="java">public HashMap() {
+    this.loadFactor = DEFAULT_LOAD_FACTOR; // all other fields defaulted
 }</code></pre>
-<p>如何没有使用<code>Cloneable</code>接口，但是重写了<code>clone</code>方法并调用，会抛出<code>java.lang.CloneNotSupportedException</code>异常。还有一点需要注意的是，默认的<code>clone</code>是浅拷贝，对于引用类型的拷贝需要当心了！</p>
-</li>
-<li><p><code>Iterator</code>接口是有迭代器接口，需要实现<code>iterator</code>方法返回一个迭代器。而一个迭代器又是实现了<code>iterable</code>接口，其中有迭代器的基本的<code>next</code>，<code>hasNext</code>，<code>remove</code>方法需要实现。</p>
-</li>
-</ul>
-</blockquote>
-<p>上面基本上就是对<code>ArrayList</code>声明的一些说明了。</p>
-<h3 id="ArrayLIst源码"><a href="#ArrayLIst源码" class="headerlink" title="ArrayLIst源码"></a>ArrayLIst源码</h3><p><code>ArrayList</code>的源码也是有几千行，但是这个看起来要比<code>String</code>类的源码舒服多了，没用那么多完全看不懂的地方了。我们还是从构造函数看起。</p>
+<p>里面对一个属性<code>loadFactor</code>做了一个赋值，其余的什么都没有做。联系到之前我们说的<code>ArrayList</code>的源码，我们不难猜出<code>HashMap</code>将在我们第一次使用<code>put</code>操作的时候加载底层的数据结构，实现了所谓的懒加载的机制。不过我们似乎先要将这个<code>this.loadFactor</code>搞清楚到底是个什么玩意。</p>
 <pre><code class="java">/**
- * Constructs an empty list with an initial capacity of ten.
+* The load factor used when none specified in constructor.
+*/
+static final float DEFAULT_LOAD_FACTOR = 0.75f;
+
+/**
+ * The load factor for the hash table.
+ *
+ * @serial
  */
-public ArrayList() {
-    this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
-}</code></pre>
-<p>注释告诉我们他是创建了一个初始容量为10的一个数组。但是看起来没有那么简单。</p>
-<pre><code class="java">private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};</code></pre>
-<p>这个明明是一个没有长度的数组，我寻思你这个注释不是骗我的嘛。不过我们添加元素的时候<code>ArrayList</code>是如何做的呢？</p>
-<pre><code class="java">public boolean add(E e) {
-    modCount++;
-    add(e, elementData, size);
-    return true;
-}
-
-private void add(E e, Object[] elementData, int s) {
-    if (s == elementData.length)
-        elementData = grow();
-    elementData[s] = e;
-    size = s + 1;
-}
-
-private Object[] grow() {
-    return grow(size + 1);
-}
-
-private Object[] grow(int minCapacity) {
-    return elementData = Arrays.copyOf(elementData,
-                                       newCapacity(minCapacity));
-}
-
-private int newCapacity(int minCapacity) {
-    // overflow-conscious code
-    int oldCapacity = elementData.length;
-    int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1);
-    if (newCapacity - minCapacity &lt;= 0) {
-        if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA)
-            return Math.max(DEFAULT_CAPACITY, minCapacity);
-        if (minCapacity &lt; 0) // overflow
-            throw new OutOfMemoryError();
-        return minCapacity;
-    }
-    return (newCapacity - MAX_ARRAY_SIZE &lt;= 0)
-        ? newCapacity
-        : hugeCapacity(minCapacity);
-}</code></pre>
-<p>上面是我们添加元素的时候的调用<code>add</code>所执行的函数。一开始<code>elementData.length</code>是为0的。然后调用了<code>grow(1)</code>开始扩容。关键是看一下函数<code>newCapacity</code>，第二十八行，二十九行的代码，<code>DEFAULT_CAPACITY</code>是10，通过上面的方式会创建一个长度为10的数组。看来<code>ArrayList</code>采取的是懒加载的形式，只有调用了<code>add</code>方法的时候才会去创建数组。不过如果是使用带参数的构造器的话，就不会懒加载。</p>
-<pre><code class="java">public ArrayList(int initialCapacity) {
-    if (initialCapacity &gt; 0) {
-        this.elementData = new Object[initialCapacity];
-    } else if (initialCapacity == 0) {
-        this.elementData = EMPTY_ELEMENTDATA;
-    } else {
-        throw new IllegalArgumentException(&quot;Illegal Capacity: &quot;+
-                                           initialCapacity);
-    }
-}</code></pre>
-<p>其实上面的懒加载也是从<code>JDK8</code>之后改动的。<code>JDK7</code>及之前都不是懒加载，我们可以看一下<code>Vector</code>的源码。</p>
-<pre><code class="java">public Vector(int initialCapacity) {
-    this(initialCapacity, 0);
+final float loadFactor;</code></pre>
+<p>似乎什么也看不出来，这到底是一个什么玩意。不过按照中文的直译，这个东西应该被称为——装载因子。不过现在这个东西其什么作业我们还是不得而知，需要进一步的看源码。不过想要看懂下面的源码还是需要先来看看<code>HashMap</code>中有什么属性，也就是说用了什么结构。</p>
+<h3 id="table"><a href="#table" class="headerlink" title="table"></a>table</h3><pre><code class="java">/**
+ * The table, initialized on first use, and resized as
+ * necessary. When allocated, length is always a power of two.
+ * (We also tolerate length zero in some operations to allow
+ * bootstrapping mechanics that are currently not needed.)
+ */
+transient Node&lt;K,V&gt;[] table;</code></pre>
+<p>先看第一个，<code>table</code>。table前面有个限定词<code>transient</code>，这个之前也是说过的，加上了<code>transient</code>的属性在对象被序列化的时候将不会被序列化，也就是说不会被写入到文件中去。反序列化之后值将会被初始化。</p>
+<p>看上面的注释，说这个table将会在第一次使用的时候被初始化，这正印证了刚才我们的猜想。后面还说了如果不够用的话这个数组将会扩容，一般规则是变成原来的<code>两倍</code>的大小，这个和<code>Vector</code>的规则是一致的。<code>ArrayList</code>的扩容规则是变成原来的<code>1.5</code>倍，<code>StringBuilder</code>则是变成原来的<code>两倍加上2</code>.</p>
+<p>实际上这个<code>table</code>就是我们说的组成散列的那个数组，那么链表该如何来呢？我们看一下<code>Node</code>中的属性就明白了。</p>
+<pre><code class="java">/**
+ * Basic hash bin node, used for most entries.  (See below for
+ * TreeNode subclass, and in LinkedHashMap for its Entry subclass.)
+ */
+static class Node&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; {
+    final int hash;
+    final K key;
+    V value;
+    Node&lt;K,V&gt; next;
+    ......</code></pre>
+<p><code>hash</code>明显是用来存放放入的对象的<code>hash</code>值的，后面还有一个<code>next</code>属性，就是通过<code>next</code>属性，一个又一个的<code>Node</code>构成了一条链表。我们还注意到<code>key</code>是<code>final</code>的，但是<code>value</code>不是。那是因为如果我们插入相同的键的不同值，后面的那个值将会覆盖前面的值，所以不是<code>vlalue</code>不是<code>final</code>的。</p>
+<h3 id="entrySet"><a href="#entrySet" class="headerlink" title="entrySet"></a>entrySet</h3><pre><code class="java">/**
+ * Holds cached entrySet(). Note that AbstractMap fields are used
+ * for keySet() and values().
+ */
+transient Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet;</code></pre>
+<p><code>Map.Entry</code>这个类，我们之前也已经说过了，至于<code>entrySet</code>就是返回键值对的集合，如何使用我们之前也说过了，这里不在赘述。</p>
+<h3 id="threshold"><a href="#threshold" class="headerlink" title="threshold"></a>threshold</h3><pre><code class="java">/**
+ * The next size value at which to resize (capacity * load factor).
+ *
+ * @serial
+ */
+// (The javadoc description is true upon serialization.
+// Additionally, if the table array has not been allocated, this
+// field holds the initial array capacity, or zero signifying
+// DEFAULT_INITIAL_CAPACITY.)
+int threshold;</code></pre>
+<p><code>threshold</code>是阈值的意思。不过这个东西比较有意思的地方是，竟然出现了单行注释<code>//</code>。emm，，有点儿奇怪。注释中说。这个阈值是<code>table</code>将要改变容量时大小的位置，后面还标注了<code>capacity * load factor</code>。容量乘以上面的提到的加载因子。那么谜团也就解开了，<code>HashMap</code>的扩容不是等到<code>table</code>放满了才扩容。比如说容量是<code>16</code>，默认的加载因子是<code>0.75</code>，那么等到<code>table</code>的被占用12个时候可能就要扩容了。当然这里扩容的具体的细节我们是不知道的。下面的单行注释就是一些细节上面的问题。</p>
+<h3 id="put源码"><a href="#put源码" class="headerlink" title="put源码"></a>put源码</h3><p>其实要说的也就这几个属性，其他的属性还有点儿看不懂。还有一个属性是<code>loadFactor</code>之前已经说过了。</p>
+<p>现在我们就好好的来看看<code>put</code>方法的源码。</p>
+<pre><code class="java">/**
+ * Associates the specified value with the specified key in this map.
+ * If the map previously contained a mapping for the key, the old
+ * value is replaced.
+ *
+ * @param key key with which the specified value is to be associated
+ * @param value value to be associated with the specified key
+ * @return the previous value associated with {@code key}, or
+ *         {@code null} if there was no mapping for {@code key}.
+ *         (A {@code null} return can also indicate that the map
+ *         previously associated {@code null} with {@code key}.)
+ */
+public V put(K key, V value) {
+    return putVal(hash(key), key, value, false, true);
 }
 
 /**
- * Constructs an empty vector so that its internal data array
- * has size {@code 10} and its standard capacity increment is
- * zero.
+ * Implements Map.put and related methods.
+ *
+ * @param hash hash for key
+ * @param key the key
+ * @param value the value to put
+ * @param onlyIfAbsent if true, don&#39;t change existing value
+ * @param evict if false, the table is in creation mode.
+ * @return previous value, or null if none
  */
-public Vector() {
-    this(10);
+final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+               boolean evict) {
+    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; int n, i;
+    if ((tab = table) == null || (n = tab.length) == 0)
+        n = (tab = resize()).length;
+    .......
+</code></pre>
+<p>从put方法中，我们进入了putVal方法。其中<code>hash</code>函数是用来计算对象的<code>hash</code>值，这里可以不管他。不过我们可以稍微观摩一下<code>hash</code>函数的源码。</p>
+<pre><code class="java">static final int hash(Object key) {
+    int h;
+    return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
 }</code></pre>
-<p>之所以改动的时候没有修改<code>Vector</code>的源码，是因为<code>Vector</code>在Java中是真的没有人使用了，所以写<code>JDK</code>的人不改进他的源码也是很正常的。想我<code>vector</code>在c++中那么牛逼，没想到在Java中竟然沦落到如此的底部，呜呼，哀哉！！</p>
-<p>再看一下那个<code>newCapacity</code>函数，感觉这个函数名字非常的熟悉。因为好像我们昨天看<code>StringBuilder</code>的源码，观察<code>StringBuilder</code>底层的数组的扩容的时候也看到了这个函数。不过<code>StringBuilder</code>的默认大小是<code>16</code>，扩容的规则是两倍加上二，但是<code>ArrayList</code>的默认的大小是<code>10</code>，扩容的规则是变成原来的<code>1.5</code>倍。<code>Vector</code>是变成原来的<code>2</code>倍。</p>
-<p>我们发现出去对数组的基本的操作的<code>API</code>之外，<code>ArrayList</code>中竟然还常有三个内部类。他们分别是</p>
-<pre><code class="java">private class Itr implements Iterator&lt;E&gt;
-
-final class ListItr extends Itr implements ListIterator&lt;E&gt;
-
-final class VectorSpliterator implements Spliterator&lt;E&gt;</code></pre>
-<p>看来这个三个都是迭代器，这里就不深入的了解了。<code>ArrayList</code>中也有获取这些迭代器对象的对应的方法。</p>
-<pre><code class="java">public synchronized Iterator&lt;E&gt; iterator() {
-    return new Itr();
-}
-
-public synchronized ListIterator&lt;E&gt; listIterator() {
-    return new ListItr(0);
-}
-
-public synchronized ListIterator&lt;E&gt; listIterator(int index) {
-    if (index &lt; 0 || index &gt; elementCount)
-        throw new IndexOutOfBoundsException(&quot;Index: &quot;+index);
-    return new ListItr(index);
-}
-
-@Override
-public Spliterator&lt;E&gt; spliterator() {
-    return new VectorSpliterator(null, 0, -1, 0);
-}</code></pre>
-<h3 id="remove-方法"><a href="#remove-方法" class="headerlink" title="remove 方法"></a>remove 方法</h3><p><code>ArrayList</code>中有如下的两个方法。</p>
-<pre><code class="java">public E remove(int index)
-
-public boolean remove(Object o)</code></pre>
-<p>这两个方法是不是有点不好呢？比如说如下的情况下。</p>
-<pre><code class="java">public static void main(String[] args) throws CloneNotSupportedException {
-    List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
-    list.add(1);
-    list.add(2);
-    list.add(3);
-
-    list.remove(1);
-    System.out.println(list);
-}</code></pre>
-<p>那么到底是输出的是<code>2 3</code>还是<code>1 3</code>呢？也就是调用的是哪个函数呢？或许会有点儿疑惑，但是毫无疑问会调用<code>remove(int index)</code>这个函数，虽然int会执行装箱的操作，但是如果存在不用装箱就可以调用的函数，那他为何还需要装箱呢？如果我们真的是需要调用<code>remove(Object o)</code>的话，我们需要这样子写<code>list.remove(Integer.valueOf(1));</code>。</p>
-<h3 id="遍历ArrayList"><a href="#遍历ArrayList" class="headerlink" title="遍历ArrayList"></a>遍历ArrayList</h3><pre><code class="java">public static void main(String[] args) throws CloneNotSupportedException {
-    List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
-    list.add(1);
-    list.add(2);
-    list.add(3);
-
-    Iterator&lt;Integer&gt; iterator = list.iterator();
-    while (iterator.hasNext()) {
-        System.out.println(iterator.next());
-}</code></pre>
-<p>其实如果要使用这种方式的话，还不如使用增强for循环来实现呢。</p>
-<p>使用这个迭代器也是可以的，两个迭代器比起来只是<code>listIterator</code>的方法更多一点而已。可以添加也可以前后的移动。</p>
-<pre><code class="java">public static void main(String[] args) throws CloneNotSupportedException {
-    List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
-    list.add(1);
-    list.add(2);
-    list.add(3);
-
-    ListIterator&lt;Integer&gt; integerListIterator = list.listIterator();
-    while (integerListIterator.hasNext()) {
-        System.out.println(integerListIterator.next());
-    }
-
-    for (int val : list) {
-        System.out.println(val);
-    }
-
-    list.forEach(System.out::println);
-
-    list.stream().forEach(System.out::println);
-}</code></pre>
-<p>同样的后面也有两种不是很常用的遍历方式。</p>
-<h3 id="ArrayList的拷贝"><a href="#ArrayList的拷贝" class="headerlink" title="ArrayList的拷贝"></a>ArrayList的拷贝</h3><p>思来想去说一说关于拷贝的问题的。其实也就是拷贝是浅拷贝韩式深拷贝的问题。<code>clone</code>是浅拷贝，<code>Collections.copy</code>也是浅拷贝。然后普通数组的拷贝方法<code>System.arraycopy</code>和<code>Arrays.copyOf</code>也都是浅拷贝。</p>
-<p>其中<code>Collections.copy</code>的使用如下所示</p>
-<pre><code class="java">public static void main(String[] args) throws CloneNotSupportedException {
-    List&lt;CA&gt; list = new ArrayList&lt;&gt;();
-    list.add(new CA(&quot;sher&quot;));
-    list.add(new CA(&quot;hony&quot;));
-    list.add(new CA(&quot;honysher&quot;));
-
-    List&lt;CA&gt; temp = Arrays.asList(new CA[list.size()]);
-    Collections.copy(temp, list);
-    System.out.println(temp.get(0).name == list.get(0).name);
-}</code></pre>
-<p>使用方式，说实话蛮沙雕的。而剩下的两个函数我写一下声明就行了。</p>
-<pre><code class="java">public static void arraycopy(Object src, int srcPos, Object dest, int destPos, int length);
-
-public static int[] copyOf(int[] original, int newLength)</code></pre>
-<p>其实这个<code>copyOf</code>也是用<code>arraycopy</code>来实现的。</p>
-<pre><code class="java">public static int[] copyOf(int[] original, int newLength) {
-    int[] copy = new int[newLength];
-    System.arraycopy(original, 0, copy, 0,
-                     Math.min(original.length, newLength));
-    return copy;
-}</code></pre>
-<p>上面我们提到的所有的拷贝都是浅拷贝，那么该如何实现深拷贝呢？所谓的深拷贝就是递归的拷贝，遇到引用就要直接拷贝他的源头而不是拷贝引用。我记得之前说IO的时候说过一个东西叫序列化。也就是<code>DataInput/OuputStream</code>这个玩意。我们序列化的时候会保存所有的引用的源头，以便于后面我们读取的时候可以恢复到之前的一模一样的状态。如果只是保存引用，那就直接GG了。我们似乎可以通过序列化的方式进行深拷贝。</p>
-<pre><code class="java">public static void main(String[] args) {
-    List&lt;CA&gt; list = new ArrayList&lt;&gt;();
-    list.add(new CA(&quot;sher&quot;));
-    list.add(new CA(&quot;hony&quot;));
-    list.add(new CA(&quot;honysher&quot;));
-
-    ObjectOutputStream oos = null;
-    ObjectInputStream ois = null;
-    List&lt;CA&gt; temp = null;
-
-    try {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        oos = new ObjectOutputStream(baos);
-        oos.writeObject(list);
-        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        ois = new ObjectInputStream(bais);
-        temp = (List&lt;CA&gt;) ois.readObject();
-    } catch (IOException e) {
-        e.printStackTrace();
-    } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-    } finally {
-        if (oos != null) {
-            try {
-                oos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+<p>这里我们还是需要注意一点的，<code>HashMap</code>是可以放<code>null</code>值的。从上面的函数就可以看出来。如果放<code>null</code>的key的话，返回的<code>hashCode</code>的值是0。</p>
+<p><code>putVal</code>函数最后还有两个参数，其实不是很重要。<code>onlyIfAbsent</code>名如其意，只有当没有对象的键的时候添加，也就是说不要给我来所谓的替换值的操作。<code>evict</code>这个单词是真的不认识，不过注解中说如果是假的话，就开启创建模式。说实话有点懵。这里先不关注这个了。</p>
+<p>直接看<code>30行</code>的那个<code>if</code>，此时<code>table</code>还没有创建，毫无疑问是空的，此时将进入<code>resize</code>函数。</p>
+<pre><code class="java">/**
+ * Initializes or doubles table size.  If null, allocates in
+ * accord with initial capacity target held in field threshold.
+ * Otherwise, because we are using power-of-two expansion, the
+ * elements from each bin must either stay at same index, or move
+ * with a power of two offset in the new table.
+ *
+ * @return the table
+ */
+final Node&lt;K,V&gt;[] resize() {
+    Node&lt;K,V&gt;[] oldTab = table;
+    int oldCap = (oldTab == null) ? 0 : oldTab.length;
+    int oldThr = threshold;
+    int newCap, newThr = 0;
+    if (oldCap &gt; 0) {
+        if (oldCap &gt;= MAXIMUM_CAPACITY) {
+            threshold = Integer.MAX_VALUE;
+            return oldTab;
         }
-        if (ois != null) {
-            try {
-                ois.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+        else if ((newCap = oldCap &lt;&lt; 1) &lt; MAXIMUM_CAPACITY &amp;&amp;
+                 oldCap &gt;= DEFAULT_INITIAL_CAPACITY)
+            newThr = oldThr &lt;&lt; 1; // double threshold
+    }
+    else if (oldThr &gt; 0) // initial capacity was placed in threshold
+        newCap = oldThr;
+    else {               // zero initial threshold signifies using defaults
+        newCap = DEFAULT_INITIAL_CAPACITY;
+        newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
+    }
+    if (newThr == 0) {
+        float ft = (float)newCap * loadFactor;
+        newThr = (newCap &lt; MAXIMUM_CAPACITY &amp;&amp; ft &lt; (float)MAXIMUM_CAPACITY ?
+                  (int)ft : Integer.MAX_VALUE);
+    }
+    threshold = newThr;
+    @SuppressWarnings({&quot;rawtypes&quot;,&quot;unchecked&quot;})
+    Node&lt;K,V&gt;[] newTab = (Node&lt;K,V&gt;[])new Node[newCap];
+    table = newTab;
+    if (oldTab != null) {
+        for (int j = 0; j &lt; oldCap; ++j) {
+            Node&lt;K,V&gt; e;
+            if ((e = oldTab[j]) != null) {
+                oldTab[j] = null;
+                if (e.next == null)
+                    newTab[e.hash &amp; (newCap - 1)] = e;
+                else if (e instanceof TreeNode)
+                    ((TreeNode&lt;K,V&gt;)e).split(this, newTab, j, oldCap);
+                else { // preserve order
+                    Node&lt;K,V&gt; loHead = null, loTail = null;
+                    Node&lt;K,V&gt; hiHead = null, hiTail = null;
+                    Node&lt;K,V&gt; next;
+                    do {
+                        next = e.next;
+                        if ((e.hash &amp; oldCap) == 0) {
+                            if (loTail == null)
+                                loHead = e;
+                            else
+                                loTail.next = e;
+                            loTail = e;
+                        }
+                        else {
+                            if (hiTail == null)
+                                hiHead = e;
+                            else
+                                hiTail.next = e;
+                            hiTail = e;
+                        }
+                    } while ((e = next) != null);
+                    if (loTail != null) {
+                        loTail.next = null;
+                        newTab[j] = loHead;
+                    }
+                    if (hiTail != null) {
+                        hiTail.next = null;
+                        newTab[j + oldCap] = hiHead;
+                    }
+                }
             }
         }
     }
-
-    System.out.println(temp.get(1).name);
-    System.out.println(list.get(1).name);
-    System.out.println(temp.get(1).name == list.get(1).name);
+    return newTab;
 }</code></pre>
-<p>通过上面的方式我就完成了对<code>ArrayList</code>的深拷贝，但是前提是<code>ArrayList</code>中数据的类型的类必须要实现<code>java.io.Serializable</code>接口，不然程序是会报错的。</p>
-<p>不过这个序列化来进行深拷贝的方式效率是比较低的，但是也没办法，似乎也没有什么其他的方法。</p>
-<p>但是对于一种特殊的情况还有一种简单的方式。利用<code>JSON</code>字符串的性质。不过也有一个限制，那就是对象的所有的成员都要是基本的数据类型，或者是<code>String</code>也可以的。</p>
-<p>这里使用到了阿里巴巴的<code>FastJSON</code>的jar包，不是用的Java原生的类库。</p>
-<pre><code class="java">@Test
-public void test() {
-    CA sher = new CA(&quot;sher&quot;);
-    String str = JSON.toJSONString(sher);
-    CA temp = JSON.parseObject(str, CA.class);
-
-    System.out.println(temp.name);
-    System.out.println(sher.name);
-    System.out.println(sher.name == temp.name);
+<p>这个函数写的真的是，又臭又长，我有点儿不想看，嘤嘤嘤！！不过还是耐心来看一下吧。</p>
+<p>首先看注释这个函数作用是，初识化table，或者对table进行扩容，扩容的规则是变成原来的两倍。</p>
+<p>假如我们是以空数组初识化的目的来的，首先就会进入到<code>26行</code>的else语句块中，然后给数组的大小进行赋了一个默认值。</p>
+<pre><code class="java">/**
+ * The default initial capacity - MUST be a power of two.
+ */
+static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4; // aka 16</code></pre>
+<p>默认值是<code>1 &lt;&lt; 4</code>也就是16，至于为什么不直接写16，那当然是<code>1 &lt;&lt; 4</code>比直接写16的效率高啊。</p>
+<p>新的阈值就被赋成了<code>16 * 0.75f</code>，也就是12。</p>
+<p>通过<code>31行</code>代码，创建了<code>table</code>数组。而原来的数组就是空的。于是函数就直接返回了这个新创建的数组了。</p>
+<p>假如我们是以扩容的数组的目的来到这个函数的，(这里就不探讨什么数组的长度直接超过了最大值的这种特殊的情况了)。其实将通过第一个<code>if</code>将容量和阈值变成原来的两倍。然后同样的通过<code>31行</code>代码新建了扩容后的数组。和初始化不同得是，此时将会进入<code>39行</code>的<code>if</code>中去。因为我们需要将原来的数组上面的数据拷贝到新创建的数组中来。看一下具体扩容的细节，我们发现了<code>46行</code>代码竟然判断了一下节点是不是<code>TreeNode</code>的节点。数组中挂的不应该是链表吗，怎么变成树了？难道说这也是<code>HashMap</code>的特殊手段吗？看到了<code>48行</code>代码中的<code>else</code>语句块，这个又是对链表的处理。</p>
+<p>那么我们可以判定<code>HashMap</code>中<code>table</code>中储存的是既有链表又有树的。不过如何区分呢？这里还无从得知。</p>
+<p>让我们回到<code>putVal</code>函数中去，通过<code>resize</code>函数，我们的<code>table</code>得到了初始化，下面就该放值进去了。其实这时候我们就不用考虑数组空还是不空了。</p>
+<pre><code class="java">final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+               boolean evict) {
+    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; int n, i;
+    if ((tab = table) == null || (n = tab.length) == 0)
+        n = (tab = resize()).length;
+    if ((p = tab[i = (n - 1) &amp; hash]) == null)
+        tab[i] = newNode(hash, key, value, null);
+    else {
+        Node&lt;K,V&gt; e; K k;
+        if (p.hash == hash &amp;&amp;
+            ((k = p.key) == key || (key != null &amp;&amp; key.equals(k))))
+            e = p;
+        else if (p instanceof TreeNode)
+            e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(this, tab, hash, key, value);
+        else {
+            for (int binCount = 0; ; ++binCount) {
+                if ((e = p.next) == null) {
+                    p.next = newNode(hash, key, value, null);
+                    if (binCount &gt;= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                        treeifyBin(tab, hash);
+                    break;
+                }
+                if (e.hash == hash &amp;&amp;
+                    ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
+                    break;
+                p = e;
+            }
+        }
+        if (e != null) { // existing mapping for key
+            V oldValue = e.value;
+            if (!onlyIfAbsent || oldValue == null)
+                e.value = value;
+            afterNodeAccess(e);
+            return oldValue;
+        }
+    }
+    ++modCount;
+    if (++size &gt; threshold)
+        resize();
+    afterNodeInsertion(evict);
+    return null;
 }</code></pre>
-<p>如果是<code>ArrayList</code>那是没办法使用这个方法的。</p>
-<pre><code class="java">@Test
-public void test2() {
-    List&lt;CA&gt; list = new ArrayList&lt;&gt;();
-    list.add(new CA(&quot;sher&quot;));
-    list.add(new CA(&quot;hony&quot;));
-    list.add(new CA(&quot;honysher&quot;));
+<p>看一下上面的第<code>6行</code>。要提一下上面忘了说了的,<code>(length-1) &amp; hash</code>其实就是相当于<code>length % hash</code>这种取模运算，但是与运算的效率比较高，所以选择使用与运算。第六行中的<code>(n-1) &amp; hash</code>就是该对象应该放入<code>table</code>的第几个位置中。如果那个位置是空的，也就是说<code>== null</code>，那么直接放进去就行了（<code>tab[i] = newNode(hash, key, value, null);</code>）。</p>
+<p>如果那个位置不是空的，那么就是按照我们之前说的那个原则进行判断。其中下面依旧提到了<code>treeNode</code>，这个我们之前是没有想到的，我们认为是只有链表的。先来一步一步看吧。</p>
+<p>第<code>10行</code>的<code>if</code>如果进入了就相当于<code>key</code>是和那个位置的节点的<code>key</code>是一样的。不过为什么使用这种方式进行判断呢？</p>
+<pre><code class="java">if (p.hash == hash &amp;&amp;
+    ((k = p.key) == key || (key != null &amp;&amp; key.equals(k))))</code></pre>
+<p>其实这也就是我们之前说过的。先判断hash值<code>p.hash == hash</code>，如果<code>hash</code>值都不想等那么两个对象肯定是不一样的。然后我们应该比较得是<code>key</code>是否相等。这里使用的是</p>
+<pre><code class="java">(k = p.key) == key || (key != null &amp;&amp; key.equals(k))</code></pre>
+<p>在Java中三个逻辑云算法的优先级是<code>! &gt; &amp;&amp; &gt; ||</code>。所以说上面的写法是后面的先结合。也就相当于。</p>
+<pre><code class="java">(k = p.key) == key || (key != null &amp;&amp; key.equals(k))</code></pre>
+<p>我们先比较<code>key</code>的地址，因为地址比较特别容易，如果地址相同，那么就是同一个对象，就没有必要进行<code>equals</code>操作了，因为<code>equals</code>操作可能是比较费时的，而且使用<code>equals</code>必须要<code>key != null</code>。然后13行就是处理树的操作。这里先不说。直接看一下后面的操作。</p>
+<p>注意看一下第<code>19行</code>的操作<code>binCount &gt;= TREEIFY_THRESHOLD - 1</code>，其中<code>binCount</code>其实就是已经存在的链表的节点数-1，因为<code>binCount</code>是从0开始的。其中<code>TREEIFY_THRESHOLD</code>的声明如下。</p>
+<pre><code class="java">/**
+ * The bin count threshold for using a tree rather than list for a
+ * bin.  Bins are converted to trees when adding an element to a
+ * bin with at least this many nodes. The value must be greater
+ * than 2 and should be at least 8 to mesh with assumptions in
+ * tree removal about conversion back to plain bins upon
+ * shrinkage.
+ */
+static final int TREEIFY_THRESHOLD = 8;</code></pre>
+<p>其实无论是从这个变量的名字还是从文档的注释中我们都可以清楚的了解到，这个变量是用来标记什么时候一个链表将要变成一棵树。其实在<code>JDK</code>之前，我们使用的<code>HashMap</code>的底层都是使用<strong>数组加上链表</strong>来实现的，到了<code>JDK8</code>之后变成了数组加链表加红黑树的形式。众所周知，当链表变得很长的时候，查询的效率会变得特别的低，而如果我们使用树结构的话，将会大大降低我们的查询速度。如果<code>binCount &gt;= TREEIFY_THRESHOLD - 1</code>，就就代表这这个链表太长了，我们需要将其变成红黑树来存储。于是调用了函数<code>treeifyBin(tab, hash);</code>将链表变成了二叉树。</p>
+<p>我们可以来看一看这个函数干了什么。</p>
+<pre><code class="java">/**
+ * Replaces all linked nodes in bin at index for given hash unless
+ * table is too small, in which case resizes instead.
+ */
+final void treeifyBin(Node&lt;K,V&gt;[] tab, int hash) {
+    int n, index; Node&lt;K,V&gt; e;
+    if (tab == null || (n = tab.length) &lt; MIN_TREEIFY_CAPACITY)
+        resize();
+    else if ((e = tab[index = (n - 1) &amp; hash]) != null) {
+        TreeNode&lt;K,V&gt; hd = null, tl = null;
+        do {
+            TreeNode&lt;K,V&gt; p = replacementTreeNode(e, null);
+            if (tl == null)
+                hd = p;
+            else {
+                p.prev = tl;
+                tl.next = p;
+            }
+            tl = p;
+        } while ((e = e.next) != null);
+        if ((tab[index] = hd) != null)
+            hd.treeify(tab);
+    }
+}
 
-    String str = JSON.toJSONString(list);
-    List&lt;CA&gt; temp = JSON.parseObject(str, List.class);
-
-//        System.out.println(temp.get(1).name);
-//        System.out.println(list.get(1).name);
-//        System.out.println(temp.get(1).name == list.get(1).name);
+static final int MIN_TREEIFY_CAPACITY = 64;</code></pre>
+<p>看注释中的文档，如果数组的长度太小了的话，是不会将链表变成树的。其中，从第<code>7行</code>代码，我们可以得知，<code>tab</code>为空(这里明显不是空啊)或者是数组的长度太小（小于<code>64</code>）的话，会进行扩容而不是变树。然后下面就是变树的操作了，这里也不是二叉树专辑，所以不再介绍了。</p>
+<p>我们继续回到<code>putVal</code>函数中，其中还有这样的代码。</p>
+<pre><code class="java">if (e != null) { // existing mapping for key
+    V oldValue = e.value;
+    if (!onlyIfAbsent || oldValue == null)
+        e.value = value;
+    afterNodeAccess(e);
+    return oldValue;
 }</code></pre>
-<h3 id="ArrayLIst与Vector"><a href="#ArrayLIst与Vector" class="headerlink" title="ArrayLIst与Vector"></a>ArrayLIst与Vector</h3><p>之前也说过了<code>ArrayList</code>和<code>Vector</code>是相似的，不过一个是线程不安全，一个是线程安全的。那么是不是如果考虑到线程安全的情况下我们就要使用<code>Vector</code>呢？当然不是，<code>Vector</code>这么垃圾，其实也没有人去使用他。我们可以这样把<code>ArrayList</code>变成一个线程安全的容器。</p>
-<pre><code class="java">@Test
-public void test3() {
-    List&lt;CA&gt; list = new ArrayList&lt;&gt;();
-    list.add(new CA(&quot;sher&quot;));
-    list.add(new CA(&quot;hony&quot;));
-    list.add(new CA(&quot;honysher&quot;));
-
-    List&lt;CA&gt; cas = Collections.synchronizedList(list);
+<p>这里的<code>e</code>代表的是什么？其实就是查到了和所要插入的对象的键是相同的节点。这时候一般来说我们需要进行替换操作。不过这就要提到我们之前说的那个<code>onlyIfAbsent</code>参数了。如果这个参数是false的话，我们只有在值为空的时候才可以替换值。(键当然不是空的)。后面的函数就没啥好说的了。</p>
+<p>不过还有一点是我们需要说的，就是对象插入链表是以何种方式的呢？请看第<code>19行</code>代码</p>
+<pre><code class="java">p.next = newNode(hash, key, value, null);</code></pre>
+<p>其中这里的p是当前比较过后不相等的节点。此时我们新建一个节点，直接挂到这个节点的后面。(此时p节点的后面没有元素了)。其实这也是<code>JDK8</code>中采用的方式，<code>JDK7</code>之前采用的是使用新元素指向旧元素。但是<code>JDK8</code>使用的是旧元素指向新元素。这也被称为是七上八下。其实也就是<code>JDK7</code>中采用链表的头插法。<code>JDK8</code>中采用的是链表的尾插法，仅此而已。</p>
+<p>至此，我们的<code>put</code>源码就都看完了。下面简单的说一下<code>get</code>的源码。</p>
+<h3 id="get源码"><a href="#get源码" class="headerlink" title="get源码"></a>get源码</h3><pre><code class="java">/**
+ * Returns the value to which the specified key is mapped,
+ * or {@code null} if this map contains no mapping for the key.
+ *
+ * &lt;p&gt;More formally, if this map contains a mapping from a key
+ * {@code k} to a value {@code v} such that {@code (key==null ? k==null :
+ * key.equals(k))}, then this method returns {@code v}; otherwise
+ * it returns {@code null}.  (There can be at most one such mapping.)
+ *
+ * &lt;p&gt;A return value of {@code null} does not &lt;i&gt;necessarily&lt;/i&gt;
+ * indicate that the map contains no mapping for the key; it&#39;s also
+ * possible that the map explicitly maps the key to {@code null}.
+ * The {@link #containsKey containsKey} operation may be used to
+ * distinguish these two cases.
+ *
+ * @see #put(Object, Object)
+ */
+public V get(Object key) {
+    Node&lt;K,V&gt; e;
+    return (e = getNode(hash(key), key)) == null ? null : e.value;
 }</code></pre>
-<p>此时这个cas就是一个线程安全的容器了。</p>
-<p>其实我们可以使用这样的集合<code>java.util.concurrent.CopyOnWriteArrayList</code>，这是专门为了多线程设计的<code>ArrayList</code>的变种。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面就简单的学习了一下<code>ArrayList</code>的使用。看了声明和源码以及一些常用的方法。后面还说到了<code>ArrayList</code>的浅拷贝与深拷贝的问题。</p>
+<pre><code class="java">/**
+ * Implements Map.get and related methods.
+ *
+ * @param hash hash for key
+ * @param key the key
+ * @return the node, or null if none
+ */
+final Node&lt;K,V&gt; getNode(int hash, Object key) {
+    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; first, e; int n; K k;
+    if ((tab = table) != null &amp;&amp; (n = tab.length) &gt; 0 &amp;&amp;
+        (first = tab[(n - 1) &amp; hash]) != null) {
+        if (first.hash == hash &amp;&amp; // always check first node
+            ((k = first.key) == key || (key != null &amp;&amp; key.equals(k))))
+            return first;
+        if ((e = first.next) != null) {
+            if (first instanceof TreeNode)
+                return ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);
+            do {
+                if (e.hash == hash &amp;&amp;
+                    ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
+                    return e;
+            } while ((e = e.next) != null);
+        }
+    }
+    return null;
+}</code></pre>
+<p>相较于<code>put</code>方法，这个<code>get</code>方法可谓是简单的不要不要的。我们先通过<code>hash</code>找到数组的<code>index</code>。然后一次下去比较就完事了。不过还是要注意一下，下面到底是链表还是树，两者的比较的方法可是不同的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面简单的看了一下<code>HashMap</code>的源码，其实也就是<code>put</code>和<code>get</code>这两个方法，其实再说白了也就只是通过<code>put</code>方法简单的说明了Java当中<code>HashMap</code>底层的实现。看起来确实是蛮复杂的，但是如果仔细研究，认真阅读还是可以看懂大部分内容的。毕竟每一个方法上面都有详细的注释的说明。</p>
 
         </div>
         <!-- .entry-content -->
@@ -693,36 +750,19 @@ public void test3() {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
+        
           
-            <div class="post-nepre half previous">
+            <div class="post-nepre full next">
           
-            <a href="/2019/10/15/HastSet, HashMap(一) Hash简介/" rel="prev">
+            <a href="/2019/10/15/HastSet, HashMap(一) Hash简介/" rel="next">
               <div class="background">
                 <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/70.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/70.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                HastSet, HashMap(一) Hash简介</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-        
-          
-            <div class="post-nepre half next">
-          
-            <a href="/2019/10/13/String-StringBuilder-and-StringBuffer/" rel="next">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/68.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/68.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                String, StringBuilder and StringBuffer</h3>
+                HastSet, HashMap(一) Hash简介</h3>
                 <hr>
               </div>
             </a>

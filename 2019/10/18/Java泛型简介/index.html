@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Java中的IO-04 | Sher的小博客</title>
+  <title itemprop="name">Java泛型简介 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/45.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/45.png">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/6.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/6.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Java中的IO-04</h1>
+      Java泛型简介</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-9-25<span class="bull">
+        2019-10-18<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,107 +376,186 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Java中的IO-04"><a href="#Java中的IO-04" class="headerlink" title="Java中的IO-04"></a>Java中的IO-04</h1><h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>之前已经介绍过很多的IO流了。比如四大抽象流<code>InputStream</code>，<code>OutputStream</code>，<code>Reader</code>,<code>Writer</code>。前面的两个是<strong>字节流</strong>，后面的两个是<strong>字符流</strong>。所谓的字节流与字符流之间的最大的区别就是，<strong>字节流是写给计算机看的，而字符流写写给我们人看的。</strong>Java当中所有的IO流基本上都继承于这个四大抽象流，而且基本上都以他们结尾。之前还说过一个特殊的流<code>OutputStreamWriter</code>，<code>InputStreamReader</code>。这两个流却是有点儿特殊，他们的前面是字节流，后面却是字符流。之前我们说他是处理字符相关的流，不过实际上他是<strong>将字节流转换成字符流的特殊流</strong>。因而我们可以指定编码(字节流转换成为字符流的一种方式)来进行字节到字符的转换。如果我们要处理一些字符文件的话，之前学的<code>FileReader</code>，<code>FileWriter</code>无疑是一个最合适的选择。如果要是处理一些字节文件比如图片或者视频什么的，我们需要使用字节流<code>FileInputStream</code>，<code>FileOutputStream</code>。不过单独使用这些流的话，效率可能是一个问题。所以缓冲区是必须的，Java IO 中给我们提供了<strong>缓冲的包装流</strong>。<code>BufferedInputStream</code>,<code>BufferedOutputStream</code>,<code>BufferedReader</code>,<code>BufferedWriter</code>。这四个流是对前面的四个基本的抽象流的包装，如果不是什么特殊情况的话，我们可以每次都加上这个缓冲层。</p>
-<h2 id="ByteArrayInputStream-ByteArrayOutputStream"><a href="#ByteArrayInputStream-ByteArrayOutputStream" class="headerlink" title="ByteArrayInputStream, ByteArrayOutputStream"></a>ByteArrayInputStream, ByteArrayOutputStream</h2><p>字节流我们只是介绍了一种，也就是从文件中读取字节。不过并不是所有的情况下我们都要从文件中读取字节的。比如说我们获取一个字节数组，我们想使用流来处理一下这个字节数组，好像我们现在学过的流中没有这样的功能。</p>
-<p>于是现在我们引入了处理数组的新的流，<code>ByteArrayInputStream</code>和 <code>ByteArrayOutputStream</code>。</p>
-<p>下面就是我们正常的官方文档的学习环节。</p>
-<pre><code class="java">java.lang.Object 
-    java.io.InputStream 
-        java.io.ByteArrayInputStream </code></pre>
-<pre><code class="java">public class ByteArrayInputStream
-extends InputStream</code></pre>
+          <h1 id="Java泛型简介"><a href="#Java泛型简介" class="headerlink" title="Java泛型简介"></a>Java泛型简介</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>今天要说的是Java中的泛型，其实在C++中我们早就接触到了泛型，也感受到了泛型的强大。使用了泛型，我们可以不再为了不同的类型写多个相同的函数。比如说下面就是一个泛型的函数。</p>
+<pre><code class="c++">template &lt;typename T, typename U&gt;
+auto add(const T&amp; t, const U&amp; u) -&gt; decltype(u + t) {
+    return u + t;
+}</code></pre>
+<p>通过上面的函数，我们就可以写出一个<code>add</code>函数，作用是将两个参数相加，但是这两个参数可以是任何的类型的。那么Java中有没有相似的泛型技术呢？其实是有的，在<code>JDK5</code>之后，Java也引进了泛型的技术。其实我们是经常见到泛型的，比如说</p>
+<pre><code class="java">List&lt;String&gt; list = new ArrayList&lt;&gt;();</code></pre>
+<p>其中<code>&lt;String&gt;</code>就是一个泛型，写法是和<code>C++</code>一致的(很有可能就是抄袭C++的，毕竟C++在泛型编程这一块是非常的强大的，最伟大的泛型编程的作品就是C++的标准模板库，也就是我们经常说的STL)。</p>
+<p>那么下面我们就来介绍一下Java中的泛型吧。</p>
+<h2 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h2><p>和C++一样，我们先来接触一下泛型的方法。当我们需要声明一个泛型方法时，我们需要在修饰符之后(public static)，返回类型之前写一个类型参数。语法如下。</p>
+<pre><code class="java">public static &lt;T&gt; void swap(T[] array, int i, int j) {
+    T temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+}</code></pre>
+<p>这样我们就声明出了交换数组中某两个位置的函数了（这里为了简单没有检查范围）。</p>
+<p>但是问题却出现了。</p>
+<pre><code class="java">public static void main(String[] args) {
+    int[] arr1 = {1, 2, 3, 4};
+    swap(arr1, 1, 2);
+    System.out.println(arr1);
+}</code></pre>
+<p>上面的代码出错了，是什么没有符合这个类型的函数。其实这个问题我们之前也说过了，当我们使用泛型的时候，只可以使用对象类实现。比如我们只能使用<code>List&lt;Integer&gt;</code>而不可以使用<code>List&lt;int&gt;</code>。但是我们可以放int值进入啊，为什么这儿报错了呢？确实基本数据类型有装箱机制，但是<code>int[]</code>是没法转变成为<code>Integer[]</code>的。</p>
+<pre><code class="java">public static void main(String[] args) {
+    Integer[] arr1 = {1, 2, 3, 4};
+    swap(arr1, 1, 2);
+    System.out.println(Arrays.toString(arr1));
+
+    String[] arr2 = {&quot;hello&quot;, &quot;world&quot;, &quot;sher&quot;};
+    swap(arr2, 1, 2);
+    System.out.println(Arrays.toString(arr2));
+}</code></pre>
+<p>我们可以使用上面的方式调用这个函数。但是，我就是想要<code>int[]</code>也可以用这个函数，有没有办法呢？其实是有办法的。</p>
+<p><code>int[]</code>是一个数组，那么Java中的数组是基本数据类型吗？不是，数组其实一个对象，泛型可以用于对象上面，那么当然是可以用于<code>int[]</code>上面的。但是，我们就需要之前学的反射的知识了。</p>
+<pre><code class="java">public static &lt;T&gt; void swapPlus(T arr, int i, int j) throws Exception {
+    Class&lt;?&gt; clazz = arr.getClass();
+    if (!clazz.isArray()) {
+        return;
+    }
+    Object temp = Array.get(arr, i);
+    Array.set(arr, i, Array.get(arr, j));
+    Array.set(arr, j, temp);
+}</code></pre>
+<p>这里我们使用的不是<code>T[]</code> 而是<code>T</code>，这样<code>int[]</code>就可以作为<code>Object</code>传入函数了。此时我们就可以通过反射的方式操作这个函数了。这个函数也是适用与其他的数组的，是一个通用的方法。</p>
+<h2 id="泛型类"><a href="#泛型类" class="headerlink" title="泛型类"></a>泛型类</h2><p>之前我们看的<code>ArrayList</code>，<code>HashMap</code>都是泛型类，甚至那个<code>Entry</code>也是一个泛型类。我们使用的时候都是这样子用的。<code>HashMap&lt;K, V&gt;</code>因为我们并不知道需要放入的键值的类型，只好声明为<code>K V</code>。等到我们使用的时候指定需要的类型是什么。比如说<code>Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;();</code>后面的<code>&lt;&gt;</code>中可以省略类型声明，毕竟前面都已经写过一遍了。泛型类和泛型方法不一致的是，使用泛型类的时候需要我们指定类型。而泛型方法不需要我们提供类型，这一点和C++也是类似的。</p>
+<p>泛型类的声明方式是在类名之后加上类型参数。</p>
+<pre><code class="java">class A&lt;E&gt; {
+    private E element;
+
+    A(E e) {
+        this.element = e;
+    }
+
+    public E getElement() {
+        return element;
+    }
+
+    public void setElement(E element) {
+        this.element = element;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;A{&quot; +
+                &quot;element=&quot; + element +
+                &#39;}&#39;;
+    }
+}</code></pre>
+<p>通过上面的方式我们就声明一个简单的泛型类，其中有一个私有的泛型的属性。</p>
+<p>类中的类型参数类中的方法都是可以使用的，但是如果我们需要在类中声明额外的泛型方法，这当然也是可以的。我们可以将这个类型参数声明和泛型类的类型参数一致（不建议这么脑残），此时优先使用的是泛型方法的类型参数。</p>
+<h2 id="类型限定"><a href="#类型限定" class="headerlink" title="类型限定"></a>类型限定</h2><p>有时候我们需要对泛型的类型做一些限定，比如说这个类型必须要实现了<code>Comparable</code>接口才可以，此时我们可以这么写。</p>
+<pre><code class="java">public static &lt;T extends Comparable&gt; void func(T t1, T t2) {
+    if (t1.compareTo(t2) &gt; 0) {
+        System.out.println(&quot;The fromer is bigger&quot;);
+    } else {
+        System.out.println(&quot;The Later is bigger&quot;);
+    }
+}
+
+@Test
+public void test2() {
+    String str1 = &quot;Hello&quot;;
+    String str2 = &quot;World&quot;;
+    func(str1, str2);
+}</code></pre>
+<p>此时调用<code>func</code>的参数必须要实现<code>Comparable</code>这个接口，如果没有实现这个接口是没法调用的。不过也可以有多个限定。</p>
+<pre><code class="java">public static &lt;T extends Comparable &amp; Serializable&gt; void func(T t1, T t2) {
+    if (t1.compareTo(t2) &gt; 0) {
+        System.out.println(&quot;The fromer is bigger&quot;);
+    } else {
+        System.out.println(&quot;The Later is bigger&quot;);
+    }
+}</code></pre>
+<p>使用<code>&amp;</code>符号相连，就想捕捉异常那样子一样。</p>
+<h2 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h2><p>如果我们需要实现一个方法，用来处理<code>Employee</code>类的子类组成的数组，我们只需要讲参数声明为<code>Employee[]</code>就行了。比如说<code>Manager</code>是<code>Employee</code>的一个子类，此时<code>Manager[]</code>也是<code>Employee</code>的子类，因为Java中数组具有协变性。但是如果我们使用的不是原生数组，而是动态数组<code>ArrayList</code>呢？此时如果我们使用<code>ArrayList&lt;Employee&gt;</code>是没有用的。</p>
+<pre><code class="java">@Test
+public void test4() {
+    List&lt;Employee&gt; employeeList = null;
+    List&lt;Manager&gt; managerList = null;
+
+    employeeList = managerList; // Error
+    employeeList.add(new Employee());
+}</code></pre>
+<p>上面的代码告诉我们，其实<code>List&lt;Manager&gt;</code>不是<code>List&lt;Employee&gt;</code>的子类，是不可以进行赋值。如果第六行代码可以通过编译的话，那么第七行代码就是可以执行的，此时可以将一个普通的员工加入经理的数组中，这显然是不合适的。所以Java中禁止了这样的操作。Java中的数组虽然是具有协变性，但是如果我们将<code>Employee</code>对象放入到<code>Manager</code>数组中，也是会抛出异常的，所以说具有协变性非常的方便但是也有缺点。那么我们该如何解决这个问题呢？我们需要找到他们共同的父类，那是<code>List&lt;Object&gt;</code>吗？闭着眼睛想都不可能是的。如果是的话那就真的乱套了，不仅普通员工可以加入到经理的列表中，甚至什么老鼠猴子都是可以的。Java中提供了通配符<code>?</code>帮助我们解决这个问题。</p>
+<p><code>List&lt;?&gt;</code>就是任何的<code>List&lt;xxx&gt;</code>的父类，他自然也都是<code>List&lt;Employee&gt;</code>和<code>List&lt;Manager&gt;</code>的父类，不过这个题目中我们说的是所有的<code>Employer</code>子类，我们就应该使用<code>List&lt;? extends Employee&gt;</code></p>
+<p>不过我们使用<code>add</code>操作的时候，却发现了问题。编译器不允许我们进行添加数据。毕竟<code>?</code>可以是<code>Employee</code>的任何子类，所以我们是没有办法进行添加数据的。但是我们可以进行读的操作。因为只要是<code>Employee</code>的子类都是可以赋值给<code>Employee</code>的，不过也有一个例外的，我们可以想数组中添加<code>null</code>，比较任何对象都可以是<code>null</code>，添加<code>null</code>是肯定没有任何问题的，但是添加<code>null</code>真的有意义吗？</p>
+<pre><code class="java">@Test
+public void test4() {
+    List&lt;Manager&gt; managerList = new ArrayList&lt;&gt;();
+    managerList.add(new Manager());
+    List&lt;? extends Employee&gt; list = null;
+
+    list = managerList;
+    Employee employee = list.get(0);
+    System.out.println(employee.getClass());
+}</code></pre>
+<p>取出来的是<code>Employee</code>但是我们也可以将其强转为<code>Manager</code>，毕竟我们通过<code>getClass</code>可以知道其实这是一个<code>Manager</code>对象。</p>
+<p>上面说的是子类型的通配符，其实还有一种父类型的通配符。上面的是有下界，这里是有上界。不过这两种通配符都是可以匹配自己的。比如说<code>? extends Employee</code>，此时<code>Employee</code>也是在这个范围之内的。<code>? super Manager</code>如是。</p>
+<p><code>List&lt;? super Manager&gt;</code>就代表着<code>List</code>中是<code>Manager</code>的父类，使用的方式比较相似。</p>
+<pre><code class="java">@Test
+public void test5() {
+    List&lt;Employee&gt; employeeList = new ArrayList&lt;&gt;();
+    employeeList.add(new Employee());
+
+    List&lt;? super Manager&gt; list = employeeList;
+
+    list.add(new Manager());
+    list.add(new BigMan());
+    System.out.println(list);
+
+    Object object = list.get(1);
+    System.out.println(object.getClass());
+}</code></pre>
+<p>不过需要注意的是，此时我们是可以进行读写两种操作的。<code>? super Manager</code>表示其中肯定是<code>Manager</code>的父类的类型。子类是可以赋值给父类的，此时我们就可以添加任何的<code>Manager</code>以及其子类类型的对象。(上面的<code>BigMan</code>是<code>Manager</code>的子类)。至于获取，我们并不知道我们将要获取到一个什么样类型的对象，但是既然是一个对象我们就可以将其赋值给<code>Object</code>，所以对于<code>？ super Manager</code>，我们是可以对其进行读写两种操作的。</p>
+<p><code>? super xx</code>这种用法是经常用于函数式对象的参数。比如我们需要根据给定的属性打印出员工的姓名。</p>
+<pre><code class="java">public static void printAll(Employ[] emps, Predicate&lt;Employee&gt; filter) {
+    for (Employ e : emps) {
+        if (filter.test(e)) {
+            System.out.println(e.getName());
+        }
+    }
+}</code></pre>
+<p>当然我们也可以使用一个lambda表达式来传递这个参数。</p>
+<pre><code class="java">printAll(emps, e -&gt; e.getSalary() &gt; 10000);</code></pre>
+<p>不过有时候我们想要使用一个<code>Predicate&lt;Object&gt;</code>来替代他。</p>
+<pre><code class="java">printAll(emps, e -&gt; e.toString().length() % 2 == 0);</code></pre>
+<p>这个没有任何的问题，因为<code>toString</code>方法其实是<code>Object</code>和他的子类共有的一个方法。不过<code>Predicate&lt;Object&gt;</code>和<code>Predicate&lt;Employee&gt;</code>是毫无关系的两个类。此时我们就需要使用<code>Predicate&lt;? super Employee&gt;</code>。</p>
+<pre><code class="java">public static void printAll(Employ[] emps, Predicate&lt;? super Employee&gt; filter) {
+    for (Employ e : emps) {
+        if (filter.test(e)) {
+            System.out.println(e.getName());
+        }
+    }
+}</code></pre>
+<p>此时e是<code>Employee</code>的父类，他可以使用的方法，<code>Employee</code>也是可以使用的。</p>
+<p>一般情况下，当给方法指定一个泛型函数式接口的时候，我们应当使用<code>super</code>通配符。</p>
 <blockquote>
-<ul>
-<li>A <code>ByteArrayInputStream</code>包含一个内部缓冲区，其中包含可以从流中读取的字节。内部计数器跟踪<code>read</code>方法要提供的下一个字节。</li>
-<li>关闭<code>ByteArrayInputStream</code>没有任何效果。  在关闭流之后，可以调用此类中的方法，而不生成<code>IOException</code> 。 </li>
-</ul>
+<p>小提示：</p>
+<p>很多的程序员喜欢使用<code>PECS</code>的方法来帮助直接来记忆。<code>Productor</code>生产者使用<code>extends</code>，<code>Consumer</code>消费者使用<code>super</code>。当我们从<code>ArrayList</code>中读取数据的时候，我们需要使用<code>extends</code>，此时是生产者。如果要将值传递给<code>Predicate</code>用来测试的时候，此时是消费者。  </p>
 </blockquote>
-<pre><code class="java">ByteArrayInputStream(byte[] buf) 
-// 创建一个 ByteArrayInputStream ，使其使用 buf作为其缓冲区数组。  
-ByteArrayInputStream(byte[] buf, int offset, int length) 
-// 创建 ByteArrayInputStream使用 buf作为其缓冲器阵列。  </code></pre>
-<pre><code class="java">int available() 
-// 返回可从此输入流读取（或跳过）的剩余字节数。  
-void close() 
-// 关闭 ByteArrayInputStream没有任何效果。  
-void mark(int readAheadLimit) 
-// 设置流中当前标记的位置。  
-boolean markSupported() 
-// 测试 InputStream是否支持标记/复位。  
-int read() 
-// 从该输入流读取下一个数据字节。  
-int read(byte[] b, int off, int len) 
-// 将 len字节的数据读入此输入流中的字节数组。  
-void reset() 
-// 将缓冲区重置为标记位置。  
-long skip(long n) 
-// 从此输入流跳过 n个字节的输入。  </code></pre>
-<p>其实上面的这些方法，和这些属性都是可以一眼就看懂的，和其他的流是没什么区别的。</p>
-<p>看一下官方文档的第一点，我们可以知道使用<code>ByteArrayInputStream</code>内部有一个缓冲区，那是否可以使用<code>BufferedInputStream</code>来包装呢？这个肯定是可以用的，毕竟这个也是<code>InputStream</code>的子类吖。</p>
-<p>第二点是关于这个流的关闭的，官方文档告诉我们，这个流的关闭是不会做任何事情的，也就是说我们可以选择不关闭。但是为了IO流中操作的有机的统一和规范。虽然关闭没有用，我们还是推荐来关闭一下子的。</p>
-<h3 id="代码举例"><a href="#代码举例" class="headerlink" title="代码举例"></a>代码举例</h3><pre><code class="java">public class ByteArrayInputStreamDemo {
-    public static void main(String[] args) {
-        byte[] b = &quot;sher is a wonderful boy!&quot;.getBytes();
-        ByteArrayInputStream bais = new ByteArrayInputStream(b);
-        StringBuilder sb = new StringBuilder();
-        int temp = 0;
-        while ((temp = bais.read()) != -1){
-            sb.append((char) temp);
-        }
-        System.out.println(sb.toString());
-    }
+<p>​                                                                                                                                                            —— 以上的部分内容来自《Core Java for the Impatient》</p>
+<h2 id="通配符捕获"><a href="#通配符捕获" class="headerlink" title="通配符捕获"></a>通配符捕获</h2><p>我们尝试使用通配符定义一个<code>swap</code>方法。</p>
+<pre><code class="java">public static void swap(ArrayList&lt;?&gt; list, int i, int j) {
+    Object temp = list.get(i);
+    list.set(i, list.get(j)); // Error
+    list.set(j, temp); // Error
 }</code></pre>
-<p>其实上面的我的用法不没有是把这个作为一个IO流来使用，所以也没有使用IO流的<code>try catch finally</code>的标准操作。而且这个流也是不会抛出<code>IOException</code>的。</p>
-<p>下面随便写一个有关<code>ByteArrayOutputStream</code>的代码举例</p>
-<pre><code class="java">public class ByteArrayOutputStreamDemo {
-    public static void main(String[] args) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        while (baos.size() &lt;= 10){
-            try {
-                baos.write(System.in.read());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        byte[] b = baos.toByteArray();
-        System.out.println(new String(b));
+<p>之前我们也说过了，这个时候我们是可以从数组得到数据，但是我们不可以对数据进行修改。那么我们到底该怎么做呢？</p>
+<pre><code class="java">public static void swap(List&lt;?&gt; list, int i, int j) {
+    swapHelper(list, i, j);
+}
 
-    }
+private static &lt;T&gt; void swapHelper(List&lt;T&gt; list, int i, int j) {
+    T temp = list.get(i);
+    list.set(i, list.get(j));
+    list.set(j, temp);
 }</code></pre>
-<p>这里也没有使用标准的IO流操作方式，毕竟这个流是有点儿特殊了。</p>
-<h2 id="CharArrayWriter-CharArrayReader"><a href="#CharArrayWriter-CharArrayReader" class="headerlink" title="CharArrayWriter, CharArrayReader"></a>CharArrayWriter, CharArrayReader</h2><p>和上面的字节数组类似的，字符流中也有相应的流是和字符数组相关的。其实他们之间的道理是一样的，这里就不再赘述了。</p>
-<pre><code class="java">public class CharArrayWriterDemo {
-    public static void main(String[] args) {
-        char[] ch = &quot;sher is the best boy!&quot;.toCharArray();
-        CharArrayWriter c = new CharArrayWriter();
-
-        try {
-            c.write(ch);
-            c.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(c.toString());
-    }
-}</code></pre>
-<pre><code class="java">public class CharArrayReaderDemo {
-    public static void main(String[] args) {
-        char [] ch = &quot;abcdefg&quot;.toCharArray();
-        CharArrayReader char1 = new CharArrayReader(ch);
-        StringBuilder sb = new StringBuilder();
-        int temp = 0;
-        while (true){
-            try {
-                if (((temp = char1.read()) == -1)) break;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            sb.append((char)temp);
-        }
-        System.out.println(sb.toString());
-    }
-}</code></pre>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>其实这些流都不是常见的流，基本上我们是用不到的。不过稍微做一下了解也是好的呢、</p>
+<p>上面就是通配符匹配I的例子。编译器虽然是不知道<code>?</code>到底是个什么玩意，但是知道它代表是某种类型，所以说调用一个泛型方法是没有问题的。也就是说<code>swapHelper</code>中的<code>T</code>捕获了，这个<code>?</code>，此时我们就可以使用<code>T</code>来声明变量。</p>
+<p>但是这样做，我们得到了什么呢？直接使用<code>swapHelper</code>这个泛型函数不是更好。。。其实我也不是很能理解官方的说辞。说什么<code>List&lt;?&gt;</code>这样的<code>API</code>更加的友好，泛型函数不好。我倒是感觉反过来了。没学过<code>?</code>是什么含义的，估计死都不会用，但是看到泛型方法倒是很容易理解。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面简单的介绍了Java中泛型方法、泛型类，以及通配符的使用。不过泛型还有很多需要注意的地方没有说。下面我们将会更加深入的Java中的泛型。</p>
 
         </div>
         <!-- .entry-content -->
@@ -504,36 +583,19 @@ long skip(long n)
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/09/25/Java中的IO-05/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/46.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/46.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                Java中的IO-05</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/09/24/Java中的IO-03/" rel="next">
+            <a href="/2019/10/17/反射是个什么鬼？/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/44.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/5.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/5.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                Java中的IO-03</h3>
+                反射是个什么鬼？</h3>
                 <hr>
               </div>
             </a>

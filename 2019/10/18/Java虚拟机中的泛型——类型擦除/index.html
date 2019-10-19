@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Apache Commons IO简介 | Sher的小博客</title>
+  <title itemprop="name">Java虚拟机中的泛型——类型擦除 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/8.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/8.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Apache Commons IO简介</h1>
+      Java虚拟机中的泛型——类型擦除</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-9-26<span class="bull">
+        2019-10-18<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,182 +376,177 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Apache-Commons-IO简介"><a href="#Apache-Commons-IO简介" class="headerlink" title="Apache Commons IO简介"></a>Apache Commons IO简介</h1><hr>
-<p>之前一直学的都是Java中IO的知识，使用起来基本上都是那个一个样，说实话我确实是有点儿感到厌倦了。于是世界上著名的开源组织阿帕奇(Apache)将Java中的IO进行了封装写了Commons IO这个玩意。这个是需要从阿帕奇的光网上面去下载的，因为这个并不是jdk自带的库。下载完之后还自带了源码以及官方文档，不过都是英文的，，这就非常考验我的能力了。</p>
-<p>先看一下这个Commons IO 由哪些东西组成。</p>
-<pre><code class="java">org.apache.commons.io    
-// This package defines utility classes for working with streams, readers, writers and files.
-org.apache.commons.io.comparator    
-// This package provides various Comparator implementations for Files.
-org.apache.commons.io.filefilter    
-// This package defines an interface (IOFileFilter) that combines both FileFilter and FilenameFilter.
-org.apache.commons.io.input    
-// This package provides implementations of input classes, such as InputStream and Reader.
-org.apache.commons.io.monitor    
-// This package provides a component for monitoring file system events (directory and file create, update and delete events).
-org.apache.commons.io.output    
-// This package provides implementations of output classes, such as OutputStream and Writer.
-org.apache.commons.io.serialization    
-// This package provides a framework for controlling the deserialization of classes.</code></pre>
-<p>上面的这所只言片语，说实话我是什么都看不懂的，如果不是对Commons IO的体系有足够的了解，是肯定看不懂的。就像给我们一开始看那个Java io的体系图，我们也肯定是看的一脸懵逼的吖~~</p>
-<p>而且上面的并不是一些类而已，只是一些包，每个包中还有非常多的类，每个类中又有非常多的方法。所以说不可能一个一个去学习的，只能寻找自己需要的去学，这里就看一下别人的博客,毕竟我对这个玩意是一点也不了解。</p>
-<p><a href="https://blog.csdn.net/langgufu314/article/details/84721816" target="_blank" rel="noopener"><strong>Apache Commons IO入门教程</strong></a></p>
-<p>这个博客写了一点，但是我感觉写的并不怎么样，看了也没什么收获。下面我就直接上一些这个类的常用方法的代码吧。</p>
-<h2 id="文件或者文件夹的大小"><a href="#文件或者文件夹的大小" class="headerlink" title="文件或者文件夹的大小"></a>文件或者文件夹的大小</h2><pre><code class="java">public class TestCommonIo {
-    public static void main(String[] args) {
-        long len1 = FileUtils.sizeOf(new File(&quot;test&quot;));
-        long len2 = FileUtils.sizeOf(new File(&quot;./Exercise/src&quot;));
-        System.out.println(len1);
-        System.out.println(len2);
-    }
+          <h1 id="Java虚拟机中的泛型——类型擦除"><a href="#Java虚拟机中的泛型——类型擦除" class="headerlink" title="Java虚拟机中的泛型——类型擦除"></a>Java虚拟机中的泛型——类型擦除</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上面我们已经简单的介绍了Java中的泛型的基本的用法了。按理来说，已经足够我们昏头昏脑的去使用泛型了。一开始我们会感觉泛型是多么的简单，然后用着用着就会发现，泛型到底是个什么东西，越来越不能理解泛型了。此时，我们就需要进一步的去理解泛型，而不是将泛型局限在简单的加一个<code>&lt;T&gt;</code>上面。</p>
+<h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><p>我们先来一个经典的测试题。</p>
+<pre><code class="java">@Test
+public void test() {
+    List&lt;String&gt; list1 = new ArrayList&lt;&gt;();
+    List&lt;Integer&gt; list2 = new ArrayList&lt;&gt;();
+
+    System.out.println(list1.getClass() == list2.getClass());
 }</code></pre>
-<p>上面的第一个就是文件的大小，第二个是文件夹的大小，使用的方法是一样的。对于计算一个文件的大小，这还是非常简单的，使用length()方法就可以了，不过计算文件夹的代码确实要进行递归的操作，可以说要考虑的东西很多，而且也很繁琐。</p>
-<p>我们可以看一下这个方法的源码</p>
-<pre><code class="java">public static long sizeOf(final File file) {
-
-    if (!file.exists()) {
-        final String message = file + &quot; does not exist&quot;;
-        throw new IllegalArgumentException(message);
-    }
-
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file); // private method; expects directory
-    } else {
-        return file.length();
-    }
-
+<p>请问上面的输出的什么？之前我们说反射的时候已经提及到了<code>getClass</code>是获取对应的类的唯一的那个反射对象。之前我们也说过<code>List&lt;String&gt;</code>，<code>List&lt;Integer&gt;</code>是完全没有关系的，但是他们的唯一的父类是<code>List&gt;?&gt;</code>。所以说上面的输出是<code>false</code>？？答案是错误的，上面的输出的结果是<code>true</code>。</p>
+<p>我们发现输出的结果是<code>class java.util.ArrayList</code>，而<code>ArrayList.class</code>输出的结果也是这样。怎么会这样，我们的泛型信息呢？怎么丢掉了？？其实这就是类型擦除，泛型将在Java虚拟机中被擦除，也就是无论你在代码中写了什么泛型，Java虚拟机是不知道什么叫泛型的。</p>
+<p>之前我们也说过了，泛型是<code>JDK5</code>之后才被引入的，之前的Java代码都是没有泛型的。比如我们使用<code>ArrayList</code>的时候，会这样使用。</p>
+<pre><code class="java">@Test
+public void test1() {
+    List list = new ArrayList();
+    list.add(&quot;sher&quot;);
+    list.add(33);
+    list.add(new Date());
+    list.forEach(System.out::println);
 }</code></pre>
-<p>可以看到源码中专门写了一个函数来计算文件夹的大小</p>
-<pre><code class="java">private static long sizeOfDirectory0(final File directory) {
-    final File[] files = directory.listFiles();
-    if (files == null) {  // null if security restricted
-        return 0L;
-    }
-    long size = 0;
+<p>这是之前我们使用<code>ArrayList</code>的方式，没有任何的泛型信息。<code>ArrayList</code>中可以存放任何类型的数据。嗯？可以存放任何类型的数据，那这岂不是更好了？？但是我们似乎没有必要去存放各种类型不同的数据，如果按照上面这样写的话，我们<code>add</code>的都只能是<code>Object</code>类型的对象。当我们使用<code>get</code>的时候返回的数据的类型也都是<code>Object</code>，我们还需要对其中的不同的对象进行转型，这很不方便而且非常不安全。因此，我们是非常的建议使用泛型的。但是我们之前都是没有泛型的，现在引入了泛型，这对Java之前的生态是不是有很大的影响呢？比如说之前的代码都不可以运行了。这当然是不可取的，Java可不是python，Java是一门非常向前兼容的语言。那么我们必然是可以讲<code>ArrayList&lt;String&gt;</code>传给之前接受<code>ArrayList</code>类型的方法。(里面存放的是<code>Object</code>类型的数据)。那么<code>ArrayList</code>相当于一个<code>ArrayList&lt;Object&gt;</code>吗？当然不是，至少<code>ArrayList&lt;String&gt;</code>是不可以赋值给<code>ArrayList&lt;Object&gt;</code>的。</p>
+<pre><code class="java">    @Test
+    public void test2() {
+        List list = null;
+        List&lt;String&gt; list1 = null;
+        List&lt;Object&gt; list2 = null;
 
-    for (final File file : files) {
-        try {
-            if (!isSymlink(file)) {
-                size += sizeOf0(file); // internal method
-                if (size &lt; 0) {
-                    break;
-                }
-            }
-        } catch (final IOException ioe) {
-            // Ignore exceptions caught when asking if a File is a symlink.
-        }
+        list = list1; // Right
+        list2 = list1; // Error
+    }</code></pre>
+<p>当我们定义一个泛型类型的时候，他会被编译成为一个原始的类型。比如说我们之前说的<code>Entry&lt;K, V&gt;</code>就会变成了。</p>
+<pre><code class="java">public class Entry {
+    private Object key;
+    private Object value;
+
+    public Entry(Object key, Object value){
+        this.key = key;
+        this.value = value;
     }
 
-    return size;
+    public Object getKey() {return key;}
+    public Object getValue() {return value;}
+}</code></pre>
+<p>每一个<code>K V</code>都会被替换称为<code>Object</code>。不过这也不是必然的，如果我们的<code>Entry</code>的声明是这样的话。</p>
+<pre><code class="java">public class Entry＜K extends Comparable&lt;? super K&gt; &amp; Serializable,
+                    V extends Serializable&gt;</code></pre>
+<p>编译之后就会变成如下的形式。编译之后的类型将会被类型上限说取代。</p>
+<pre><code class="java">public class Entry {
+    private Comparable key;
+    private Serializable value;
+}</code></pre>
+<p>为什么<code>key</code>的<code>Serializable</code>丢失了呢？那是因为，如果类型有多个限定的话，将会被第一个限定取代。</p>
+<p>但是有了类型擦除并不是代表着不安全，其实很安全，因为编译器会为我们做安全检查还有自动转换。我们无法将其他的类型的对象插入到<code>List&lt;String&gt;</code>中，但是也是有例外的时候。我们说过运行的时候是没有泛型的，此时我们就可以通过反射放入我们想要的对象。比如说如下的方式。</p>
+<pre><code class="java">@Test
+public void test3() throws Exception {
+    List&lt;String&gt; list = new ArrayList&lt;&gt;();
+    Class&lt;? extends List&gt; clazz = list.getClass();
+    Method add = clazz.getMethod(&quot;add&quot;, Object.class);
+    add.invoke(list, new Date());
+
+    String s = list.get(0);
+    System.out.println(s);
+}</code></pre>
+<p>上面的代码编译器没有给我们任何的警告，因为他自以为类型是安全的，list中只有<code>String</code>类型的变量，但是我们通过反射的方式放入了一个<code>Date</code>对象。因为运行期间泛型被擦除了，<code>add</code>方法变成了<code>public add(Object e)</code>，所以我们可以放入任何的对象。(我们通过反射寻找这个方法的时候也是<code>Object.class</code>)。</p>
+<pre><code class="java">@Test
+public void test3() throws Exception {
+    List&lt;String&gt; list = new ArrayList&lt;&gt;();
+    Class&lt;? extends List&gt; clazz = list.getClass();
+    Method add = clazz.getMethod(&quot;add&quot;, Object.class);
+    add.invoke(list, new Date());
+
+    System.out.println(list.get(0)); // Error
+    Date date = (Date) list.get(0); // Error
+    Date date1 = (Date) (Object) list.get(0); // Right
+    System.out.println(date1);
+
+    Object o = list.get(0);
+    o = (Date) o;
+    System.out.println(o);
+}</code></pre>
+<p>需要或许数据是不可以直接进行转型的，需要转为<code>Object</code>类型才行。因为我们使用<code>get</code>方法的时候是默认进行了转型的。</p>
+<p>需要注意的是，由于类型擦除的缘故，我们是没有办法在静态方法或者是静态字段中使用泛型的。</p>
+<h2 id="桥方法"><a href="#桥方法" class="headerlink" title="桥方法"></a>桥方法</h2><p>上面我们也基本明白了，类型擦除是简单的而且安全的，但是只是绝大多数情况是如此。不过编译器做的事情远比我们想的多，有时会合成桥方法。这只是泛型的实现的细节，我们并不需要去了解他。但是如果我们想要更加深入的了解Java中的泛型，还是有必要去了解一下编译器干了什么的。</p>
+<pre><code class="java">public class WordList extends ArrayList&lt;String&gt; {
+    public void add(String e) {
+        return isBadWord(e) ? false : super.add(e);
+    }
+    ......
+}</code></pre>
+<p>如果我们是这样使用的话。</p>
+<pre><code class="java">WordList words = ...;
+ArrayList&lt;String&gt; strings = words; // It is right
+strings.add(&quot;C++&quot;)</code></pre>
+<p>上面的代码是完全没有任何问题的，第三行调用的什么函数？？按道理来说应该是<code>WordList</code>的<code>add</code>方法，但是真的可以调用到么？首先是调用<code>ArrayList&lt;String&gt;</code>中的<code>add(Object e)</code>(<code>ArrayList&lt;String&gt;</code>中是没有<code>add（String str)</code>的)，这是根据多态，然后应该调用。。。emm，多态？？哪儿来的多态？子类中只有一个<code>add(String e)</code>，这没有多态啊。所以不会调用子类的函数。但是经过实验，确实是调用了子类的函数了的。那么是如何实现的呢？肯定是通过多态实现，因为父类想要调用子类的函数只有多态这一条路。</p>
+<p>为了做到这一点，编译器在<code>WordList</code>中添加一个桥方法，声明如下。</p>
+<pre><code class="java">public void add(Object e) {
+    add((String) e);
+}</code></pre>
+<p>这样就可以实现多态了。不过这个函数的多态调用通过了一个桥一样的东西，这就是所谓的桥方法。</p>
+<p>当返回类型改变的时候，同样会生成桥方法。</p>
+<pre><code class="java">public String get(int i) {
+    return super.get(i).toLowerCase();
+}</code></pre>
+<p>使用同样的方法，应该调用的是<code>ArrayList</code>中的<code>Object get(int i)</code>方法。但是<code>WordList</code>中没有对应的不同的函数，所以会在<code>WordList</code>中生成桥方法<code>Object get(int i)</code>，这个桥方法中会调用<code>WordList</code>中的<code>String get(int i)</code>方法。</p>
+<p>你可能会想，不对啊，我寻思<code>String get(int i)</code>不是可以重写<code>Object get(int i)</code>方法的吗？没有桥方法不就是可以实现多态的吗？其实我们想多了，没有泛型的时候也是会生成桥方法的。上面的返回类型不一致之所以可以调用就是因为生成了桥方法，所以说桥方法不是泛型的专属。</p>
+<p>不过桥方法也会导致其他的问题，最显著的问题就是方法的冲突问题，这里就不多说了。</p>
+<h2 id="实例类型变量与数组"><a href="#实例类型变量与数组" class="headerlink" title="实例类型变量与数组"></a>实例类型变量与数组</h2><p>我们无法创建<code>new T(...)</code>或者<code>new T[...]</code>这样的表达式中使用类型变量。这些形式都是非法的，因为当类型<code>T</code>被擦除之后，编译器并不知道应该创建什么类型的变量。</p>
+<pre><code class="java">public static &lt;T&gt; T[] repeat(int n, T obj) {
+    T[] result = new T[n]; // Error
+    for (int i = 0; i &lt; n; i++) {
+        result[i] = obj;
+    }
+    return result;
+}</code></pre>
+<p>为了实现这个方法，我们需要提供类型的构战函数。</p>
+<pre><code class="java">public static &lt;T&gt; T[] repeat(int n, T obj, IntFunction&lt;T[]&gt; ctor) {
+    T[] result = ctor.apply(n);
+    for (int i = 0; i &lt; n; i++) {
+        result[i] = obj;
+    }
+    return result;
 }
 
-private static long sizeOf0(final File file) {
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file);
-    } else {
-        return file.length(); // will be 0 if file does not exist
-    }
+@Test
+public void test() {
+    String[] hellos = repeat(3, &quot;hello&quot;, String[]::new);
+    System.out.println(Arrays.toString(hellos));
 }</code></pre>
-<p>简单的看一下确实也是使用递归的方法来计算文件夹的大小的。</p>
-<h2 id="列出文件"><a href="#列出文件" class="headerlink" title="列出文件"></a>列出文件</h2><pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, null);
-    for (File file : files) {
-        System.out.println(file.getName());
+<p>除此之外，我们还可以使用反射的机制来完成构造函数的工作。</p>
+<pre><code class="java">public static &lt;T&gt; T[] repeat(int n, T obj, Class&lt;T&gt; clazz) {
+    @SuppressWarnings(&quot;unchecked&quot;) T[] result = (T[]) Array.newInstance(clazz, n);
+    for (int i = 0; i &lt; n; i++) {
+        result[i] = obj;
     }
+    return result;
+}
+
+@Test
+public void test2() {
+    String[] worlds = repeat(5, &quot;world&quot;, String.class);
+    System.out.println(Arrays.toString(worlds));
 }</code></pre>
-<p><code>listFiles</code>函数的第一个参数是待列的文件夹，第二个参数是文件过滤器（这里使用的是非空过滤器），第三个参数是文件夹过滤器（使用null就是表示不列出文件夹）</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, DirectoryFileFilter.INSTANCE);
-    for (File file : files) {
-        System.out.println(file.getName());
+<p>不过需要注意的是，当我们使用<code>ArrayList&lt;T&gt;</code>的时候，我们是可以直接new的。</p>
+<pre><code class="java">public static &lt;T&gt; List&lt;T&gt; repeat(int n, T obj) {
+    List&lt;T&gt; result = new ArrayList&lt;&gt;();
+    for (int i = 0; i &lt; n; i++) {
+        result.add(obj);
     }
+    return result;
+}
+
+@Test
+public void test3() {
+    List&lt;String&gt; sher = repeat(3, &quot;sher&quot;);
+    System.out.println(sher);
 }</code></pre>
-<p>使用这个方法就可以列出所有的文件，包括文件夹以及文件夹里面的内容。还有一种常用的文件过滤器是后缀名过滤。比如说我只想要后缀为Java的非空的文件，可以这样写。</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), 
-            FileFilterUtils.and(new SuffixFileFilter(&quot;java&quot;), EmptyFileFilter.NOT_EMPTY), 
-            DirectoryFileFilter.INSTANCE);
-
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
+<p>当我们没有什么强有力的理由去使用原生数组的话，我们是没有必要绕道去想解决方法的，我们可以直接使用<code>ArrayList</code>，这样简单清晰的多。</p>
+<p>另外的一个话题是实例化类型变量的数组。</p>
+<pre><code class="java">ArrayList&lt;String&gt;[] lists = new ArrayList&lt;String&gt;[100];</code></pre>
+<p>这种方式是错误的。因为类型擦除了，我们创建的是一个原始的<code>ArrayList</code>数组，可以添加任何类型的数据的<code>ArrayList</code>对象，比如说<code>ArrayList&lt;Integer&gt;</code>，<code>ArrayList&lt;Data&gt;</code>，因为这些东西在运行期间都是一样的。不过，<code>ArrayList&lt;String&gt;[]</code>这种语法是正确的，如果我们真的要使用这种看着都很难受的东西的话，我们需要这样使用。</p>
+<pre><code class="java">@Test
+public void test4() {
+    @SuppressWarnings(&quot;unchecked&quot;)
+    ArrayList&lt;String&gt;[] lists = (ArrayList&lt;String&gt;[]) new ArrayList&lt;?&gt;[5];
+    System.out.println(Arrays.toString(lists));
 }</code></pre>
-<p>可以使用<code>FileFilterUtils.and</code>,<code>FileFilterUtils.or</code>或者<code>FileFilterUtils.or</code>来组织过滤器之间的逻辑，比如上面的就是以java为后缀名的并且非空的文件。</p>
-<h2 id="读取内容"><a href="#读取内容" class="headerlink" title="读取内容"></a>读取内容</h2><pre><code class="java">static void test3() {
-    try {
-        String msg = FileUtils.readFileToString(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        System.out.println(msg);
-
-        byte[] b = FileUtils.readFileToByteArray(new File(&quot;hony&quot;));
-        System.out.println(new String(b, StandardCharsets.UTF_8));
-
-        List&lt;String&gt; lines = FileUtils.readLines(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        for (String line : lines) {
-            System.out.println(line);
-        }
-
-        LineIterator lineIterator = FileUtils.lineIterator(new File(&quot;hony&quot;), &quot;UTF-8&quot;);
-        while (lineIterator.hasNext()) {
-            System.out.println(lineIterator.nextLine());
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}</code></pre>
-<p>读取文件中的内容主要有上面的四种方式，无论哪一种都是比我们使用原始的Java IO流方便多了。</p>
-<p>第一种是直接将文件中的内容读取到一个String对象中。第二种则是读取到字节数组中。</p>
-<p>第三种是将文件的每一行都放入到一个List中。第四种方式倒是有点儿特殊，是使用迭代器的方式进行遍历文件的。</p>
-<h2 id="写出内容"><a href="#写出内容" class="headerlink" title="写出内容"></a>写出内容</h2><pre><code class="java">static void test4() {
-    try {
-        FileUtils.write(new File(&quot;happy.txt&quot;),
-                &quot;I am happy1!&quot;, StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy2!&quot;, StandardCharsets.UTF_8, true);
-        FileUtils.writeByteArrayToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy3!&quot;.getBytes(StandardCharsets.UTF_8), true);
-
-        List&lt;String&gt; datas = new ArrayList&lt;&gt;();
-        datas.add(&quot;sher&quot;);
-        datas.add(&quot;hony&quot;);
-        datas.add(&quot;sherhony&quot;);
-
-        FileUtils.writeLines(new File(&quot;happy.txt&quot;),
-                datas, &quot;\r\n&quot;, true);
-
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}</code></pre>
-<p>写出到文件中同样有以上的好几种方式。上面函数的第四个参数都是代表<strong>是否一追加的形式写入</strong>到文件当中，在Java原始流当中也是使用的这种方式。不过下面的<code>FileUtils.writeLines</code>方法的第三个参数不再是编码了，而是分隔符，也就是说写入的这些data之间用什么隔开，这里我是用的是windows下的换行符。</p>
-<h2 id="拷贝"><a href="#拷贝" class="headerlink" title="拷贝"></a>拷贝</h2><p>拷贝包括拷贝文件或者说的是拷贝文件夹，拷贝文件的操作我们已经做过了，但是拷贝文件夹的操作是有点儿复杂，需要递归的操作。不过这个commons io提供给我们一个十分方便地方法。</p>
-<pre><code class="java">static void test5() {
-    try {
-        FileUtils.copyFile(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;Exercise/src/test-copy.jpg&quot;));
-        FileUtils.copyFileToDirectory(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;D:/&quot;));
-        FileUtils.copyDirectory(new File(&quot;Exercise/out&quot;), new File(&quot;Exercise/out-copy&quot;));
-        FileUtils.copyDirectoryToDirectory(new File(&quot;Exercise/out&quot;),
-                new File(&quot;Exercise/src&quot;));
-        String url = &quot;http://i1.hdslb.com/bfs/archive/9cc5e3fcc7d6c48e5a0d8d3dd8bbb6ed11937f89.jpg&quot;;
-        FileUtils.copyURLToFile(new URL(url), new File(&quot;Exercise/src/miaonei.jpg&quot;));
-        String baidu = &quot;http://www.baidu.com&quot;;
-        String wangyi = &quot;http://www.163.com&quot;;
-        String bd = IOUtils.toString(new URL(baidu), StandardCharsets.UTF_8);
-        String wy = IOUtils.toString(new URL(wangyi), &quot;GBK&quot;);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/baidu.txt&quot;), bd,
-                StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/wangyi.txt&quot;), wy,
-                &quot;GBK&quot;);
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}</code></pre>
-<p>上面是拷贝的常见的操作。可以看到这个方法是什么的方便的。不过需要注意的是，从网络流中拷贝东西（也就是下载东西）的时候，如果是文字的话（也就网页的代码），可以使用<code>IOUtils.toString</code>方法，这个方法可以指定字符的编码。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面就是Commons IO中简单的常用的一些操作，不过Commons IO这么强大的库怎么可能就这么一点点功能，只不过其余的功能太过与强大，而且并不是经常用到，所以现在可以不用了解。现在就是简单的看看这个类，知道有这么个玩意就行了。</p>
+<p>不过还是要说的是，我们大可不必这么写，我们完全可以这么写。</p>
+<pre><code class="java">ArrayList&lt;ArrayList&lt;String&gt;&gt; list = new ArrayList&lt;&gt;(5);
+System.out.println(list);</code></pre>
+<p>这种写法才是我们推荐的，也是很多<code>API</code>所使用的写法。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面基本上就是这次学习泛型的所有的东西了。其实还有一个细节是没有说的。在Java虚拟机中，类型擦除只是擦除那些实例化的变量，对于泛型类与泛型方法的完整信息在运行期间是可用的。不过这点确实是有点复杂，而且一点都不常用，所以此处直接略过了。</p>
 
         </div>
         <!-- .entry-content -->
@@ -579,36 +574,19 @@ private static long sizeOf0(final File file) {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/09/27/IO应用——文件分割/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                IO应用——文件分割</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/09/26/Java中的IO-06/" rel="next">
+            <a href="/2019/10/18/Java泛型简介/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/6.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/6.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                Java中的IO-06</h3>
+                Java泛型简介</h3>
                 <hr>
               </div>
             </a>

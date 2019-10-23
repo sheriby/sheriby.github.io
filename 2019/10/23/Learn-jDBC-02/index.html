@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Tag: JDBC | Sher的小博客</title>
+  <title itemprop="name">Learn JDBC-02 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,97 +340,385 @@
   </div>
 </header>
 
-      
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
 <div class="pattern-center-blank"></div>
-<div class="pattern-center ">
-  <div class="pattern-attachment-img">
-    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="JDBC.img" class="lazyload" onerror="imgError(this,3)" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/10.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/10.jpg">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      Learn JDBC-02</h1>
+      <p class="entry-census">
+        <span>
+          <a href="sheriby.github.io">
+            <img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true">
+          </a>
+        </span>
+        <span>
+          <a href="sheriby.github.io">Hony Sher</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2019-10-23<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
   </div>
-  <header class="pattern-header ">
-    <h1 class="cat-title">JDBC</h1>
-  </header>
-</div>
+
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="Learn-JDBC-02"><a href="#Learn-JDBC-02" class="headerlink" title="Learn JDBC-02"></a>Learn JDBC-02</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上面我们已经说完了如何对JDBC中的增删改查的操作进行封装。其中最为复杂的就是查询的操作。因为我们需要考虑返回值是什么东西，其中我们使用两种类型的返回值。一种是使用<code>JAVA Bean</code>对象作为返回值，此时我们需要根据表中的信息建立相对应的方式，然后再调用函数的时候传入<code>Class</code>对象。在函数中根据查询到的信息，然后使用反射的反思创建的对象，第二种方式是使用<code>Map</code>的方式，这种方式我们不需要根据表创建对应的什么东西，我们只需要将查询到的东西直接以键值对的形式放入<code>Map</code>中就行了。我个人感觉这种方式似乎是更不错的。</p>
+<h2 id="Java与SQL中的类型"><a href="#Java与SQL中的类型" class="headerlink" title="Java与SQL中的类型"></a>Java与SQL中的类型</h2><p>前面我们只接触到了SQL中的两种数据类型，一种是<code>int</code>，另一种是<code>varchar(n)</code>。这两种类型毫无疑问的是对应Java中的<code>int</code>和<code>String</code>类型的数据。但是<code>SQL</code>中还有其他的不少类型的数据，他们与Java中的类型的对应关系也是需要我们来掌握的，不然都不知道直接应该插入什么样的类型的数据了。</p>
+<table>
+<thead>
+<tr>
+<th align="center">Java类型</th>
+<th align="center">SQL类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">boolean</td>
+<td align="center">BIT</td>
+</tr>
+<tr>
+<td align="center">byte</td>
+<td align="center">TINYINT</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">INTEGER</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">BIGINT</td>
+</tr>
+<tr>
+<td align="center">String</td>
+<td align="center">CHAR, VARCHAR, LONGVARCHAR</td>
+</tr>
+<tr>
+<td align="center">byte array</td>
+<td align="center">BINARY, VARBINARY</td>
+</tr>
+<tr>
+<td align="center">java.sql.Date</td>
+<td align="center">DATE</td>
+</tr>
+<tr>
+<td align="center">java.sql.Time</td>
+<td align="center">TIME</td>
+</tr>
+<tr>
+<td align="center">java.sql.Timestamp</td>
+<td align="center">TIMESTAMP</td>
+</tr>
+</tbody></table>
+<p>上面就是Java和SQL中的一些常用的类型的对应关系。这也是非常容易记的，不过需要注意的是后面的三个东西。他们是<code>java.sql</code>这个下面的而不是<code>java.util</code>下的。</p>
+<p>不过也不是每一个SQL语言都有以上的内容的，这就是SQLtmd操蛋的地方，没有统一的标准。其中MySQL中有一个类型是<code>DATETIME</code>。<code>DATETIME</code>和<code>TIMESTAMP</code>是有有一定的区别的，<code>TIMESTAMP</code>只占用4个字节，表示的时间范围比较少。而<code>DATETIME</code>占用了八个字节，表示的范围很大。不过他们两个之间更大的一个区别是<code>TIMESTAMP</code>和时区有关，但是<code>DATETIME</code>和时区是无关的。</p>
+<p>这里就不得不说如果我们需要插入一个时间的时候该怎么做了，我们只需要按照特定的时间的格式就可以了。在MySQL中的格式是<code>%Y-%m-%d %H:%i:%s</code>其中这是使用的24小时制。如果需要使用使用12小时制的话，需要使用的是<code>%h</code>并且加上代表<code>am pm</code>的<code>%p</code>。示例如下。</p>
+<pre><code class="sql">select date_format(ctime, &#39;%Y-%m-%d %H:%i:%s&#39;) from datetest;
+
+select date_format(ctime, &#39;%Y-%m-%d %h:%i:%s %p&#39;) from datetest; </code></pre>
+<p><code>MySQL</code>中没有<code>to_char</code>函数，这是真的头疼，数据库为什么不能同一呢？</p>
+<p>如果是使用的<code>Oracle</code>，格式是<code>yyyy-mm-dd HH24:mi:ss</code>，如果是返回12小时制的就将上面的24去掉就行了。</p>
+<pre><code class="sql">select to_char(ctime, &#39;yyyy-mm-dd HH24:mi:ss&#39;) from datetest;
+
+select to_char(ctime, &#39;yyyy-mm-dd HH:mi:ss am/pm&#39;) from datetest;</code></pre>
+<p>下面的那个十二小时制后面的那个<code>am/pm</code>的写法我也不确实是否是正确的，毕竟我现在只有<code>MySQL</code>的环境。其实上面的那个两个相比较的话，我是更喜欢下面的这种方式的，因为Java中使用的也是差不多这样的方式。<code>yyyy-MM-dd hh:mm:ss</code>是Java中日期常用的格式。上面的<code>oracle</code>之所以使用<code>mi</code>就是因为SQL语言是不区别大小写的，所谓无法区别<code>month</code>和<code>minute</code>。说起Java中日期的格式我们就在这儿另外插入一个话题。Java中的字符串和日期的格式转换。</p>
+<pre><code class="java">public static void main(String[] args) {
+    DateFormat dateFormat = new SimpleDateFormat(&quot;yyyy-MM-dd hh:mm:ss a&quot;);
+    Date date = new Date();
+    String format = dateFormat.format(date);
+    System.out.println(format);
+    // 2019-10-23 07:12:07 PM
+}</code></pre>
+<p>也可以使用二十四小时的格式</p>
+<pre><code class="java">public static void main(String[] args) {
+    DateFormat dateFormat = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);
+    Date date = new Date();
+    String format = dateFormat.format(date);
+    System.out.println(format);
+    // 2019-10-23 19:13:13
+}</code></pre>
+<pre><code class="java">@Test
+public void test() {
+    DateFormat dateFormat = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);
+    try {
+        Date date = dateFormat.parse(&quot;1111-11-11 11:11:11&quot;);
+        System.out.println(date);
+    } catch (ParseException e) {
+        e.printStackTrace();
+    }
+}</code></pre>
+<p>使用<code>SimpleDateFormat</code>同样也可以将字符串转为日期(<code>java.util.date</code>)，需要注意的是，格式一定要对应，不然是会抛出异常的。</p>
+<p>上面有点儿说多了，现在我们回到JDBC中的话题来，是否还有其他的类型数据被我们遗忘了。</p>
+<h2 id="操作BLOB类型数据"><a href="#操作BLOB类型数据" class="headerlink" title="操作BLOB类型数据"></a>操作BLOB类型数据</h2><p>除了上面的这些类型的数据之外，还有一个非常重要的数据类型，那就是——<code>BLOB</code>。MySQL中，BLOB是一个二进制大型对象，是一个可以存储大量数据的容器，它能容纳不同大小的数据。 <code>BLOB</code>又分为一下的四种，不过除了大小之外，他们都是一样的。</p>
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">大小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">TINYBLOB</td>
+<td align="center">255B</td>
+</tr>
+<tr>
+<td align="center">BLOB</td>
+<td align="center">65KB</td>
+</tr>
+<tr>
+<td align="center">MEDIUMBLOB</td>
+<td align="center">16M</td>
+</tr>
+<tr>
+<td align="center">LONGBLOB</td>
+<td align="center">4G</td>
+</tr>
+</tbody></table>
+<p>这个<code>BLOB</code>可以是一张图片，也可以一个视频，可以是任何的一个文件。我们需要根据插入的类型的大小确定上面的对应的<code>BOLB</code> 的类型。不过需要说明的，如果在数据库中插入过多或者过大数据的时候，数据库的性能将会受到较大的影响。</p>
+<p>如果在指定了相关的Blob类型以后，还报错：xxx too large，那么在mysql的安装目录下，找my.ini文件加上如 下的配置参数： max_allowed_packet=16M。同时注意：修改了my.ini文件之后，需要重新启动mysql服务。</p>
+<p>这种<code>BLOB</code>类型的数据是无法想之前的那样值算个格式就可以处理的了，那么我们该如何来处理这个<code>BLOB</code>类型的数据呢？是使用<code>Statement</code>还是使用<code>PreparedStatement</code>呢？其实傻子应该都可以看出来是肯定不可能是使用这个垃圾的<code>Statement</code>的，加入说我们想要上传一个图片进入一个数据中的时候，我们总不能使用数据库指令拼接的形式吧。所以说，如果我们想要插入或者是读取<code>BOLB</code>类型的话，我们是只可以使用<code>PreparedStatement</code>这种形式的。不过问题在于，如何使用。类比一下我们处理文件的时候，或者说是通过网络来获取或者是发送信息的时候，我们使用的工具是什么东西呢？就是流，我们使用<code>InputStream</code>来读取流的信息，使用<code>OutputStream</code>来发送流的信息。通过<code>PreparedStatement</code>中的<code>setBlob</code>的方式，我们可以传入一个文件流，(比如说是一张图片)，我们就可以将这个图片写入到数据库当中去了。不过使用<code>setObject</code>的方式也是非常的正确的方式。</p>
+<pre><code class="java">@Test
+public void test1() {
+    BufferedInputStream bis = null;
+    Connection conn = null;
+    try {
+        bis = new BufferedInputStream(new FileInputStream(new File(&quot;kawali.jpg&quot;)));
+        conn = JDBCUtils.getConnection();
+        JDBCUtils.update(conn, &quot;insert into blobtest values(?)&quot;, bis);
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        JDBCUtils.closeResource(conn, null, null);
+        if (bis != null) {
+            try {
+                bis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}</code></pre>
+<p>通过这种方式，我们就可以将一张可爱的图片写入到我们的数据库当中去。使用的方式就是之前我们已经说过的各种我们都已经封装好了的方法。不过此时如果我们需要读取的话，可就不是那么容易的了。</p>
+<pre><code class="java">@Test
+public void test2() {
+    Connection conn = null;
+    BufferedOutputStream bos = null;
+    try {
+        conn = JDBCUtils.getConnection();
+        byte[] cblob = (byte[]) JDBCUtils.getValue(conn, &quot;select cblob from blobtest&quot;);
+        assert cblob != null;
+        InputStream binaryStream = new ByteArrayInputStream(cblob);
+        bos = new BufferedOutputStream(new FileOutputStream(&quot;kawali-sql.jpg&quot;));
+        byte[] buff = new byte[1024];
+        int len = -1;
+        while ((len = binaryStream.read(buff)) != -1) {
+            bos.write(buff, 0, len);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        JDBCUtils.closeResource(conn, null, null);
+        if (bos != null) {
+            try {
+                bos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}</code></pre>
+<p>一开始我将<code>getValue()</code>的返回值转化成为了<code>java.sql.Blob</code>类型，但是发生了异常，看来不是使用<code>getBlob</code>方式似乎是不可以转化成为<code>Blob</code>类型的。如果可以转化成为<code>Blob</code>类型的话，我们可以使用<code>getBinaryStream</code>的方式获取<code>InputSteram</code>。然后通过这个<code>InputStream</code>创建一个<code>OutputStream</code>，然后将图片写入到文件当中去。不过即使不可以使用<code>Blob</code>的方式，我们可以将返回值转化成为一个<code>byte[]</code>的数组，然后通过<code>ByteArrayInputStream</code>的方式返回一个<code>InputStream</code>，后面的步骤就都是一致的了。</p>
+<p>需要注意的是上面我使用的函数式<code>getValue</code>，这个纯属是一个意外，按道理来说我们使用使用<code>getInstance</code>或者是<code>getMapInstance</code>函数，不过这里我只有一个返回值，使用<code>getValue</code>完全就是图个方便而已。</p>
+<h2 id="批量插入数据"><a href="#批量插入数据" class="headerlink" title="批量插入数据"></a>批量插入数据</h2><p>上面我们研究完了如何使用<code>PreparedStatement</code>来读取或者是插入一个<code>Blob</code>类型的数据，而这种事情正是<code>Statement</code>做不到的事情，事实上尽管很多<code>Statement</code>能够做到的事情，我们也不会使用这个垃圾的<code>Statement</code>来做的。比如下面我们要说的这个批量插入的问题。</p>
+<p>在SQL中很多的操作都是天生就是批量的，比如说删除，查找，和修改。如果我们不对此加以限制的话，我们会修改数据中的所以的数据的信息。不过唯独有一个语句是例外，那就是插入语句。我们在数据库中只能使用<code>insert</code>语句，一条数据一条数据的进行插入，这非常的难受。不过现在有了Java，我们可以使用<code>for</code>循环来帮助我们进行插入数据了。不过我们应该使用什么样的方式呢？什么样的方式是最好的呢？</p>
+<p>加入我们要想数据库中插入十万条数据。</p>
+<p>先来考虑一下使用<code>Statement</code>的方式，emm，，这中方式真的需要考虑吗？别说插入的性能，光是拼接产生的sql语句的字符串都有上万条了吧。所以说这种方法是考虑都不用考虑的。</p>
+<p>那么我们就只好使用<code>PreparedStatement</code>的方式了。</p>
+<h3 id="第一种方式"><a href="#第一种方式" class="headerlink" title="第一种方式"></a>第一种方式</h3><pre><code class="java">@Test
+public void test3() {
+    Connection conn = null;
+    try {
+        conn = JDBCUtils.getConnection();
+        String sql = &quot;insert into inserttest values (?, ?)&quot;;
+        long start = System.currentTimeMillis();
+        for (int i = 0; i &lt; 10000; i++) {
+            JDBCUtils.update(conn, sql, i, &quot;stud_&quot; + i);
+        }
+        long end = System.currentTimeMillis();
+        System.out.println(&quot;Time: &quot; + (end - start) + &quot;ms&quot;);
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        JDBCUtils.closeResource(conn, null, null);
+    }
+}</code></pre>
+<p><code>Time: 8097ms</code>，插入一万条的数据只是花了八千多。<code>select count(*) from inserttest;</code>可以查询表中数据的数量。(也可以使用<code>sqlyog</code>，一种SQL的可视化的工具直接看)。</p>
+<p>如果我们使用的是<code>Statement</code>，我敢保证一分钟之内是不可能完成了。现在我们来分析一下，为什么这种方式快。我们之前也说过了<code>PreparedStatement</code>是会经过预编译的。当我们多次使用的时候，不过多次编译。所以效率非常的快。</p>
+<p>但是注意到，就像我们写入文件的的时候，是一个字节一个字节的方式写入文件的，而这里我们也是一次一次的进行插入的。此时我们多次和数据库进行互动，进行了一万次的提交。大大的降低了效率。于是写如文件的时候，我们使用了一个缓存数组，那么这里我们是否有相似的缓存的机制呢？</p>
+<h3 id="第二种方式"><a href="#第二种方式" class="headerlink" title="第二种方式"></a>第二种方式</h3><p><code>jdbc</code>中确实有这种东西，就是<code>Batch(批处理)</code>。</p>
+<pre><code class="java">@Test
+public void test4() {
+    Connection conn = null;
+    PreparedStatement ps = null;
+    try {
+        conn = JDBCUtils.getConnection();
+        String sql = &quot;insert into inserttest values (?, ?)&quot;;
+        ps = conn.prepareStatement(sql);
+        long start = System.currentTimeMillis();
+        for (int i = 1; i &lt;= 10000; i++) {
+            ps.setInt(1, i);
+            ps.setString(2, &quot;stud_&quot; + i);
+            ps.addBatch();
+
+            if (i % 500 == 0) {
+                ps.executeBatch();
+
+                ps.clearBatch();
+            }
+        }
+        long end = System.currentTimeMillis();
+        System.out.println(&quot;Time: &quot; + (end - start) + &quot;ms&quot;);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}</code></pre>
+<p>我们使用<code>addBatch</code>方法将语句放入批处理中，当满足一定的条件的时候，比如上面是，有五百个的时候，就提交一次。使用<code>executeBatch</code>的方法可以提交之前加入到批处理中的数据。不过别忘了，提交玩了之后，我们需要清空批处理中的数据，需要调用<code>clearBatch</code>方法。</p>
+<p>这个方法运行的时间是<code>Time: 7904ms</code>,似乎是提升的不是很大。。。emm，看来这个方法并不是非常的管用。其实不是这样的，我们写入文件的时候使用缓存区，效率是之前的好多好多倍。这个时候之所以没有提升是因为<strong>MySQL默认是不开启批处理的功能的，我们需要在连接的时候加上参数<code>rewriteBatchedStatements=true</code></strong>，这个也就是在我们的<code>jdbc.properties</code>文件中进行修改，不需要改动之前的源码，这就是使用资源文件的好处。</p>
+<p>配置文件如下。</p>
+<pre><code class="java">mysqlUser=root
+mysqlPasswd=root
+mysqlUrl=jdbc:mysql:///sher?serverTimezone=UTC&amp;rewriteBatchedStatements=true
+mysqlDriverClass=com.mysql.cj.jdbc.Driver</code></pre>
+<p>此时，时间是<code>Time: 130ms</code>，这个就不用多说了吧。效率是刚刚的。</p>
+<p>如果我们插入一百万条数据的话，时间就是<code>Time: 5770ms</code>。如果是不使用批处理的话，这个时间是不敢想象的。不过这个一百万的速度还不是最快的，这还不是最好的方法。</p>
+<h3 id="第三种方式"><a href="#第三种方式" class="headerlink" title="第三种方式"></a>第三种方式</h3><pre><code class="java">@Test
+@SuppressWarnings(&quot;all&quot;)
+public void test5() {
+    Connection conn = null;
+    PreparedStatement ps = null;
+    try {
+        conn = JDBCUtils.getConnection();
+        conn.setAutoCommit(false);
+        String sql = &quot;insert into inserttest values (?, ?)&quot;;
+        ps = conn.prepareStatement(sql);
+        long start = System.currentTimeMillis();
+        for (int i = 1; i &lt;= 1000000; i++) {
+            ps.setInt(1, i);
+            ps.setString(2, &quot;stud_&quot; + i);
+            ps.addBatch();
+
+            if (i % 500 == 0) {
+                ps.executeBatch();
+
+                ps.clearBatch();
+            }
+        }
+        conn.commit();
+        long end = System.currentTimeMillis();
+        System.out.println(&quot;Time: &quot; + (end - start) + &quot;ms&quot;);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}</code></pre>
+<p>上面的代码相比与之前只是增加了第8行和第23行的代码。<code>conn.setAutoCommit(false)</code>是关闭<code>Connection</code>的自动提交事务。我们可以关闭这个东西，然后在最后在提交这个事务。</p>
+<p>运行的时间是<code>Time: 4525ms</code>，提高的似乎不是很高。。。又是我操作的事务么？ :)</p>
+<p>至于上面的<code>commit</code>的详细的用法，这就要到之后再说了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面我们主要就写了三个方面的知识，第一个是<code>Java</code>和<code>SQL</code>中数据之间的对应关系。第二个就是我们如何插入和读取<code>Blob</code>的数据。第三个就是如何更加高效的进行数据的批量的提交。后面我们将要讨论数据库事务和隔离的各种各样的问题了。</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/WechatPayQr.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2019/10/21/Learn-JDBC-01/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/9.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/9.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                Learn JDBC-01</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/10/23/Learn-jDBC-02/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/10.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/10/23/Learn-jDBC-02/">
-    Learn JDBC-02</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-10-23</div>
-    <p>
-    简单的学习一下JDBC</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/10/23/Learn-jDBC-02/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/10/21/Learn-JDBC-01/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/9.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/10/21/Learn-JDBC-01/">
-    Learn JDBC-01</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-10-21</div>
-    <p>
-    学习JDBC中的基础的知识</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/10/21/Learn-JDBC-01/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-
-      <div class="clearer">
-      </div>
-    </main>
-    <!--  -->
-    
-  </div>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="sheriby.github.io" class="profile gravatar"><img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i>一枚小菜鸡</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
+
     </div>    
     <div class="ins-search">
     <div class="ins-search-mask"></div>

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Sher的小博客</title>
+  <title itemprop="name">Learn JDBC-04 | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,517 +340,372 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 0px;"></div>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/12.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/12.jpg">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      Learn JDBC-04</h1>
+      <p class="entry-census">
+        <span>
+          <a href="sheriby.github.io">
+            <img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true">
+          </a>
+        </span>
+        <span>
+          <a href="sheriby.github.io">Hony Sher</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2019-10-29<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
 <div id="content" class="site-content">
-  
-  <div class="notice" style="margin-top:60px">
-    <i class="iconfont icon-notification">
-    </i>
-    <div class="notice-content">欢迎来带到Sher的小博客！</div>
-  </div>
-  
-  <div class="top-feature-row">
-  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
-  <i class="fa fa-anchor" aria-hidden="true">
-  </i>
-  START:DASH!!</h1>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/theme-sakura/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/sakura.md.png">
-        </div>
-        <div class="info">
-          <h3>Sakura</h3>
-          <p>本站 hexo 主题</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="http://space.bilibili.com/37532334" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/bilibili.jpg">
-        </div>
-        <div class="info">
-          <h3>Bilibili</h3>
-          <p>Sher的b站视频</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/wangshiwu.jpg">
-        </div>
-        <div class="info">
-          <h3>Sher的万事屋</h3>
-          <p>技术服务</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-</div>
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
-      <i class="fa fa-envira" aria-hidden="true"></i>
-      Discovery</h1>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="Learn-JDBC-04"><a href="#Learn-JDBC-04" class="headerlink" title="Learn JDBC-04"></a>Learn JDBC-04</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前说到了JDBC中的事务以及隔离性，后面还将<code>CRUD</code>操作进行封装，创建了一个<code>DAO</code>对象。不过如果需要获取一个连接，我们还是通过之前写的那个函数来获取连接。这样每次我们进行操作，或许都要获取一次连接，这极大的降低了效率。在创建线程的时候，我们使用线程池解决了这个问题。这里的或许数据库连接和创建多线程其实是一样的，都是一种比较耗时的操作，所以我们需要专门使用一个东西对他们进行管理。线程是线程池，数据库就是数据库连接池。</p>
+<p>至于使用数据库连接池的好处和使用线程池的好处基本上是一样的。都是可以资源重用，效率更高，更好的管理等等一系列的好处。</p>
+<h2 id="数据库连接池"><a href="#数据库连接池" class="headerlink" title="数据库连接池"></a>数据库连接池</h2><p>在Java当中，数据库连接池使用<code>javax.sql.DataSource</code>来表示。不过这个<code>DateSource</code>只是一个接口，该接口在<code>JDK</code>中是没有实现的，不过有很多的开源的组织提供了实现。下面稍微来介绍一下三种数据库连接池的使用。</p>
+<h3 id="C3P0数据库连接池"><a href="#C3P0数据库连接池" class="headerlink" title="C3P0数据库连接池"></a>C3P0数据库连接池</h3><p>既然是开源软件实现的，我们就要上网上下载对应的jar包，然后导入到项目中。</p>
+<p>和之前我们写<code>jdbc.properties</code>一样，我们要使用<code>c3p0</code>的话也是需要使用配置文件的。不过此时不是一个<code>properties</code>文件而是一个<code>XML</code>文件，名字也是固定的，必须要是<code>c3p0-config.xml</code>。文件中的内容大概如下。</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;c3p0-config&gt;
+    &lt;named-config name=&quot;c3p0mysql&quot;&gt;
+        &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;password&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;driverClass&quot;&gt;com.mysql.cj.jdbc.Driver&lt;/property&gt;
+        &lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql:///sher?serverTimezone=UTC&amp;amp;rewriteBatchedStatements=true&lt;/property&gt;
+        &lt;property name=&quot;acquireIncrement&quot;&gt;5&lt;/property&gt;
+        &lt;property name=&quot;initialPoolSize&quot;&gt;10&lt;/property&gt;
+        &lt;property name=&quot;minPoolSize&quot;&gt;10&lt;/property&gt;
+        &lt;property name=&quot;maxPoolSize&quot;&gt;50&lt;/property&gt;
+        &lt;property name=&quot;maxStatements&quot;&gt;20&lt;/property&gt;
+        &lt;property name=&quot;maxStatementsPerConnection&quot;&gt;5&lt;/property&gt;
+    &lt;/named-config&gt;
+&lt;/c3p0-config&gt;</code></pre>
+<p>根据前面的<code>name</code>基本上也可以猜出来设置的是什么东西。其中<code>name-config</code>中的<code>name</code>属性不是随便写完就没事了的，后面是需要使用到的。不过我们也可以设置一下默认连接，那么下面使用的时候就不需要特别的指定要连接哪个数据库了。</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;c3p0-config&gt;
+    &lt;named-config name=&quot;c3p0mysql&quot;&gt;
+        &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;password&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;driverClass&quot;&gt;com.mysql.cj.jdbc.Driver&lt;/property&gt;
+        &lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql:///sher?serverTimezone=UTC&amp;amp;rewriteBatchedStatements=true&lt;/property&gt;
+        &lt;property name=&quot;acquireIncrement&quot;&gt;5&lt;/property&gt;
+        &lt;property name=&quot;initialPoolSize&quot;&gt;10&lt;/property&gt;
+        &lt;property name=&quot;minPoolSize&quot;&gt;10&lt;/property&gt;
+        &lt;property name=&quot;maxPoolSize&quot;&gt;50&lt;/property&gt;
+        &lt;property name=&quot;maxStatements&quot;&gt;20&lt;/property&gt;
+        &lt;property name=&quot;maxStatementsPerConnection&quot;&gt;5&lt;/property&gt;
+    &lt;/named-config&gt;
+    &lt;default-config&gt;
+        &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;password&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;driverClass&quot;&gt;com.mysql.cj.jdbc.Driver&lt;/property&gt;
+        &lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql:///sher?serverTimezone=UTC&amp;amp;rewriteBatchedStatements=true&lt;/property&gt;
+        &lt;property name=&quot;acquireIncrement&quot;&gt;5&lt;/property&gt;
+        &lt;property name=&quot;initialPoolSize&quot;&gt;10&lt;/property&gt;
+        &lt;property name=&quot;minPoolSize&quot;&gt;10&lt;/property&gt;
+        &lt;property name=&quot;maxPoolSize&quot;&gt;50&lt;/property&gt;
+        &lt;property name=&quot;maxStatements&quot;&gt;20&lt;/property&gt;
+        &lt;property name=&quot;maxStatementsPerConnection&quot;&gt;5&lt;/property&gt;
+    &lt;/default-config&gt;
+&lt;/c3p0-config&gt;</code></pre>
+<p>只要多写一个<code>dafault-config</code>就行了。</p>
+<p>至于如果获取连接，方式是非常的简单。</p>
+<pre><code class="java">private static DataSource cpds = new ComboPooledDataSource();
+public static Connection getConnection() throws SQLException {
+    return cpds.getConnection();
+}</code></pre>
+<p>最重要的也就是<code>new ComboPooledDataSource()</code>这个东西了。</p>
+<h2 id="DBCP数据库连接池"><a href="#DBCP数据库连接池" class="headerlink" title="DBCP数据库连接池"></a>DBCP数据库连接池</h2><p><code>DBCP</code>是一种比较常用的数据库连接池，是<code>Apache</code>开源组织提供的。其中<code>Tomcat</code>的连接池就是用的这个东西实现的。</p>
+<p>和上面的那个一样，我们还是需要从网上下载对应的jar包，然后导入项目中。其中需要注意的是，这个<code>commons-dbco</code>是依赖另外的两个包的，所以我们还需要下载<code>commons-logging</code>和<code>commons-pool</code>，并将其导入到项目当中。</p>
+<p>然后我们需要做的就是编写配置文件。和我们之前使用的那个<code>jdbc.properties</code>一样，<code>DBCP</code>也是需要我们编写<code>properties</code>文件，然后加载解析。</p>
+<pre><code class="java">driverClassName=com.mysql.jdbc.Driver
+url=jdbc:mysql:///sher?serverTimezone=UTC&amp;rewriteBatchedStatements=true
+username=root
+password=root
+
+initialSize=10 </code></pre>
+<p>还有其他的参数这里就不多说了，直接看看获取连接的操作。</p>
+<pre><code class="java">private static DataSource source = null;
+static {
+    try {
+        Properties pros = new Properties();
+        InputStream is = Demo1.class.getClassLoader().getResourceAsStream(&quot;dbcp.properties&quot;);
+        pros.load(is);
+        source = BasicDataSourceFactory.createDataSource(pros);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+public static Connection getConnection() throws SQLException {
+    return source.getConnection();
+}</code></pre>
+<p>最重要的也就是<code>BasicDataSourceFactory.createDataSource(pros)</code>这个东西了。</p>
+<h3 id="Druid数据库连接池"><a href="#Druid数据库连接池" class="headerlink" title="Druid数据库连接池"></a>Druid数据库连接池</h3><p>这个连接池有上面的连接池的所有的优点，是目前最好的数据库连接池。而且这个东西是阿里巴巴开发的。这个东西和<code>DBCP</code>是非常类似的。我们还是需要编写配置几乎相同的配置文件。</p>
+<pre><code class="java">driverClassName=com.mysql.cj.jdbc.Driver
+url=jdbc:mysql:///sher?serverTimezone=UTC&amp;rewriteBatchedStatements=true
+username=root
+password=root
+
+initialSize=5</code></pre>
+<p>然后读取配置文件，新建连接池。</p>
+<pre><code class="java">private static DataSource source = null;
+
+static {
+    try {
+        Properties pros = new Properties();
+        InputStream is = Demo1.class.getClassLoader().getResourceAsStream(&quot;druid.properties&quot;);
+        pros.load(is);
+        source = DruidDataSourceFactory.createDataSource(pros);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+public static Connection getConnection() throws SQLException {
+    return source.getConnection();
+}</code></pre>
+<p>操作基本上都是一样的。不一样的就是<code>DruidDataSourceFactory.createDataSource(pros)</code>，也就五个单词的不同罢了。</p>
+<p>上面就是对三个数据库连接池的介绍，其实都调用这些东西都是蛮简单的，无非就是一个<code>getConnection</code>方法。有了上面的这三个东西，我们就不需要自己手写连接数据库的操作了。不过我们还是写了<code>JDBCUtils</code>中的很多的增删改查的操作，那么这些工作是否有其他人替我们已经完成了呢？当然是有的。</p>
+<h2 id="DBUtils"><a href="#DBUtils" class="headerlink" title="DBUtils"></a>DBUtils</h2><p>和我们之前学完了<code>IO</code>之后，来了一个<code>commons-io</code>，我们做了事情，其实人家早就写好了更好的工具。我们写的都是没有必要的。同样的，我们学完了<code>JDBC</code>之后，<code>commons-dbutils</code>也完成了几乎所有的操作，我们也不需要写任何东西了，直接拿来就用就行了。</p>
+<p>首先还是下载jar包，然后导入到项目当中去。</p>
+<ul>
+<li><p><code>DbUtils</code> ：提供如关闭连接、装载JDBC驱动程序等常规工作的工具类，里面的所有方法都是静态的。主要方法 如下：</p>
+<ul>
+<li>public static void close(…) throws java.sql.SQLException： DbUtils类提供了三个重载的关闭方 法。这些方法检查所提供的参数是不是NULL，如果不是的话，它们就关闭Connection、Statement和 ResultSet。 </li>
+<li>public static void closeQuietly(…): 这一类方法不仅能在Connection、Statement和ResultSet为NULL情 况下避免关闭，还能隐藏一些在程序中抛出的SQLEeception。 </li>
+<li>public static void commitAndClose(Connection conn)throws SQLException： 用来提交连接的事务， 然后关闭连接 </li>
+<li>public static void commitAndCloseQuietly(Connection conn)： 用来提交连接，然后关闭连接，并且在 关闭连接时不抛出SQL异常。</li>
+<li>public static void rollback(Connection conn)throws SQLException：允许conn为null，因为方法内部做 了判断 </li>
+<li>public static void rollbackAndClose(Connection conn)throws SQLException  回滚事务然后关闭连接</li>
+<li>public static void rollbackAndCloseQuietly(Connection) 不抛出异常。</li>
+</ul>
+</li>
+<li><p><code>QueryRunner</code>类 </p>
+<ul>
+<li>该类简单化了SQL查询，它与ResultSetHandler组合在一起使用可以完成大部分的数据库操作，能够大大减少 编码量。 QueryRunner类提供了两个构造器： 默认的构造器 需要一个 javax.sql.DataSource 来作参数的构造器 QueryRunner类的主要方法： </li>
+<li><strong>更新</strong> public int update(Connection conn, String sql, Object… params) throws SQLException:用来执行 一个更新（插入、更新或删除）操作。 </li>
+<li><strong>插入</strong> public T insert(Connection conn,String sql,ResultSetHandler rsh, Object… params) throws SQLException：只支持INSERT语句，其中 rsh - The handler used to create the result object from the ResultSet of auto-generated keys. 返回值: An object generated by the handler.即自动生成的 键值 </li>
+<li><strong>批处理</strong> public int[] batch(Connection conn,String sql,Object[][] params)throws SQLException： INSERT, UPDATE, or DELETE语句 public T insertBatch(Connection conn,String sql,ResultSetHandler rsh,Object[][] params)throws SQLException：只支持INSERT语句 ….. </li>
+<li><strong>查询</strong> public Object query(Connection conn, String sql, ResultSetHandler rsh,Object… params) throws SQLException：执行一个查询操作，在这个查询中，对象数组中的每个元素值被用来作为查询语句 的置换参数。该方法会自行处理 PreparedStatement 和 ResultSet 的创建和关闭。 </li>
+</ul>
+</li>
+</ul>
+<p>上面就是<code>QueryRunner</code>的使用，不过上面多次写到了<code>ResultSetHandler</code>.</p>
+<p><code>ResultSetHandler</code>接口及实现类 </p>
+<ul>
+<li>该接口用于处理 java.sql.ResultSet，将数据按要求转换为另一种形式。 ResultSetHandler 接口提供了一个单独的方法：Object handle (java.sql.ResultSet .rs)。 接口的主要实现类： ArrayHandler：把结果集中的第一行数据转成对象数组。 </li>
+<li>ArrayListHandler：把结果集中的每一行数据都转成一个数组，再存放到List中。 </li>
+<li><strong>BeanHandler</strong>：将结果集中的第一行数据封装到一个对应的JavaBean实例中。 </li>
+<li><strong>BeanListHandler</strong>：将结果集中的每一行数据都封装到一个对应的JavaBean实例中，存放到List里。 </li>
+<li>ColumnListHandler：将结果集中某一列的数据存放到List中。 </li>
+<li>KeyedHandler(name)：将结果集中的每一行数据都封装到一个Map里，再把这些map再存到一个map 里，其key为指定的key。 </li>
+<li><strong>MapHandler</strong>：将结果集中的第一行数据封装到一个Map里，key是列名，value就是对应的值。 </li>
+<li><strong>MapListHandler</strong>：将结果集中的每一行数据都封装到一个Map里，然后再存放到List </li>
+<li><strong>ScalarHandler</strong>：查询单个值对象 </li>
+</ul>
+<p>主要使用的就是加黑的那几个。不过我们也可以选择自己来实现这个接口。可以选择使用匿名内部类的方式，不过<code>lambda</code>表达式是最好的，因为只有一个方法需要实现。</p>
+<pre><code class="java">ResultSetHandler rsh = new ResultSetHandler() {
+    @Override
+    public Object handle(ResultSet rs) throws SQLException {
+        if (rs.next()) {
+            return new Student(rs.getInt(&quot;id&quot;), rs.getString(&quot;username&quot;));
+        }
+        return null;
+    }
+};</code></pre>
+<pre><code class="java">ResultSetHandler rsh = rs -&gt; {
+    if (rs.next()) {
+        return new Student(rs.getInt(&quot;id&quot;), rs.getString(&quot;username&quot;));
+    }
+    return null;
+};</code></pre>
+<p>关于<code>JDBC</code>的说明基本上就结束了。现在我们就可以将之前<code>DAO</code>中调用的我自己写的<code>JDBCUtils</code>的内容修改成为<code>DBUtils</code>中的方法了。经过我们的修改，<code>BaseDAO</code>就可以省略成这个样子，不可谓不简单。</p>
+<pre><code class="java">package com.sher.dao;
+
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.*;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.sher.java1.JDBCUtils.closeResource;
+
+/**
+ * @author SHeR
+ * @time 10/28/2019 6:16 PM
+ * @describe
+ */
+@SuppressWarnings(&quot;all&quot;)
+public class BaseDao2&lt;T&gt; {
+
+    private Class&lt;T&gt; type;
+    private QueryRunner queryRunner = null;
+    BeanHandler&lt;T&gt; beanHandler = null;
+    BeanListHandler&lt;T&gt; beanListHandler = null;
+    MapHandler mapHandler = null;
+    MapListHandler mapListHandler = null;
+    ScalarHandler scalarHandler = null;
+
+
+    public BaseDao2() {
+        Class&lt;? extends BaseDao2&gt; clazz = this.getClass();
+        ParameterizedType parameterizedType = (ParameterizedType) clazz.getGenericSuperclass();
+        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+        this.type = (Class&lt;T&gt;) actualTypeArguments[0];
+
+        queryRunner = new QueryRunner();
+    }
+
+
+    public int update(Connection conn, String sql, Object... objs) {
+        int count = 0;
+        try {
+            count = queryRunner.update(conn, sql, objs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    public T getInstance(Connection conn, String sql, Object... objs) throws Exception {
+        if (beanHandler == null) {
+            beanHandler = new BeanHandler&lt;&gt;(type);
+        }
+        return queryRunner.query(conn, sql, beanHandler, objs);
+    }
+
+    public List&lt;T&gt; getInstances(Connection conn, String sql, Object... objs) throws Exception {
+        if (beanListHandler == null) {
+            beanListHandler = new BeanListHandler&lt;&gt;(type);
+        }
+        return queryRunner.query(conn, sql, beanListHandler, objs);
+    }
+
+    public Map&lt;String, Object&gt; getMapInstance(Connection conn, String sql, Object... objs) throws Exception {
+        if (mapHandler == null) {
+            mapHandler = new MapHandler();
+        }
+        return queryRunner.query(conn, sql, mapHandler, objs);
+    }
+
+    public List&lt;Map&lt;String, Object&gt;&gt; getMapInstances(Connection conn, String sql, Object... objs) throws Exception {
+        if (mapListHandler == null) {
+            mapListHandler = new MapListHandler();
+        }
+        return queryRunner.query(conn, sql, mapListHandler, objs);
+    }
+
+    public Object getValue(Connection conn, String sql, Object... objs) throws Exception {
+        if (scalarHandler == null) {
+            scalarHandler = new ScalarHandler();
+        }
+        return queryRunner.query(conn, sql, scalarHandler, objs);
+    }
+}</code></pre>
+<p>上面基本上已经没什么方法是我们直接写的了，不可谓不无脑，不可谓不简单！！！</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面基本上就是介绍了几个工具的使用。首先是三个数据库连接池（基本上就是用最好的那个<code>druid</code>连接池，其他的不看都是可以的。），然后就是<code>DBUtils</code>的使用。然后我们还使用<code>DBUtils</code>改进了之前写的那个<code>BaseDAO</code>。那么到此<code>JDBC</code>的简单学习就结束了。</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/WechatPayQr.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2019/10/24/Learn-JDBC-03/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/11.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/11.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                Learn JDBC-03</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-  <div class="post-thumb">
-    <a href="/2019/10/29/Learn-JDBC-04/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/12.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-29 17:10</div>
-      <a href="/2019/10/29/Learn-JDBC-04/" class="post-title">
-        <h3>Learn JDBC-04</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/JDBC/">JDBC<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下JDBC</p>
-        <div class="post-bottom">
-          <a href="/2019/10/29/Learn-JDBC-04/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="sheriby.github.io" class="profile gravatar"><img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
+            </h3>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/24/Learn-JDBC-03/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/11.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-24 20:10</div>
-      <a href="/2019/10/24/Learn-JDBC-03/" class="post-title">
-        <h3>Learn JDBC-03</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/JDBC/">JDBC<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>JDBC中的基础知识的学习</p>
-        <div class="post-bottom">
-          <a href="/2019/10/24/Learn-JDBC-03/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/23/Learn-jDBC-02/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/10.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-23 18:10</div>
-      <a href="/2019/10/23/Learn-jDBC-02/" class="post-title">
-        <h3>Learn JDBC-02</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/JDBC/">JDBC<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单的学习一下JDBC</p>
-        <div class="post-bottom">
-          <a href="/2019/10/23/Learn-jDBC-02/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/21/Learn-JDBC-01/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/9.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-21 19:10</div>
-      <a href="/2019/10/21/Learn-JDBC-01/" class="post-title">
-        <h3>Learn JDBC-01</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/JDBC/">JDBC<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>学习JDBC中的基础的知识</p>
-        <div class="post-bottom">
-          <a href="/2019/10/21/Learn-JDBC-01/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/19/注解/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/7.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-19 09:10</div>
-      <a href="/2019/10/19/注解/" class="post-title">
-        <h3>注解</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单的学习一下Java中的注解，以及自定义一个注解</p>
-        <div class="post-bottom">
-          <a href="/2019/10/19/注解/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/18/Java虚拟机中的泛型——类型擦除/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/8.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-18 19:10</div>
-      <a href="/2019/10/18/Java虚拟机中的泛型——类型擦除/" class="post-title">
-        <h3>Java虚拟机中的泛型——类型擦除</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>进一步理解Java中的泛型</p>
-        <div class="post-bottom">
-          <a href="/2019/10/18/Java虚拟机中的泛型——类型擦除/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/18/Java泛型简介/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/6.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-18 13:10</div>
-      <a href="/2019/10/18/Java泛型简介/" class="post-title">
-        <h3>Java泛型简介</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java中的泛型</p>
-        <div class="post-bottom">
-          <a href="/2019/10/18/Java泛型简介/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/17/反射是个什么鬼？/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/5.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-17 17:10</div>
-      <a href="/2019/10/17/反射是个什么鬼？/" class="post-title">
-        <h3>反射是个什么鬼？</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单的了解一下Java中的反射机制</p>
-        <div class="post-bottom">
-          <a href="/2019/10/17/反射是个什么鬼？/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/16/HastSet-HashMap-二-看看源码/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/71.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-16 17:10</div>
-      <a href="/2019/10/16/HastSet-HashMap-二-看看源码/" class="post-title">
-        <h3>HastSet, HashMap(二) 看看源码</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Hashset、HashMap的使用</p>
-        <div class="post-bottom">
-          <a href="/2019/10/16/HastSet-HashMap-二-看看源码/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/15/HastSet, HashMap(一) Hash简介/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/70.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-15 20:10</div>
-      <a href="/2019/10/15/HastSet, HashMap(一) Hash简介/" class="post-title">
-        <h3>HastSet, HashMap(一) Hash简介</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java中的HashSet与HashMap的使用</p>
-        <div class="post-bottom">
-          <a href="/2019/10/15/HastSet, HashMap(一) Hash简介/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-
-
-    </main>
-      <!-- 首页默认取最最新文章集 -->
-    <!-- 
-      <nav class="navigator">
-        
-        <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">Next</a>
-      </nav>
-     -->
-  </div>
-  
-    <div id="pagination"><a href="/page/2/" class="">Previous</a></div>
-  
+        <hr>
+        <p><i class="iconfont icon-write"></i>一枚小菜鸡</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
 
     </div>    
     <div class="ins-search">

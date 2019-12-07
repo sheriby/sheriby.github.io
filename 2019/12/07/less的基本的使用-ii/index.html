@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Apache Commons IO简介 | Sher的小博客</title>
+  <title itemprop="name">less的基本的使用(ii) | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/12.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/12.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Apache Commons IO简介</h1>
+      less的基本的使用(ii)</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-9-26<span class="bull">
+        2019-12-7<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,182 +376,237 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Apache-Commons-IO简介"><a href="#Apache-Commons-IO简介" class="headerlink" title="Apache Commons IO简介"></a>Apache Commons IO简介</h1><hr>
-<p>之前一直学的都是Java中IO的知识，使用起来基本上都是那个一个样，说实话我确实是有点儿感到厌倦了。于是世界上著名的开源组织阿帕奇(Apache)将Java中的IO进行了封装写了Commons IO这个玩意。这个是需要从阿帕奇的光网上面去下载的，因为这个并不是jdk自带的库。下载完之后还自带了源码以及官方文档，不过都是英文的，，这就非常考验我的能力了。</p>
-<p>先看一下这个Commons IO 由哪些东西组成。</p>
-<pre><code class="java">org.apache.commons.io    
-// This package defines utility classes for working with streams, readers, writers and files.
-org.apache.commons.io.comparator    
-// This package provides various Comparator implementations for Files.
-org.apache.commons.io.filefilter    
-// This package defines an interface (IOFileFilter) that combines both FileFilter and FilenameFilter.
-org.apache.commons.io.input    
-// This package provides implementations of input classes, such as InputStream and Reader.
-org.apache.commons.io.monitor    
-// This package provides a component for monitoring file system events (directory and file create, update and delete events).
-org.apache.commons.io.output    
-// This package provides implementations of output classes, such as OutputStream and Writer.
-org.apache.commons.io.serialization    
-// This package provides a framework for controlling the deserialization of classes.</code></pre>
-<p>上面的这所只言片语，说实话我是什么都看不懂的，如果不是对Commons IO的体系有足够的了解，是肯定看不懂的。就像给我们一开始看那个Java io的体系图，我们也肯定是看的一脸懵逼的吖~~</p>
-<p>而且上面的并不是一些类而已，只是一些包，每个包中还有非常多的类，每个类中又有非常多的方法。所以说不可能一个一个去学习的，只能寻找自己需要的去学，这里就看一下别人的博客,毕竟我对这个玩意是一点也不了解。</p>
-<p><a href="https://blog.csdn.net/langgufu314/article/details/84721816" target="_blank" rel="noopener"><strong>Apache Commons IO入门教程</strong></a></p>
-<p>这个博客写了一点，但是我感觉写的并不怎么样，看了也没什么收获。下面我就直接上一些这个类的常用方法的代码吧。</p>
-<h2 id="文件或者文件夹的大小"><a href="#文件或者文件夹的大小" class="headerlink" title="文件或者文件夹的大小"></a>文件或者文件夹的大小</h2><pre><code class="java">public class TestCommonIo {
-    public static void main(String[] args) {
-        long len1 = FileUtils.sizeOf(new File(&quot;test&quot;));
-        long len2 = FileUtils.sizeOf(new File(&quot;./Exercise/src&quot;));
-        System.out.println(len1);
-        System.out.println(len2);
-    }
+          <h1 id="Less，-更加高效好用的动态CSS-ii"><a href="#Less，-更加高效好用的动态CSS-ii" class="headerlink" title="Less， 更加高效好用的动态CSS(ii)"></a>Less， 更加高效好用的动态CSS(ii)</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前我们学过了less的结构化嵌套和变量，下面我们该学习一下less中的一些高端操作了。比如混合继承什么的，这些可都是高端操作！！这里我们就先来简单的聊聊混合。</p>
+<h2 id="简单的混合用法"><a href="#简单的混合用法" class="headerlink" title="简单的混合用法"></a>简单的混合用法</h2><p>混合这个计算机名词我是真的没听过，不过要说是复合或者组合的话，我还清楚一点。两个类有一种关系叫做复合，在一个类中包含了另一个类，是一种<code>has-a</code>的关系。不知道混合和复合之间有什么关系。</p>
+<p>官方文档对复合的解释是——<strong>混合（Mixin）是一种将一组属性从一个规则集包含（或混入）到另一个规则集的方法。</strong>那么这样看来混合和复合是真的一个意思嘛。</p>
+<p>现在我们有一个样式需要使用，但是我们并不想将这个样式在需要的地方都写一遍，那么原生CSS中，我们做的事情就是将这些样式写成一个类，在需要的地方加上这个类就行了，这个解决办法其实还算蛮好的。但是有时候这个样式属性名都是一样的，但是里面个别的属性的参数不一致，这个时候该怎么做？那只能没辙了。原生的CSS是真的美欧办法来解决这个问题。那less肯定是可以为我们解决这个问题的。</p>
+<p>现在我们有这样的一个样式。</p>
+<pre><code class="less">.bordered {
+      border-top: dotted 1px black;
+      border-bottom: solid 2px black;
+      border-radius: 20px;
 }</code></pre>
-<p>上面的第一个就是文件的大小，第二个是文件夹的大小，使用的方法是一样的。对于计算一个文件的大小，这还是非常简单的，使用length()方法就可以了，不过计算文件夹的代码确实要进行递归的操作，可以说要考虑的东西很多，而且也很繁琐。</p>
-<p>我们可以看一下这个方法的源码</p>
-<pre><code class="java">public static long sizeOf(final File file) {
-
-    if (!file.exists()) {
-        final String message = file + &quot; does not exist&quot;;
-        throw new IllegalArgumentException(message);
-    }
-
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file); // private method; expects directory
-    } else {
-        return file.length();
-    }
-
+<p>此时有一个元素需要使用这个样式，我们只需要这样子做就行了。</p>
+<pre><code class="less">.box1 {
+    width: 200px;
+    height: 200px;
+    background: red;
+    .bordered()
 }</code></pre>
-<p>可以看到源码中专门写了一个函数来计算文件夹的大小</p>
-<pre><code class="java">private static long sizeOfDirectory0(final File directory) {
-    final File[] files = directory.listFiles();
-    if (files == null) {  // null if security restricted
-        return 0L;
-    }
-    long size = 0;
-
-    for (final File file : files) {
-        try {
-            if (!isSymlink(file)) {
-                size += sizeOf0(file); // internal method
-                if (size &lt; 0) {
-                    break;
-                }
-            }
-        } catch (final IOException ioe) {
-            // Ignore exceptions caught when asking if a File is a symlink.
-        }
-    }
-
-    return size;
+<p>编译出来的结果如下。</p>
+<pre><code class="css">.bordered {
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+  border-radius: 20px;
 }
 
-private static long sizeOf0(final File file) {
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file);
-    } else {
-        return file.length(); // will be 0 if file does not exist
-    }
+.box1 {
+  width: 200px;
+  height: 200px;
+  background: red;
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+  border-radius: 20px;
 }</code></pre>
-<p>简单的看一下确实也是使用递归的方法来计算文件夹的大小的。</p>
-<h2 id="列出文件"><a href="#列出文件" class="headerlink" title="列出文件"></a>列出文件</h2><pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, null);
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
+<p>这个编译结果我们其实不是很满意，上面的<code>.bordered</code>我们是当作一个混合来使用的，但是less也将其编译到了CSS代码中去了，这完全是一个没有用的的操作。不过是可以解决的，只需要在后面加上一个括号，less就知道你是想写一个混合，并不想将它作为一个CSS类来使用。</p>
+<pre><code class="less">.bordered() {
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+  border-radius: 20px;
 }</code></pre>
-<p><code>listFiles</code>函数的第一个参数是待列的文件夹，第二个参数是文件过滤器（这里使用的是非空过滤器），第三个参数是文件夹过滤器（使用null就是表示不列出文件夹）</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, DirectoryFileFilter.INSTANCE);
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
+<p>如我们想的那样，混合还可以拥有参数，less果然是强大，这混合加上的参数可以完美的解决我们的问题了。就比如上面的这个问题，边框可能需要是不同的颜色，边框的圆角也可能是不一样大的。</p>
+<pre><code class="less">.bordered(@color: black, @radius: 20px) {
+  border-top: dotted 1px @color;
+  border-bottom: solid 2px @color;
+  border-radius: @radius;
 }</code></pre>
-<p>使用这个方法就可以列出所有的文件，包括文件夹以及文件夹里面的内容。还有一种常用的文件过滤器是后缀名过滤。比如说我只想要后缀为Java的非空的文件，可以这样写。</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), 
-            FileFilterUtils.and(new SuffixFileFilter(&quot;java&quot;), EmptyFileFilter.NOT_EMPTY), 
-            DirectoryFileFilter.INSTANCE);
+<p>上面我们不仅设置了参数，还设置了默认的参数。我们可以像下面这样使用这个混合。</p>
+<pre><code class="less">.bordered()
+.bordered(red)
+.bordered(red, 40px)</code></pre>
+<p>因为函数的参数有默认值，是可以空着不写的。但是这并不代表我们不可以只对<code>@radius</code>赋值而缺省<code>@color</code>，我们可以使用下面的方式给形参（姑且这么说吧）赋值。</p>
+<pre><code class="kess">.bordered(@radius: 50%)</code></pre>
+<h2 id="匹配模式"><a href="#匹配模式" class="headerlink" title="匹配模式"></a>匹配模式</h2><p>上面就是不带参数和带参数（以及带上了默认的参数）的混合的用法，但是混合也并不是只有这么一点东西，下面需要了解的是组合的匹配模式。</p>
+<p>首先是参数个数的匹配，下面是两个同名的函数，但是参数的个数是不相等的。</p>
+<pre><code class="less">.mixins(@color, @size) {
+    color: @color;
+    font-size: @size;
+}
 
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
+.mixins(@opacity) {
+    opacity: @opacity;
 }</code></pre>
-<p>可以使用<code>FileFilterUtils.and</code>,<code>FileFilterUtils.or</code>或者<code>FileFilterUtils.or</code>来组织过滤器之间的逻辑，比如上面的就是以java为后缀名的并且非空的文件。</p>
-<h2 id="读取内容"><a href="#读取内容" class="headerlink" title="读取内容"></a>读取内容</h2><pre><code class="java">static void test3() {
-    try {
-        String msg = FileUtils.readFileToString(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        System.out.println(msg);
+<p>和其他的语言一样(<code>javasript</code>这个东西似乎是一个意外)，函数的参数的个数也是函数的签名的一部分（强类型语言甚至函数的参数的类型也是函数的签名的一部分）。</p>
+<pre><code class="less">.mixins(red, 10px);
+.mixins(0.5);</code></pre>
+<p>上面的调用的是不同的混合，这也算是一种简单的混合的调用。下面来介绍一个比较重要的混合模式。</p>
+<p>还是使用上面的<code>border</code>作为例子，现在我们的需求是要有一个东西来做四个方向的边框的圆角，该整么办呢？我寻思这个应该是非常的好办的。直接撸四个混合分别叫做<code>borderRadiusTopLeft</code>。。。。等等等的，需要什么地方的混合就调用对应的函数就行了。不过这个东西是不是有一点点low呢？我们是否可以使用同一个函数完成这样的功能呢？毕竟咱们老年人记忆力差记不清那么多的函数。</p>
+<pre><code class="less">.mixins(test, @parameter);</code></pre>
+<p>上面就是一个匹配模式，意思是调用这个函数的第一个参数必须是<code>test</code>，只有匹配了才可以调用。知道了这个功能我们可以很容易的写出需求的代码。</p>
+<pre><code class="less">.border(topLeft, @color: red, @radius: 20px) {
+    border-top: dotted 1px @color;
+    border-bottom: solid 2px @color;
+    border-top-left-radius: @radius;
+}
 
-        byte[] b = FileUtils.readFileToByteArray(new File(&quot;hony&quot;));
-        System.out.println(new String(b, StandardCharsets.UTF_8));
+.border(topRight, @color: red, @radius: 20px) {
+    border-top: dotted 1px @color;
+    border-bottom: solid 2px @color;
+    border-top-right-radius: @radius;
+}
 
-        List&lt;String&gt; lines = FileUtils.readLines(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        for (String line : lines) {
-            System.out.println(line);
-        }
+.border(bottomLeft, @color: red, @radius: 20px) {
+    border-top: dotted 1px @color;
+    border-bottom: solid 2px @color;
+    border-bottom-left-radius: @radius;
+}
 
-        LineIterator lineIterator = FileUtils.lineIterator(new File(&quot;hony&quot;), &quot;UTF-8&quot;);
-        while (lineIterator.hasNext()) {
-            System.out.println(lineIterator.nextLine());
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
+.border(bottomRight, @color: red, @radius: 20px) {
+    border-top: dotted 1px @color;
+    border-bottom: solid 2px @color;
+    border-bottom-right-radius: @radius;
 }</code></pre>
-<p>读取文件中的内容主要有上面的四种方式，无论哪一种都是比我们使用原始的Java IO流方便多了。</p>
-<p>第一种是直接将文件中的内容读取到一个String对象中。第二种则是读取到字节数组中。</p>
-<p>第三种是将文件的每一行都放入到一个List中。第四种方式倒是有点儿特殊，是使用迭代器的方式进行遍历文件的。</p>
-<h2 id="写出内容"><a href="#写出内容" class="headerlink" title="写出内容"></a>写出内容</h2><pre><code class="java">static void test4() {
-    try {
-        FileUtils.write(new File(&quot;happy.txt&quot;),
-                &quot;I am happy1!&quot;, StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy2!&quot;, StandardCharsets.UTF_8, true);
-        FileUtils.writeByteArrayToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy3!&quot;.getBytes(StandardCharsets.UTF_8), true);
+<p>这样我们就可以只使用一个函数完成上面的功能了（准确的来说是使用了四个同名的函数）。不过很容易看出一个问题，那就是上面的四个函数都有冗余的代码，重复了好多次，我们最好是将他们单独放置在一个组合中，然后在这四个组合中挨个进行调用。less早就想到了我们需要这个组合，所以说他已经提前为我们写好了。我们只需要将匹配的那部分改成<code>@_</code>（可以匹配任意的部内容），然后将公共的样式写在其中就行了。</p>
+<pre><code class="less"> .border(topLeft, @color: red, @radius: 20px) {
+    // border-top: dotted 1px @color;
+    // border-bottom: solid 2px @color;
+    border-top-left-radius: @radius;
+}
 
-        List&lt;String&gt; datas = new ArrayList&lt;&gt;();
-        datas.add(&quot;sher&quot;);
-        datas.add(&quot;hony&quot;);
-        datas.add(&quot;sherhony&quot;);
+.border(topRight, @color: red, @radius: 20px) {
+    // border-top: dotted 1px @color;
+    // border-bottom: solid 2px @color;
+    border-top-right-radius: @radius;
+}
 
-        FileUtils.writeLines(new File(&quot;happy.txt&quot;),
-                datas, &quot;\r\n&quot;, true);
+.border(bottomLeft, @color: red, @radius: 20px) {
+    // border-top: dotted 1px @color;
+    // border-bottom: solid 2px @color;
+    border-bottom-left-radius: @radius;
+}
 
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
+.border(bottomRight, @color: red, @radius: 20px) {
+    // border-top: dotted 1px @color;
+    // border-bottom: solid 2px @color;
+    border-bottom-right-radius: @radius;
+}
+
+// 调用上面的四个任意的混合的时候，都会先来调用这里的公共样式的混合。
+.border(@_, @color: red, @radius: 20px) {
+    border-top: dotted 1px @color;
+    border-bottom: solid 2px @color;
 }</code></pre>
-<p>写出到文件中同样有以上的好几种方式。上面函数的第四个参数都是代表<strong>是否一追加的形式写入</strong>到文件当中，在Java原始流当中也是使用的这种方式。不过下面的<code>FileUtils.writeLines</code>方法的第三个参数不再是编码了，而是分隔符，也就是说写入的这些data之间用什么隔开，这里我是用的是windows下的换行符。</p>
-<h2 id="拷贝"><a href="#拷贝" class="headerlink" title="拷贝"></a>拷贝</h2><p>拷贝包括拷贝文件或者说的是拷贝文件夹，拷贝文件的操作我们已经做过了，但是拷贝文件夹的操作是有点儿复杂，需要递归的操作。不过这个commons io提供给我们一个十分方便地方法。</p>
-<pre><code class="java">static void test5() {
-    try {
-        FileUtils.copyFile(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;Exercise/src/test-copy.jpg&quot;));
-        FileUtils.copyFileToDirectory(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;D:/&quot;));
-        FileUtils.copyDirectory(new File(&quot;Exercise/out&quot;), new File(&quot;Exercise/out-copy&quot;));
-        FileUtils.copyDirectoryToDirectory(new File(&quot;Exercise/out&quot;),
-                new File(&quot;Exercise/src&quot;));
-        String url = &quot;http://i1.hdslb.com/bfs/archive/9cc5e3fcc7d6c48e5a0d8d3dd8bbb6ed11937f89.jpg&quot;;
-        FileUtils.copyURLToFile(new URL(url), new File(&quot;Exercise/src/miaonei.jpg&quot;));
-        String baidu = &quot;http://www.baidu.com&quot;;
-        String wangyi = &quot;http://www.163.com&quot;;
-        String bd = IOUtils.toString(new URL(baidu), StandardCharsets.UTF_8);
-        String wy = IOUtils.toString(new URL(wangyi), &quot;GBK&quot;);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/baidu.txt&quot;), bd,
-                StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/wangyi.txt&quot;), wy,
-                &quot;GBK&quot;);
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
+<p>还有一个比较类似的东西，在<code>C++</code>的<code>type_traits</code>中也是可以看到的，那就是调用函数的值的条件检查。</p>
+<pre><code class="less">.condition(@index, @para) when (@index = 1) {
+    background-color: @para;
+}
+
+.condition(@index, @para) when (@index &gt;= 2) {
+    color: @para;
+}
+
+.test5 {
+    .condition(1, red);
+    .condition(3, yellow);
 }</code></pre>
-<p>上面是拷贝的常见的操作。可以看到这个方法是什么的方便的。不过需要注意的是，从网络流中拷贝东西（也就是下载东西）的时候，如果是文字的话（也就网页的代码），可以使用<code>IOUtils.toString</code>方法，这个方法可以指定字符的编码。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面就是Commons IO中简单的常用的一些操作，不过Commons IO这么强大的库怎么可能就这么一点点功能，只不过其余的功能太过与强大，而且并不是经常用到，所以现在可以不用了解。现在就是简单的看看这个类，知道有这么个玩意就行了。</p>
+<p>和上面一样，这也是两个同名的函数，参数也都是一样的，但是函数的后面跟着一个<code>when</code>条件。当<code>index = 1</code>的时候调用第一个函数，当<code>index &gt;= 2</code>的时候调用第二个函数。这个东西一般来说都是用于递归的。至于递归，这里就不多bb了，后面说到<code>bootstrap</code>源码的时候自然要说到递归的鬼东西。</p>
+<p>上面的代码编译的结果如下。</p>
+<pre><code class="css">.test5 {
+  background-color: #ff0000;
+  color: #ffff00;
+}</code></pre>
+<h2 id="可变参数及arguments"><a href="#可变参数及arguments" class="headerlink" title="可变参数及arguments"></a>可变参数及arguments</h2><p>说到<code>arguments</code>就不得不提到<code>javascript</code>这门神奇的语言，还是和上面说的一样，JavaScript是一门函数的参数不是函数签名的语言，那么就导致了我们调用函数的时候根本不知道传入了什么东西。一个有两个参数的函数，我们可以不传参数，也可以传入一百个参数，这有点儿荒谬，不过有时候还是蛮方便的。<code>javascript</code>中将函数传入的参数都放置在一个数组<code>arguments</code>中，在函数中我们就可以直接遍历这个数组得到函数的所有的参数。</p>
+<pre><code class="javascript">let sum = function() {
+    let res = 0
+    for (var i = 0; i &lt; arguments.length; i++) {
+        res += arguments[i]
+    }
+    return res
+}
+
+console.log(sum(1,2,3,4,5))</code></pre>
+<p>上面的函数可以计算任意参数数字的和，但是这个函数甚至没有任何的参数。。。</p>
+<p>下面就来介绍一下less中的<code>arguments</code>是如何使用的。</p>
+<p>在less中<code>arguments</code>是代表组合中传入的所以的参数。比如下面的这个例子。</p>
+<pre><code class="less">.arguments(@para1, @para2, @para3) {
+    background: @arguments;
+}
+
+.test {
+    .arguments(red, no-repeat, cover)
+}</code></pre>
+<p>编译出来的结果如下。</p>
+<pre><code class="less">.test {
+  background: #ff0000 no-repeat cover;
+}</code></pre>
+<p>虽然看起来是非常的方便，但是总感觉是没那么必要使用这个变量，就算不使用也问题不大。</p>
+<p>不过骚年是否知道可变参数呢？如果我们使用了可变的参数根本就不知道参数的个数或者名字，那该如何直接使用呢？下面先来介绍一下什么是可变参数以及如何使用可变参数。</p>
+<p>可变参数这个玩意很多语言都是有的，就连c++这们<strong>古老</strong>的语言都拥有可变参数的写法，形式就是<code>...</code>。在less中使用可变参数也是使用<code>...</code>表示很多个参数。既然是可变参数，那么就必须放在最后面，不然如果我们在可变参数的后面再跟着其他的参数，我们到底该如何使用呢？</p>
+<pre><code class="less">.more-argu(@para, ...) {
+    background: @arguments;
+}
+
+.test2 {
+    .more-argu(10px, red, 20%, cover)
+}</code></pre>
+<p>上面就是可变参数的写法，不过上面的函数表示的是<code>1-N</code>个参数的函数，其实这样写是没啥意义的，因为想要取得可变参数中的内容就需要使用<code>@arguments</code>参数，但是<code>@arguments</code>表示的所有的参数，我们没有办法获取真的的可变参数中的内容。不过我们还是有办法的。</p>
+<pre><code class="less">.more-argu(@para, @rest...) {
+    background: @rest;
+}
+
+.test2 {
+    .more-argu(10px, red, 20%, cover)
+}</code></pre>
+<p>为这些可变的参数取一个名字，一般情况下是使用的<code>@rest</code>（官方文档中是这么写的）。</p>
+<h2 id="混合的命名空间"><a href="#混合的命名空间" class="headerlink" title="混合的命名空间"></a>混合的命名空间</h2><p>所谓的命名空间，我们最经常看到的地方就是在<code>C++</code>中，当我们写<code>C++</code>代码的时候可能会不由自主的打上一行<code>using namespace std;</code>其含义就是使用标准库中的命名空间，那么我们就可以使用标准库的中函数而不用每次都加上<code>std::</code>了。命名空间就是将不同部分的函数的作用范围隔离开。比如<code>C++</code>的标准库中有<code>sort</code>函数，然后你又写了一个<code>sort</code>函数，如果没有命名空间的话，两个函数就会出现重定义或者其他的什么问题，有了命名空间之后，我们就可以使用<code>std::sort</code>告诉编译器我要使用的是标准库的<code>sort</code>函数，而不是我自己写的<code>sort</code>函数。</p>
+<pre><code class="less">#my-less-lib {
+    .mixins() {
+        background-color: skyblue;
+    }
+}
+
+#other-less-lib {
+    .minxis() {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.test3 {
+    #my-less-lib &gt; .mixins();
+}
+
+.test4 {
+    #other-less-lib &gt; .minxis();
+}</code></pre>
+<p>上面的代码中就定义了两个不同的命名空间。<code>my-less-lib</code>和<code>other-less-lib</code>，两个命名空间中都有相同的名字的混合<code>minxis</code>。此时对他们我们就可以使用命名空间就行区别了。</p>
+<p>上面的代码的编译结果如下。</p>
+<pre><code class="css">.test3 {
+  background-color: skyblue;
+}
+.test4 {
+  margin: 0;
+  padding: 0;
+}</code></pre>
+<p>还有所谓的条件命名空间，这里就不多扯蛋了，感觉应该是没啥用的东西。</p>
+<h2 id="将混合作为函数来使用"><a href="#将混合作为函数来使用" class="headerlink" title="将混合作为函数来使用"></a>将混合作为函数来使用</h2><p>这也是一种蛮高端的操作，我们可以将混合作为函数那样子进行使用。不过并不是我们想象中的在混合中使用<code>return</code>语句。就比如说我们讲<code>sql</code>中的存储过程作为函数来使用，也不是通过<code>return</code>的方式，而是传入<code>out | in out</code>参数来实现的。不过这里less中的混合作为函数来使用和他们都有一点点的不一样。</p>
+<pre><code class="less">.average(@x, @y) {
+  @result: ((@x + @y) / 2);
+  prop: 20px;
+}
+
+div {
+  // call a mixin and look up its &quot;@result&quot; value
+  padding: .average(16px, 50px)[@result];
+  margin: .average(1px, 2px)[prop];
+}</code></pre>
+<p>编译结果如下。</p>
+<pre><code class="less">div {
+    padding: 33px;
+    margin: 20px;
+}</code></pre>
+<p>需要注意的是这个需要较高的less版本(less 3.5)。这里就简单的说到这了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面对less的混合的说明已经算是足够详细了，但是还有一个比较重要的less中的递归没有说，因为篇幅有限，还是留到下次再说吧。下面要对less中的继承进行一点说明。</p>
 
         </div>
         <!-- .entry-content -->
@@ -579,36 +634,19 @@ private static long sizeOf0(final File file) {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/09/27/IO应用——文件分割/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                IO应用——文件分割</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/09/26/Java中的IO-06/" rel="next">
+            <a href="/2019/12/06/less的基本的使用/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/15.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/15.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                Java中的IO-06</h3>
+                less的基本的使用</h3>
                 <hr>
               </div>
             </a>

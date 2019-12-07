@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">less的基本的使用 | Sher的小博客</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "HonySher的小博客";
+  mashiro_option.author_name = "Sher的小博客";
+  mashiro_option.site_url = "https://sheriby.github.io";
+  mashiro_option.v_appId = "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz";
+  mashiro_option.v_appKey = "mgOpfzbkHYqU92CV4IDlAUHQ";
+  mashiro_option.mathjax = "0";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/sheriby/cdn@1.1/img/cover/(9).png".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+</head>
+</html>
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop filter-dot">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://sheriby.github.io">
+          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/head.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>To Make Some Funny and Meaningful Things!</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="http://github.com/sheriby" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Hony</span>
+            <span class="shironeko">Sher的小博客</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories/技术/">
+                          <i class="fa fa-code" aria-hidden="true"></i>
+                          技术
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/生活/">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                          生活
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/资源/">
+                          <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                          资源
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/随想/">
+                          <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                          随想
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/转载/">
+                          <i class="fa fa-book" aria-hidden="true"></i>
+                          转载
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="javascript:;">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+                    清单
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/tags/悦读/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          书单
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/bangumi/">
+                          <i class="fa fa-film faa-vertical" aria-hidden="true"></i>
+                          番组
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/music/">
+                          <i class="fa fa-headphones" aria-hidden="true"></i>
+                          歌单
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags/图集/">
+                          <i class="fa fa-photo" aria-hidden="true"></i>
+                          图集
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/comment/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+                    留言板
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/links/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+                    友人帐
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/donate/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+                    赞赏
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/theme-sakura/">
+                          <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                          主题
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/lab/">
+                          <i class="fa fa-cogs" aria-hidden="true"></i>
+                          Lab
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/client/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-android faa-vertical" aria-hidden="true"></i>
+                    客户端
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/atom.xml">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+                    RSS
+                  </span>
+                </a>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/15.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/15.jpg">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      less的基本的使用</h1>
+      <p class="entry-census">
+        <span>
+          <a href="sheriby.github.io">
+            <img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true">
+          </a>
+        </span>
+        <span>
+          <a href="sheriby.github.io">Hony Sher</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2019-12-6<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="Less，-更加高效好用的动态CSS-i"><a href="#Less，-更加高效好用的动态CSS-i" class="headerlink" title="Less， 更加高效好用的动态CSS(i)"></a>Less， 更加高效好用的动态CSS(i)</h1><h2 id="为什么会有less的出现"><a href="#为什么会有less的出现" class="headerlink" title="为什么会有less的出现"></a>为什么会有less的出现</h2><p>如果要我说什么语言是写起来最烦人的，我恐怕会毫无疑问的说——肯定是CSS。原因恐怕是每个写过CSS的人很能理解的。简单的几十行代码还好，如果要是几百行上千行的CSS代码，HTML中一个div套着另一个div估计能套个十层，那种CSS代码真的非常的难以阅读了，除非是真的是隔几个样式协议注释这种的，要不然看起来是真的费劲。一千行的HTML代码看起来就是非常的清晰，因为他有结构，而CSS代码没有任何的结构可言，选择器一个套着一个，看起来非常的赘余，我们是否可以想写HTML那样写CSS呢？这是我刚开始写CSS的时候就在思考的问题。</p>
+<h2 id="Less"><a href="#Less" class="headerlink" title="Less"></a>Less</h2><p>Less是一门动态的CSS样式语言。正如他的名字那样，less的出现就是为了使我们写更加少的CSS代码，不仅如此，少的CSS代码还可以发挥更强大的作用。其实我们写的也不是原生的CSS的语法，而是使用less的语法，less的编译器会将我们的less语法编译成为CSS的语法，也就是说浏览器最终渲染的还是CSS，less只是一个中间产物罢了，不过这种中间产物可是一个开发利器。下面就从less的功能开始说起。</p>
+<h3 id="如何使用less"><a href="#如何使用less" class="headerlink" title="如何使用less"></a>如何使用less</h3><p>使用less有如下的三种方式。</p>
+<ul>
+<li><p>第一种是通过js在运行时渲染less文件。</p>
+<pre><code class="html">&lt;link rel=&quot;stylesheet/less&quot; type=&quot;text/css&quot; href=&quot;styles.less&quot; /&gt;
+&lt;script src=&quot;//cdnjs.cloudflare.com/ajax/libs/less.js/3.10.0-beta/less.min.js&quot; &gt;&lt;/script&gt;</code></pre>
+<p>上面使用cdn的方式引用了<code>less.min.js</code>，同样的我们也可以通过下载这个文件到本地的方式进行引用。</p>
+<p>需要注意的是上面的<code>link</code>的<code>rel</code>中的值是<code>stylesheet/less</code>，不是普通的<code>stylesheet</code>，为什么要如此呢？因为<code>less.min.js</code>需要找到这个属性的标签中的内容进行解析然后渲染到页面中。既然是使用js进行渲染的，那么肯定就是在运行的时候做的事情，这就极大的降低的效率，这种方式不是很推荐。不过如果就是写那么一点点less代码这种方式也是可以的。</p>
+</li>
+<li><p>第二种方式在<code>Node.js</code>的环境中使用less</p>
+<p>先通过<code>npm install -g less</code>的命令安装<code>less</code>（前提是你的电脑中需要安装Nodejs而且你还是需要将其加入到环境变量中。然后通过<code>lessc style.less style.css</code>就可以将<code>style.less</code>这样的一个less文件编译成为<code>style.css</code>的css文件进行使用了。</p>
+</li>
+<li><p>第三种方式和第二种方式有点儿相似。</p>
+<p>不过这里我们不需要安装Nodejs的环境，我们只需要下载一个less的桌面的实时编译软件。（如我现在使用的<code>koala</code>软件就具有这样的功能。）我们将CSS文件夹放入到该软件中，软件就会自动的讲我们写好的<code>less</code>文件编译成为同名的<code>css</code>文件。此时我们引用的是那个<code>css</code>文件，而不是<code>less</code>文件。同样的，在页面中，我们也不需要引入那个什么<code>less.min.js</code>文件对我们的less代码进行渲染了。因为我们给浏览器本身就是CSS文件。</p>
+<p>这种方式也是现在我在使用的。不过说到底还是第二种方式最好吧。</p>
+</li>
+</ul>
+<h3 id="结构化的嵌套"><a href="#结构化的嵌套" class="headerlink" title="结构化的嵌套"></a>结构化的嵌套</h3><p>正如我上面说到的问题，CSS代码没有结构，如果我们可以将CSS样式中进行嵌套那就好了。</p>
+<p>比如说如下的CSS代码。</p>
+<pre><code class="css">div.box {
+  background-color: red;
+  width: 200px;
+  height: 200px;
+}
+
+div.box .minbox {
+  background-color: aqua;
+  width: 100px;
+  height: 100px;
+}
+
+div.box p {
+  font-size: 20px;
+  color: blue;
+}
+
+div.box:hover {
+  background-color: skyblue;
+}</code></pre>
+<p>现在的CSS代码还非常的少所以我们很容易的看清楚代码的结构，不过如果我们可以这样写的话，结构表现的可能就会更美好了。</p>
+<pre><code class="less">div.box{
+    background-color: red;
+    width: 200px;
+    height: 200px;
+
+    .minbox{
+        background-color: aqua;
+        width: 100px;
+        height: 100px;
+    }
+
+    p{
+        font-size: 20px;
+        color: blue;
+    }
+
+    &amp;:hover{
+        background-color: skyblue;
+    }
+}</code></pre>
+<p>CSS的结构看的是一目了然，而且我们还可以通过像HTML那样代码的折叠观察我们真正需要注意的那部分CSS代码。可惜的是原生的CSS语法并不能满足我们这样的要求。不过试问，那个小大哥小大姐不想要这样子写代码呢？</p>
+<p>less就提供了这样的写法。可以说认识了less之后，你就再也不想写原生的CSS代码呢，那简直就是一种酷刑。</p>
+<p>上面的结构化嵌套的CSS代码其实就是使用less的语法写出来的。很容易理解和学习，不过如果仔细地观察的话，我们会看到一个非常默认的东西，那就是<code>&amp;</code>。因为写在<code>div</code>中的选择器选择的都是他的后代，不过我们是要<code>div:hover</code>这样伪选择器的需要的，如果我们就是直接写一个<code>:hover</code>就是相当于<code>div :hover</code>，这个是给div的所有的子类加上了一个hover，这样做肯定是不可以的。此时我们就需要使用<code>&amp;</code>。</p>
+<p><code>&amp;</code>表示的是当前选择器的父级，这样<code>&amp;:hover</code>就就是代表<code>div:hover</code>，此时就是给div加上了hover。</p>
+<p>CSS中非常常见的一个类<code>clearfix</code>使用<code>less</code>语法可以写成下面的这样。</p>
+<pre><code class="less">.clearfix{
+    display: block;
+    zoom: 1; // 兼容旧版的ie
+
+    &amp;:before, &amp;:after{ // 解决高度塌陷和子元素外边距传递的问题
+        content: &quot;&quot;;
+        display: table;
+        clear: both;
+        font-size: 0;
+        height: 0;
+        visibility: hidden;
+    }
+
+}</code></pre>
+<p>通过less的编译之后生成了如下的代码。</p>
+<pre><code class="css">.clearfix {
+  display: block;
+  zoom: 1;
+}
+
+.clearfix:before,
+.clearfix:after {
+  content: &quot;&quot;;
+  display: table;
+  clear: both;
+  font-size: 0;
+  height: 0;
+  visibility: hidden;
+}</code></pre>
+<h3 id="更多关于-amp"><a href="#更多关于-amp" class="headerlink" title="更多关于&amp;"></a>更多关于<code>&amp;</code></h3><pre><code class="less">div.link {
+  &amp; + &amp; {
+    color: red;
+  }
+
+  &amp; &amp; {
+    color: green;
+    &amp;666{
+        color: red;
+    }
+  }
+
+  &amp;&amp; {
+    color: blue;
+    &amp;777{
+        color: #00FFFF;
+    }
+  }
+
+  &amp;, &amp;ish {
+    color: cyan;
+  }
+  &amp; &gt; span {
+      &amp;:hover {
+          color: white;
+      }
+  }
+}</code></pre>
+<p>观察上面的选择器，有的都用了不止一个的<code>&amp;</code>，如果使用多个<code>&amp;</code>会发生什么呢？那就要看编译结果了。</p>
+<pre><code class="css">div.link + div.link {
+  color: red;
+}
+div.link div.link {
+  color: green;
+}
+div.link div.link666 {
+  color: red;
+}
+div.linkdiv.link {
+  color: blue;
+}
+div.linkdiv.link777 {
+  color: #00FFFF;
+}
+div.link,
+div.linkish {
+  color: cyan;
+}
+div.link &gt; span:hover {
+  color: white;
+}</code></pre>
+<p>很显然所有的<code>&amp;</code>都被直接替换成为了他们父级的选择器，如<code>div.link</code>。</p>
+<p>需要的是替换的不只是父级的哪一个选择器，而是所有的选择器。</p>
+<pre><code class="less">.grand {
+  .parent {
+    &amp; &gt; &amp; {
+      color: red;
+    }
+
+    &amp; &amp; {
+      color: green;
+    }
+
+    &amp;&amp; {
+      color: blue;
+    }
+
+    &amp;, &amp;ish {
+      color: cyan;
+    }
+  }
+}</code></pre>
+<p>被编译成了</p>
+<pre><code class="css">.grand .parent &gt; .grand .parent {
+  color: red;
+}
+.grand .parent .grand .parent {
+  color: green;
+}
+.grand .parent.grand .parent {
+  color: blue;
+}
+.grand .parent,
+.grand .parentish {
+  color: cyan;
+}</code></pre>
+<h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><p>在原生CSS中只有一种注释，那就是多行注释<code>/* */</code>，不过在less中我们也可以使用大多数语言使用的单行注释<code>//</code>了，这算是对我们这些喜欢使用<code>//</code>作为注释的一个体验上面简单的一个优化。</p>
+<p>不过这还不是单行多行这么简单的一个区别。如果我们使用的是多行注释的话，使用less编译默认是将我们的注释编译到<code>css</code>文件中的，而单行注释是不会别编译到<code>css</code>文件中的。（所以什么见不得人的东西要写在单行注释中哦）。不过我们也可以修改less的编译选项，使其也不编译多行注释，甚至我们可以让他编译出来的CSS文件是一个<code>compressed</code>（压缩）过的版本。</p>
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><h3 id="变量的基本使用"><a href="#变量的基本使用" class="headerlink" title="变量的基本使用"></a>变量的基本使用</h3><p>原生CSS中还有一个非常令人头疼的事情，就是没有变量。比如说如果我们在网页中经常要使用到一种颜色<code>#ff6d3f</code>，我们就得把这个颜色背下来，然后在需要的地方写下<code>color: #ff6d3f</code>或者<code>backgroud: #ff6d3f</code>。有一天突然又感觉这个颜色不是很好，于是又要换成<code>#ee6dfe</code>。就算是使用<code>ctrl+h</code>进行替换也是一件非容令人头疼的事情。这个时候有一个变量的好处就体现出来了。</p>
+<pre><code class="less">@width: 10px;
+@height: @width + 10;
+@color: red;
+
+#header {
+    width: @width;
+    height: @height;
+    background-color: @color;
+}</code></pre>
+<p>这样的less代码会被编译成为如下的CSS代码。</p>
+<pre><code class="css">#header {
+  width: 10px;
+  height: 20px;
+  background-color: #ff0000;
+}</code></pre>
+<p>通过<code>@xxx: xxx;</code>这种方式我们就可以定义一个变量了。不过我们是否可以使用一个变量作为一个属性的名字呢？或者是说作为选择器的名字呢？</p>
+<p>尝试下面的这种写法。</p>
+<pre><code class="less">#header {
+    width: @width;
+    height: @height;
+    background-color: @color;
+    @m: 100px;
+
+    @d {
+        background-color: @color;
+    }
+}</code></pre>
+<p>想象是非常的美好的，但是现实往往是非常的骨感。观察一下编译的结果。</p>
+<pre><code class="css">#header {
+  width: 10px;
+  height: 20px;
+  background-color: #ff0000;
+}
+@d {
+  background-color: #ff0000;
+}</code></pre>
+<p><code>@m</code>这个属性发现都没有了，而<code>@d</code>这个选择器好像也要闹独立了，而且名字竟然还是<code>@d</code>，你说气人不气人。</p>
+<p>经过查阅资料我们才知道，如果要使用选择器或者是属性名字的变量，在使用的时候需要加上大括号，比如上面的代码的正确的写法应该是这样子的。</p>
+<pre><code class="less">#header {
+    width: @width;
+    height: @height;
+    background-color: @color;
+    @{m}: 100px;
+
+    @{d} {
+        background-color: @color;
+    }
+}</code></pre>
+<p>此时的编译结果如下。</p>
+<pre><code class="css">#header {
+  width: 10px;
+  height: 20px;
+  background-color: #ff0000;
+  margin: 100px;
+}
+#header div {
+  background-color: #ff0000;
+}</code></pre>
+<p>这就是我们想要的结果。不过你可能带有疑问的是，为啥我们要将属性或者是选择器作为变量来使用呢？现在讨论这个问题有点儿太早了，等之后我们看<code>bootstrap</code>源码的时候就会知道这个东西有什么用了，这可是高端操作。</p>
+<p>不仅仅是选择器和属性名，变量还有下面的这些用法。</p>
+<pre><code class="less">// 作为URL的一部分
+@img: &quot;../img/myimg&quot;;
+
+div {
+    background: url(&quot;@{img}/hello.png&quot;)
+}
+
+// 作为import的一部分
+// Variables
+@themes: &quot;../../src/themes&quot;;
+
+// Usage
+@import &quot;@{themes}/tidal-wave.less&quot;;
+
+// 我们可以通过变量引用另一个变量，不过这种写法确实是不常见
+@primary:  green;
+@secondary: blue;
+
+.section {
+  @color: primary;
+
+  .element {
+    color: @@color;
+    // @color 是primary @@color也就是@@color-&gt;@primary-&gt;green
+  }
+}</code></pre>
+<h3 id="变量的懒运算"><a href="#变量的懒运算" class="headerlink" title="变量的懒运算"></a>变量的懒运算</h3><p>首先我们来一段JavaScript的代码。下面的代码是否会报错呢？如果不报错又会输出什么东西呢？</p>
+<pre><code class="javascript">var a = b
+var b = 3
+console.log(&#39;a = &#39;, a)
+// 输出还是报错呢？输出什么呢？</code></pre>
+<p>估计只要是稍微有一点JavaScript的人都知道上面的代码是不会报错的，而是输出<code>undefined</code>。JavaScript运行的时候首先来处理变量的声明，被声明的变量还没有被定义，值为<code>undefined</code>。也就说上面的代码相当于这样子的。</p>
+<pre><code class="javascript">var a = undefined
+var b = undefined
+a = b
+b = 3
+console.log(&#39;a = &#39;, a)</code></pre>
+<p>为嘛要说到JavaScript中的这个玩意呢？那是因为less中的所谓的变量也有这么一手，不过两者是不怎么一样的。</p>
+<pre><code class="less">.lazy-eval {
+  width: @var;
+  @a: 9%;
+}
+
+@var: @a;
+@a: 100%;</code></pre>
+<p>上面的less变量，我们也是在变量定义之前先来使用他的，这并没有报错，编译结果如下。</p>
+<pre><code class="css">.lazy-eval {
+  width: 9%;
+}</code></pre>
+<p>没有任何的问题，那是因为less会讲所有的变量声明的语句放在前面去执行，类似的<code>@import</code>语句也会放在最前面去执行，和JavaScript不同的是，没有所谓的<code>undefined</code>了。各种不同的变量可以和谐的相处。不过如果是相同的变量在同一个作用域中声明了两次的话，后面的还是会覆盖前面的声明的。如</p>
+<pre><code class="less">.header {
+  --color: white;
+  color: var(--color);  // the color is black
+  --color: black;
+}</code></pre>
+<h3 id="变量的作用域"><a href="#变量的作用域" class="headerlink" title="变量的作用域"></a>变量的作用域</h3><p>上面说到了在同一个作用域中声明同一个变量，那么不在同一个作用域中的同名是不是也会覆盖呢？多种其他语言的编程经验告诉我们这是不可能会进行覆盖的。比如上面的列中的两个<code>@a</code>的声明，不过这个还不够典型。看下面的这个例子。</p>
+<pre><code class="less">@var: 0;
+.class {
+  @var: 1;
+  .brass {
+    @var: 2;
+    three: @var;
+    @var: 3;
+  }
+  one: @var;
+}</code></pre>
+<p>编译的结果如下。</p>
+<pre><code class="css">.class {
+  one: 1;
+}
+.class .brass {
+  three: 3;
+}</code></pre>
+<p>和我们之前的猜想是一致的，大括号中就是一个作用域。内部的作用域和外部的作用域的同名的变量是相互不影响，不会覆盖的，但是内部如果不是同名的变量的话，还是可以使用外部的变量的。</p>
+<p>很多情况下这种写法也可以节省很多的代码量。</p>
+<p>我们不仅仅可以在less中使用变量，可以看到的是，我们甚至还可以对这些变量进行加减乘除的运算。如上面的<code>@height: @width + 10;</code>就使用加法的运算。不过这个运算似乎是有点儿奇怪，因为看起来是<code>10px + 10</code>，一个是有单位的量，而另一个是没有单位的量，这样真的可以进行运算吗？答案是可以的，只要一个有单位就可以了哦。比如<code>10 * 20px</code>的结果是<code>200px</code>。只需要一个有单位。</p>
+<h3 id="避免编译"><a href="#避免编译" class="headerlink" title="避免编译"></a>避免编译</h3><p>对于上面的那个less中表达式的计算，现在又出现了一个问题，就是有些东西我不想less帮我进行编译，我想要css来计算他。比如说使用<code>@width: calc(100% + 10px);</code></p>
+<p>我们本来的目的想要想要其比父元素的大小还要大10px,经过less的编译之后变成了<code>width: calc(110%);</code>这个不是搞事情的嘛，这个地方less你就不要好心给我们办坏事了，这里不需要你的编译。这个时候我们就可以使用<code>less</code>避免编译的语法。</p>
+<p><code>~&#39;不需要less编译的内容&#39;</code></p>
+<p>上面的代码就可以写成<code>@width: ~&#39;calc(100% + 10px)&#39;;</code>编译的结果为<code>width: calc(100% + 10px);</code></p>
+<p>不过此时又出现了一个问题。那就是<code>@height: @width + 10</code>这行代码会报错，因为less没有给你进行编译，less也不知道你是个什么玩意啊，less中的变量虽然表面上说是变量，但是实际上理解起来还是一个常量的。至于上面的这个问题该如何解决，可以根据具体的情况使用<code>calc</code>函数进行解决。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面简单的介绍了less中最重要的两个用法，结构化的嵌套和变量，但是less强大的地方不仅如此，less还有更多的强大的地方是三言两语说不清的。不过这些东西我大抵也不会，，，看来还是需要好好学习了。</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/WechatPayQr.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2019/10/30/SQL-More/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/14.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/14.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                SQL More</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="sheriby.github.io" class="profile gravatar"><img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i>一枚小菜鸡</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            // PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Hony Sher<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <p style="color: #666666;">&copy 2019</p>
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
+        </span>
+      </p>
+    </div>
+  </div><!-- .site-info -->
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/head.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">HonySher的小博客</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="http://github.com/sheriby" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+        <a href="https://wpa.qq.com/msgrd?v=3&uin=1970734379&site=qq&menu=yes" class="fa fa-qq" target="_blank" style="color: #25c6fe; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories/技术/">
+                  <i class="fa fa-code" aria-hidden="true"></i>
+                  技术
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/生活/">
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                  生活
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/资源/">
+                  <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                  资源
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/随想/">
+                  <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                  随想
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/转载/">
+                  <i class="fa fa-book" aria-hidden="true"></i>
+                  转载
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="javascript:;">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+            清单
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/tags/悦读/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  书单
+                </a>
+              </li>
+            
+              <li>
+                <a href="/bangumi/">
+                  <i class="fa fa-film faa-vertical" aria-hidden="true"></i>
+                  番组
+                </a>
+              </li>
+            
+              <li>
+                <a href="/music/">
+                  <i class="fa fa-headphones" aria-hidden="true"></i>
+                  歌单
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags/图集/">
+                  <i class="fa fa-photo" aria-hidden="true"></i>
+                  图集
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/comment/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+            留言板
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/links/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+            友人帐
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/donate/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+            赞赏
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+              <li>
+                <a href="/theme-sakura/">
+                  <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                  主题
+                </a>
+              </li>
+            
+              <li>
+                <a href="/lab/">
+                  <i class="fa fa-cogs" aria-hidden="true"></i>
+                  Lab
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/client/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-android faa-vertical" aria-hidden="true"></i>
+            客户端
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/atom.xml">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+            RSS
+          </span>
+        </a>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<div class="aplayer"
+
+    data-id="2660651585"
+
+    data-server="netease"
+
+    data-type="playlist"
+
+    data-fixed="true"
+
+    data-autoplay="false"
+
+    data-loop="all"
+
+    data-order="random"
+
+    data-preload="auto"
+
+    data-volume="0.7"
+
+    data-mutex="true"
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/meting@1.2/dist/Meting.min.js"></script>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

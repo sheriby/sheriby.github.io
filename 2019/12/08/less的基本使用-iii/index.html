@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Sher的小博客</title>
+  <title itemprop="name">less的基本使用(iii) | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,517 +340,336 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 0px;"></div>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/16.jpeg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/16.jpeg">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      less的基本使用(iii)</h1>
+      <p class="entry-census">
+        <span>
+          <a href="sheriby.github.io">
+            <img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true">
+          </a>
+        </span>
+        <span>
+          <a href="sheriby.github.io">Hony Sher</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2019-12-8<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
 <div id="content" class="site-content">
-  
-  <div class="notice" style="margin-top:60px">
-    <i class="iconfont icon-notification">
-    </i>
-    <div class="notice-content">欢迎来带到Sher的小博客！</div>
-  </div>
-  
-  <div class="top-feature-row">
-  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
-  <i class="fa fa-anchor" aria-hidden="true">
-  </i>
-  START:DASH!!</h1>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/theme-sakura/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/sakura.md.png">
-        </div>
-        <div class="info">
-          <h3>Sakura</h3>
-          <p>本站 hexo 主题</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="http://space.bilibili.com/37532334" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/bilibili.jpg">
-        </div>
-        <div class="info">
-          <h3>Bilibili</h3>
-          <p>Sher的b站视频</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/startdash/wangshiwu.jpg">
-        </div>
-        <div class="info">
-          <h3>Sher的万事屋</h3>
-          <p>技术服务</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-</div>
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
-      <i class="fa fa-envira" aria-hidden="true"></i>
-      Discovery</h1>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="Less，更加高效好用的CSS-iii"><a href="#Less，更加高效好用的CSS-iii" class="headerlink" title="Less，更加高效好用的CSS(iii)"></a>Less，更加高效好用的CSS(iii)</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面的一个章节中我们详细的介绍了less中的最为重要的混合的知识，现在我们要进行说明的是less中的继承。继承这个玩意似乎并不是很重要，为什么呢？因为我在less的官网中没有找到任何有关的教程，就算是上网上去搜索相关的文章也没啥好看的，大多是三言两语，这就是继承什么什么的。在这里我们就来好好的看看less中的继承到底是个啥吧。</p>
+<h2 id="混合的一点缺陷"><a href="#混合的一点缺陷" class="headerlink" title="混合的一点缺陷"></a>混合的一点缺陷</h2><p>在前面的几篇文章中把组合中我们常说的类之间的关系组合或者说混合进行比较，发现他们似乎真的是蛮相似的。现在又来了一个继承，这就不是相似的问题了，这是完全一样。不过这个既然是继承，解决的肯定是那种父类子类的那种拓展的问题。比如说，现在有一个基本的样式，但是在这个基本样式的前提下还有其他几个更加特殊的样式（也就是说在基本样式的基础上，增加了几个行的样式）。这样的问题该如何解呢？</p>
+<p>我想，人们的第一反应肯定是使用混合。将基本的样式写成一个混合，然后再特殊的样式中调用这个混合。比如如下的代码。</p>
+<pre><code class="less">.basestyle {
+    background-color: red;
+    color: #008000;
+    margin-left: 20px;
+    border: 1px solid blue;
+}
+
+.special-style1 {
+    .basestyle();
+    padding: 20px;
+    vertical-align: middle;
+}
+
+.special-style2 {
+    .basestyle();
+    vertical-align: baseline;
+    margin-top: 10px;
+}
+
+.special-style3 {
+    .basestyle();
+    box-shadow: 0 0 3px black;
+    border-radius: 10px;
+}</code></pre>
+<p>问题似乎很简单的就解决了（此时使用组合基类中没有使用括号，因为基类中的样式可能也要被使用，在没有使用参数的情况下是没有必要加上括号的）。不过先让我们来看一下这个编译的结果如何。</p>
+<pre><code class="css">.basestyle {
+  background-color: red;
+  color: #008000;
+  margin-left: 20px;
+  border: 1px solid blue;
+}
+.special-style1 {
+  background-color: red;
+  color: #008000;
+  margin-left: 20px;
+  border: 1px solid blue;
+  padding: 20px;
+  vertical-align: middle;
+}
+.special-style2 {
+  background-color: red;
+  color: #008000;
+  margin-left: 20px;
+  border: 1px solid blue;
+  vertical-align: baseline;
+  margin-top: 10px;
+}
+.special-style3 {
+  background-color: red;
+  color: #008000;
+  margin-left: 20px;
+  border: 1px solid blue;
+  box-shadow: 0 0 3px black;
+  border-radius: 10px;
+}</code></pre>
+<p>说实话，不用我说是个人都应该能知道其中的问题所在——样式是真的赘余了。我们理应当使用<code>,</code>选择器将基类和子类的样式统统写在一起的。你要是说这种写法是否解决了这个问题，还真的是解决了这个问题，只能说解决的方式不够优雅，less给我们提供了一种全新的方式来解决这个问题——那就是继承。</p>
+<h2 id="继承的使用"><a href="#继承的使用" class="headerlink" title="继承的使用"></a>继承的使用</h2><p>less中的继承也是使用<code>extend</code>关键词（可见Java的影响力是多么的大），不过使用的方式不像是组合的那个函数那样，而是有一点儿像CSS中的伪类（<code>before, after, hover, focus</code>），下面使用继承的方式解决上面的问题。</p>
+<pre><code class="less">.basestyle {
+    background-color: red;
+    color: #008000;
+    margin-left: 20px;
+    border: 1px solid blue;
+}
+
+.special-style1:extend(.basestyle) {
+    padding: 20px;
+    vertical-align: middle;
+}
+
+.special-style2:extend(.basestyle) {
+    vertical-align: baseline;
+    margin-top: 10px;
+}
+
+.special-style3:extend(.basestyle) {
+    box-shadow: 0 0 3px black;
+    border-radius: 10px;
+}</code></pre>
+<p>在对应的子类的后面写上<code>:extend(需要继承的类)</code>，之后子类就拥有了父类的所有的样式，而且是没有赘余的那种。上面的代码编译结果如下。</p>
+<pre><code class="css">.basestyle,
+.special-style1,
+.special-style2,
+.special-style3 {
+  background-color: red;
+  color: #008000;
+  margin-left: 20px;
+  border: 1px solid blue;
+}
+.special-style1 {
+  padding: 20px;
+  vertical-align: middle;
+}
+.special-style2 {
+  vertical-align: baseline;
+  margin-top: 10px;
+}
+.special-style3 {
+  box-shadow: 0 0 3px black;
+  border-radius: 10px;
+}</code></pre>
+<p>这样的编译出来的代码才是真正的赏心悦目，足够的优雅。</p>
+<p>其实继承也是足够的容易理解的，上面基本上就是继承的全部用法了，下面就简单的对继承进行一些说明。</p>
+<h2 id="继承的其他说明"><a href="#继承的其他说明" class="headerlink" title="继承的其他说明"></a>继承的其他说明</h2><h3 id="不能使用参数"><a href="#不能使用参数" class="headerlink" title="不能使用参数"></a>不能使用参数</h3><p>我们不能在继承中像组合那样子使用参数，也就是说继承是不够灵活的。其实仔细想想也是很容易想明白的，什么时候我们需要写有参数的继承呢？那么这个使用使用混合不是刚刚好吗？反正又不会重复。所以说继承中实在是没有必要拥有参数。</p>
+<p>既然是肯定不能有参数，那么就意味着继承的基类是肯定要要less编译到CSS文件中去的，不过这似乎并不是一个问题。</p>
+<h3 id="不能使用变量选择器"><a href="#不能使用变量选择器" class="headerlink" title="不能使用变量选择器"></a>不能使用变量选择器</h3><p>变量选择器是什么东西？<code>Talk is cheap, show me the code!</code></p>
+<pre><code class="less">@selector = .parent-class;
+@{selector} {
+    color: red;
+}
+
+.base-class:extend(.parent-class) {} // Error!
+.base-class:extend(@{selector}) {} // Error!</code></pre>
+<p>上面的两种写法都是错误的写法，不过这次说实话我也不知道为啥这个不可以用。既然人家已经告诉你这种情况下不可以使用继承，那么就避免在这种情况下使用继承吧。（不过说实话实现变量选择器就已经很少了，还要对它进行继承，这种情况属实时有点儿罕见的。）</p>
+<h3 id="可以使用嵌套选择器"><a href="#可以使用嵌套选择器" class="headerlink" title="可以使用嵌套选择器"></a>可以使用嵌套选择器</h3><p>这种写法也是很少的我感觉，简单的了解一下就行了。</p>
+<pre><code class="less">div {
+    span{
+        color: red;
+    }
+    color: black;
+}
+
+.speclass {
+    &amp;:extend(div span);
+}</code></pre>
+<p>上面我们顺便的补充了两个相关的知识点，继承不只是使用<code>.</code>类，其他的比如id tag都是可以的，只不过使用类是最好的罢了。还有就是继承的时候，也可以在类中使用<code>&amp;:extend(继承)</code>，因为<code>&amp;</code>代表的就是父类的选择器<code>.speclass</code>。</p>
+<p>然后就是回到主题，嵌套的选择器<code>div span</code>也是可以继承的。</p>
+<p>编译结果如下。</p>
+<pre><code class="css">div {
+  color: black;
+}
+div span,
+.speclass {
+  color: red;
+}</code></pre>
+<h3 id="精确匹配"><a href="#精确匹配" class="headerlink" title="精确匹配"></a>精确匹配</h3><p>当我们使用继承的时候，继承的选择器必须要和我们定义的选择器完整的匹配。比如</p>
+<pre><code class="less">div .a {
+    color: red
+}
+
+.b:extend(.a) {} // Error!</code></pre>
+<p>虽然上面<code>div .a</code>和<code>.a</code>选择的都是同一个，但是如果只写一个<code>.a</code>，less是无法匹配样式的，我们必须将样式写全了才能够继承。</p>
+<pre><code class="less">div .a {
+    color: red
+}
+
+.b:extend(div .a) {}</code></pre>
+<h3 id="分组选择器的继承问题"><a href="#分组选择器的继承问题" class="headerlink" title="分组选择器的继承问题"></a>分组选择器的继承问题</h3><pre><code class="less">.class1, .class2 {
+    color: red;
+}
+
+.class1 {
+    margning: 10px;
+}
+
+.class2 {
+    padding: 20px
+}
+
+.base:extend(.class1, class2) {}</code></pre>
+<p>对于继承中的分组选择器会每个单独继承，所以上面的代码相当于如下。</p>
+<pre><code class="less">.base {
+    &amp;:extend(.class1);
+    &amp;:extend(.class2);
+}</code></pre>
+<p>编译的结果如下。</p>
+<pre><code class="css">.class1,
+.class2,
+.base {
+  color: red;
+}
+.class1,
+.base {
+  margning: 10px;
+}
+.class2 {
+  padding: 20px;
+}</code></pre>
+<h3 id="继承中属性的覆盖问题"><a href="#继承中属性的覆盖问题" class="headerlink" title="继承中属性的覆盖问题"></a>继承中属性的覆盖问题</h3><p>来想想这么的一个问题，如果我们当前类中和继承的类中有相同的属性会怎么样？当前的类会覆盖基类？还是和他们写的顺序有关？那就是实践一下看看到底会怎样。</p>
+<pre><code class="less">.bbase {
+    color: red;
+}
+
+.spe:extend(.bbase) {
+    color: black;
+}</code></pre>
+<p>编译结果如下。</p>
+<pre><code class="css">.bbase,
+.spe {
+  color: red;
+}
+.spe {
+  color: black;
+}</code></pre>
+<p>对<code>.spe</code>来说两个选择器的优先级是相同的，那么下面的子类中写的<code>color</code>就会覆盖上面的<code>color</code>。</p>
+<p>不过这个顺序是固定的嘛？基类就要在上面，子类就要在下面？当然不是。</p>
+<pre><code class="less">.spe:extend(.bbase) {
+    color: black;
+}
+
+.bbase {
+    color: red;
+}</code></pre>
+<p>现在我们将less中子类父类的位置换一下，看一下编译的结果。</p>
+<pre><code class="css">.spe {
+  color: black;
+}
+.bbase,
+.spe {
+  color: red;
+}</code></pre>
+<p>( ⊙ o ⊙ )啊！子类中的属性竟然被父类给覆盖了，这岂不是滑天下之大稽？？要避免这样的结果，我们需要尽量将要被继承的类写在源文件的上面，防止父类覆盖子类这类事件的发生。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>继承中的内容蛮少的，我们可以很简单的写完继承的基本上所有的内容，但是仅仅知道了继承是个啥，不知道继承怎么用也是没啥用的，后面准备针对bootstrap中的栅格布局的源码分析一下less的使用。</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6https://raw.githubusercontent.com/sheriby/cdn/master/img/custom/donate/WechatPayQr.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2019/12/07/less的基本的使用-ii/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/12.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/12.png">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                less的基本的使用(ii)</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-  <div class="post-thumb">
-    <a href="/2019/10/18/Java泛型简介/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/6.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-18 13:10</div>
-      <a href="/2019/10/18/Java泛型简介/" class="post-title">
-        <h3>Java泛型简介</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java中的泛型</p>
-        <div class="post-bottom">
-          <a href="/2019/10/18/Java泛型简介/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="sheriby.github.io" class="profile gravatar"><img src="https://github.com/sheriby/cdn/blob/master/img/custom/head.jpg?raw=true" itemprop="image" alt="Hony Sher" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="sheriby.github.io" itemprop="url" rel="author">Hony Sher</a>
+            </h3>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/17/反射是个什么鬼？/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/newcover/5.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-17 17:10</div>
-      <a href="/2019/10/17/反射是个什么鬼？/" class="post-title">
-        <h3>反射是个什么鬼？</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单的了解一下Java中的反射机制</p>
-        <div class="post-bottom">
-          <a href="/2019/10/17/反射是个什么鬼？/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/16/HastSet-HashMap-二-看看源码/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/71.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-16 17:10</div>
-      <a href="/2019/10/16/HastSet-HashMap-二-看看源码/" class="post-title">
-        <h3>HastSet, HashMap(二) 看看源码</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Hashset、HashMap的使用</p>
-        <div class="post-bottom">
-          <a href="/2019/10/16/HastSet-HashMap-二-看看源码/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/15/HastSet, HashMap(一) Hash简介/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/70.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-15 20:10</div>
-      <a href="/2019/10/15/HastSet, HashMap(一) Hash简介/" class="post-title">
-        <h3>HastSet, HashMap(一) Hash简介</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java中的HashSet与HashMap的使用</p>
-        <div class="post-bottom">
-          <a href="/2019/10/15/HastSet, HashMap(一) Hash简介/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/14/ArrayList/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/69.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-14 16:10</div>
-      <a href="/2019/10/14/ArrayList/" class="post-title">
-        <h3>ArrayList</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java中最重要的集合——ArrayList</p>
-        <div class="post-bottom">
-          <a href="/2019/10/14/ArrayList/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/13/String-StringBuilder-and-StringBuffer/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/68.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-13 16:10</div>
-      <a href="/2019/10/13/String-StringBuilder-and-StringBuffer/" class="post-title">
-        <h3>String, StringBuilder and StringBuffer</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习String, StringBuilder and StringBuffer的源码</p>
-        <div class="post-bottom">
-          <a href="/2019/10/13/String-StringBuilder-and-StringBuffer/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/13/Java中的多线程-06/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/67.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-13 14:10</div>
-      <a href="/2019/10/13/Java中的多线程-06/" class="post-title">
-        <h3>Java中的多线程-06</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java中的多线程知识</p>
-        <div class="post-bottom">
-          <a href="/2019/10/13/Java中的多线程-06/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/12/Java中的多线程-05/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/67.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-12 19:10</div>
-      <a href="/2019/10/12/Java中的多线程-05/" class="post-title">
-        <h3>Java中的多线程-05</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java中的多线程的知识</p>
-        <div class="post-bottom">
-          <a href="/2019/10/12/Java中的多线程-05/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/12/Java中的多线程-04/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/66.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-12 15:10</div>
-      <a href="/2019/10/12/Java中的多线程-04/" class="post-title">
-        <h3>Java中的多线程-04</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java中的多线程知识</p>
-        <div class="post-bottom">
-          <a href="/2019/10/12/Java中的多线程-04/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2019/10/11/Java中的多线程-03/">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/65.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2019-10-11 15:10</div>
-      <a href="/2019/10/11/Java中的多线程-03/" class="post-title">
-        <h3>Java中的多线程-03</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/悦读/">悦读<em>·</em></a>
-          
-            <a href="/tags/Java基础/">Java基础<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>简单学习一下Java中的多线程的知识</p>
-        <div class="post-bottom">
-          <a href="/2019/10/11/Java中的多线程-03/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-
-
-    </main>
-      <!-- 首页默认取最最新文章集 -->
-    <!-- 
-      <nav class="navigator">
-        
-        <a class="extend prev" rel="prev" href="/">Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/">Next</a>
-      </nav>
-     -->
-  </div>
-  
-    <div id="pagination"><a href="/page/3/" class="">Previous</a></div>
-  
+        <hr>
+        <p><i class="iconfont icon-write"></i>一枚小菜鸡</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
 
     </div>    
     <div class="ins-search">

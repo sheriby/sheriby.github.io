@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Apache Commons IO简介 | Sher的小博客</title>
+  <title itemprop="name">Bootstrap栅格布局Less源码分析(ii) | Sher的小博客</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/48.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/10.jpg);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/10.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Apache Commons IO简介</h1>
+      Bootstrap栅格布局Less源码分析(ii)</h1>
       <p class="entry-census">
         <span>
           <a href="sheriby.github.io">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2019-9-26<span class="bull">
+        2019-12-9<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,182 +376,375 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="Apache-Commons-IO简介"><a href="#Apache-Commons-IO简介" class="headerlink" title="Apache Commons IO简介"></a>Apache Commons IO简介</h1><hr>
-<p>之前一直学的都是Java中IO的知识，使用起来基本上都是那个一个样，说实话我确实是有点儿感到厌倦了。于是世界上著名的开源组织阿帕奇(Apache)将Java中的IO进行了封装写了Commons IO这个玩意。这个是需要从阿帕奇的光网上面去下载的，因为这个并不是jdk自带的库。下载完之后还自带了源码以及官方文档，不过都是英文的，，这就非常考验我的能力了。</p>
-<p>先看一下这个Commons IO 由哪些东西组成。</p>
-<pre><code class="java">org.apache.commons.io    
-// This package defines utility classes for working with streams, readers, writers and files.
-org.apache.commons.io.comparator    
-// This package provides various Comparator implementations for Files.
-org.apache.commons.io.filefilter    
-// This package defines an interface (IOFileFilter) that combines both FileFilter and FilenameFilter.
-org.apache.commons.io.input    
-// This package provides implementations of input classes, such as InputStream and Reader.
-org.apache.commons.io.monitor    
-// This package provides a component for monitoring file system events (directory and file create, update and delete events).
-org.apache.commons.io.output    
-// This package provides implementations of output classes, such as OutputStream and Writer.
-org.apache.commons.io.serialization    
-// This package provides a framework for controlling the deserialization of classes.</code></pre>
-<p>上面的这所只言片语，说实话我是什么都看不懂的，如果不是对Commons IO的体系有足够的了解，是肯定看不懂的。就像给我们一开始看那个Java io的体系图，我们也肯定是看的一脸懵逼的吖~~</p>
-<p>而且上面的并不是一些类而已，只是一些包，每个包中还有非常多的类，每个类中又有非常多的方法。所以说不可能一个一个去学习的，只能寻找自己需要的去学，这里就看一下别人的博客,毕竟我对这个玩意是一点也不了解。</p>
-<p><a href="https://blog.csdn.net/langgufu314/article/details/84721816" target="_blank" rel="noopener"><strong>Apache Commons IO入门教程</strong></a></p>
-<p>这个博客写了一点，但是我感觉写的并不怎么样，看了也没什么收获。下面我就直接上一些这个类的常用方法的代码吧。</p>
-<h2 id="文件或者文件夹的大小"><a href="#文件或者文件夹的大小" class="headerlink" title="文件或者文件夹的大小"></a>文件或者文件夹的大小</h2><pre><code class="java">public class TestCommonIo {
-    public static void main(String[] args) {
-        long len1 = FileUtils.sizeOf(new File(&quot;test&quot;));
-        long len2 = FileUtils.sizeOf(new File(&quot;./Exercise/src&quot;));
-        System.out.println(len1);
-        System.out.println(len2);
-    }
+          <h1 id="Bootstrap栅格布局Less源码分析-ii"><a href="#Bootstrap栅格布局Less源码分析-ii" class="headerlink" title="Bootstrap栅格布局Less源码分析(ii)"></a>Bootstrap栅格布局Less源码分析(ii)</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面算是简单的认识了一下栅格布局是个什么东西，其实之前我写过<code>Flex</code>布局的学习笔记的，只不过没有上传上来，蛤蛤蛤~~</p>
+<p>这次的还是先来介绍栅格布局的使用，等到基本上使用了再分析源码，不然都不知道再干什么。。</p>
+<h2 id="offset-pull-push"><a href="#offset-pull-push" class="headerlink" title="offset, pull, push"></a>offset, pull, push</h2><p>当我们需要改变一行中列的位置的时候，或许你会使用原生的CSS给<code>col-*-*</code>写样式，这样虽然也是可以的，但是<code>Bootstrap</code>给我们实现了三个方式改变列的位置。</p>
+<h3 id="offset"><a href="#offset" class="headerlink" title="offset"></a>offset</h3><p>直接看看源码就知道这个属性可以干啥了，下面是部分的样式。</p>
+<pre><code class="css">.col-xs-offset-12 {
+    margin-left: 100%;
+}
+.col-xs-offset-11 {
+    margin-left: 91.66666667%;
+}
+.col-xs-offset-10 {
+    margin-left: 83.33333333%;
+}
+.col-xs-offset-9 {
+    margin-left: 75%;
+}
+.col-xs-offset-8 {
+    margin-left: 66.66666667%;
+}
+.col-xs-offset-7 {
+    margin-left: 58.33333333%;
 }</code></pre>
-<p>上面的第一个就是文件的大小，第二个是文件夹的大小，使用的方法是一样的。对于计算一个文件的大小，这还是非常简单的，使用length()方法就可以了，不过计算文件夹的代码确实要进行递归的操作，可以说要考虑的东西很多，而且也很繁琐。</p>
-<p>我们可以看一下这个方法的源码</p>
-<pre><code class="java">public static long sizeOf(final File file) {
-
-    if (!file.exists()) {
-        final String message = file + &quot; does not exist&quot;;
-        throw new IllegalArgumentException(message);
-    }
-
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file); // private method; expects directory
-    } else {
-        return file.length();
-    }
-
+<p>咦，为啥只有<code>xs</code>呢？那当然是我只选取了这一部分，其他的也都是有的，而且都是一样的，那为啥不写成这个样式呢？</p>
+<pre><code class="css">.col-xs-offset-12,
+.col-sm-offset-12,
+.col-md-offset-12,
+.col-lg-offset-12{
+    margin-left: 100%;
 }</code></pre>
-<p>可以看到源码中专门写了一个函数来计算文件夹的大小</p>
-<pre><code class="java">private static long sizeOfDirectory0(final File directory) {
-    final File[] files = directory.listFiles();
-    if (files == null) {  // null if security restricted
-        return 0L;
-    }
-    long size = 0;
+<p>因为这个是使用<code>Less</code>编译出来的，因为默写特殊的原因，所以就成了这种“很难看”的CSS代码。不过问题不大，蛤蛤蛤。</p>
+<p>可以看到这个<code>offset</code>只是设置了一个<code>margin-left</code>。</p>
+<pre><code class="css">&lt;div class=&quot;row&quot;&gt;
+    &lt;div class=&quot;col-lg-4&quot;&gt;col-lg-4&lt;/div&gt;
+    &lt;div class=&quot;col-lg-2 col-lg-offset-4&quot;&gt;col-lg-2&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<p>显示的效果如下。</p>
+<p><img src="C:%5CUsers%5CSHeR%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1575882611459.png" alt="1575882611459"></p>
+<h3 id="push-pull"><a href="#push-pull" class="headerlink" title="push pull"></a>push pull</h3><p>之前我们看了<code>.col-*-*</code>的公共样式，不知道我们是否关注到一点，那就是所有的<code>col</code>都是<code>position: relative</code>，都是相对布局的。那么这就意味着我们是可以通过<code>left top</code>进行位置的布局的。看一下源码。</p>
+<pre><code class="css">.col-sm-push-12 {
+    left: 100%;
+}
+.col-sm-push-11 {
+    left: 91.66666667%;
+}
+.col-sm-push-10 {
+    left: 83.33333333%;
+}
+...
+.col-md-pull-12 {
+    right: 100%;
+}
+.col-md-pull-11 {
+    right: 91.66666667%;
+}
+.col-md-pull-10 {
+    right: 83.33333333%;
+}</code></pre>
+<p>其中<code>col-lg-push-2</code>就是向右移动2格，<code>col-lg-pull-2</code>是向左移动两格。不过为啥<code>push</code>是向右，而<code>pull</code>是向左呢？可以这样理解吧，元素的默认布局方式就是从左向右，如果我们推(push)他的话，一般就是促进他的运动。他就是向右。同理，拉他就是向左。。。感觉这个解释像一个憨比~。</p>
+<p>需要注意的是使用<code>pull</code>或者<code>push</code>改变元素的位置的时候，可能会和其他的列重复，但是并不会将其他的元素覆盖，毕竟只是使用<code>相对布局</code>不会脱离文档流，如果想要对其他的元素进行覆盖，可以选择使用<code>z-index: 1</code>，这样就可以覆盖那么没有设置<code>z-index</code>的元素了。</p>
+<p>使用<code>push</code>和<code>pull</code>可以对不同的列进行调换顺序。比如如下的代码。</p>
+<pre><code class="css">&lt;div class=&quot;row&quot;&gt;
+    &lt;div class=&quot;col-lg-4 col-lg-push-8&quot;&gt;col-lg-4&lt;/div&gt;
+    &lt;div class=&quot;col-lg-2 col-lg-push-2&quot;&gt;col-lg-2&lt;/div&gt;
+    &lt;div class=&quot;col-lg-6 col-lg-pull-6&quot;&gt;col-lg-6&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<p>按道理说不设置<code>push pull</code>显示的顺序应该是<code>4 2 6</code>，设置了<code>push pull</code>之后显示的效果如下图所示。</p>
+<p><img src="C:%5CUsers%5CSHeR%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1575884028340.png" alt="1575884028340"></p>
+<p>刚好反过来了。不过这只使用<code>lg</code>模式，如果想要其他模式也可以，可以设置相应的<code>push pull</code>。</p>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p>想要看源码就要先下载Less源码。在less目录下就是项目的所有的Less源码。第一级目录中就有一个<code>grid.less</code>文件。所谓的<code>grid</code>就是栅格的意思。栅格布局的实现就在这个文件中。</p>
+<p>还有三个相关的文件，<code>mixin</code>中的<code>grid.less</code>和<code>grid-frameword.less</code>用来定义<code>grid</code>中使用到的混合。<code>variable.less</code>定义了源码中的所有的变量。</p>
+<p>看根目录下的<code>grid.less</code>文件的一开始。</p>
+<h3 id="container-和-container-fluid的初始化"><a href="#container-和-container-fluid的初始化" class="headerlink" title="container 和 container-fluid的初始化"></a>container 和 container-fluid的初始化</h3><pre><code class="less">// 容器的宽度
+//
+// 设置容器的宽度，然后在媒体查询中重写固定的导航栏
 
-    for (final File file : files) {
-        try {
-            if (!isSymlink(file)) {
-                size += sizeOf0(file); // internal method
-                if (size &lt; 0) {
-                    break;
-                }
-            }
-        } catch (final IOException ioe) {
-            // Ignore exceptions caught when asking if a File is a symlink.
-        }
-    }
+.container {
+  .container-fixed(); // 调用了mixins/grid.less中的混合
 
-    return size;
+  @media (min-width: @screen-sm-min) { // @screen-sm-min =&gt; @screen-sm =&gt; 768px
+    width: @container-sm;
+  }
+  @media (min-width: @screen-md-min) { // @screen-md-min =&gt; @screen-md =&gt; 992px
+    width: @container-md;
+  }
+  @media (min-width: @screen-lg-min) { // @screen-lg-min =&gt; @screen-lg =&gt; 1200px
+    width: @container-lg;
+  }
+}</code></pre>
+<p>我们先来看看<code>.container-fixed()</code>这个混合干了什么事情。</p>
+<pre><code class="less">// 生成容器元素
+.container-fixed(@gutter: @grid-gutter-width) {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left:  floor((@gutter / 2));
+  padding-right: ceil((@gutter / 2));
+  &amp;:extend(.clearfix all); // 清除浮动
 }
 
-private static long sizeOf0(final File file) {
-    if (file.isDirectory()) {
-        return sizeOfDirectory0(file);
-    } else {
-        return file.length(); // will be 0 if file does not exist
-    }
-}</code></pre>
-<p>简单的看一下确实也是使用递归的方法来计算文件夹的大小的。</p>
-<h2 id="列出文件"><a href="#列出文件" class="headerlink" title="列出文件"></a>列出文件</h2><pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, null);
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
-}</code></pre>
-<p><code>listFiles</code>函数的第一个参数是待列的文件夹，第二个参数是文件过滤器（这里使用的是非空过滤器），第三个参数是文件夹过滤器（使用null就是表示不列出文件夹）</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), EmptyFileFilter.NOT_EMPTY, DirectoryFileFilter.INSTANCE);
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
-}</code></pre>
-<p>使用这个方法就可以列出所有的文件，包括文件夹以及文件夹里面的内容。还有一种常用的文件过滤器是后缀名过滤。比如说我只想要后缀为Java的非空的文件，可以这样写。</p>
-<pre><code class="java">static void test2() {
-    Collection&lt;File&gt; files = FileUtils.listFiles(
-            new File(&quot;./Exercise/src&quot;), 
-            FileFilterUtils.and(new SuffixFileFilter(&quot;java&quot;), EmptyFileFilter.NOT_EMPTY), 
-            DirectoryFileFilter.INSTANCE);
+//-------------------------------------
+// variable.less
+// Padding between columns. Gets divided in half for the left and right.
+@grid-gutter-width:         30px;
 
-    for (File file : files) {
-        System.out.println(file.getName());
-    }
+//-------------------------------------
+// clearfix.less
+.clearfix() {
+  &amp;:before,
+  &amp;:after {
+    content: &quot; &quot;; // 1
+    display: table; // 2
+  }
+  &amp;:after {
+    clear: both;
+  }
 }</code></pre>
-<p>可以使用<code>FileFilterUtils.and</code>,<code>FileFilterUtils.or</code>或者<code>FileFilterUtils.or</code>来组织过滤器之间的逻辑，比如上面的就是以java为后缀名的并且非空的文件。</p>
-<h2 id="读取内容"><a href="#读取内容" class="headerlink" title="读取内容"></a>读取内容</h2><pre><code class="java">static void test3() {
-    try {
-        String msg = FileUtils.readFileToString(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        System.out.println(msg);
+<p>上面调用混合的时候没有使用参数，那么这里的调用就是使用默认的参数。所谓的<code>grid-gutter-width</code>就是设置列与列之间的空隙，然后平均分给两边设置<code>padding</code>。这个混合中还继承了<code>.clearfix</code>，这样所有的容器就都是清除了浮动了的。</p>
+<p>下面再来看看后面的媒体查询。</p>
+<pre><code class="less">// variable.less
 
-        byte[] b = FileUtils.readFileToByteArray(new File(&quot;hony&quot;));
-        System.out.println(new String(b, StandardCharsets.UTF_8));
+//** Deprecated `@screen-lg` as of v3.0.1
+@screen-lg:                  1200px;
+@screen-lg-min:              @screen-lg;
 
-        List&lt;String&gt; lines = FileUtils.readLines(new File(&quot;hony&quot;), StandardCharsets.UTF_8);
-        for (String line : lines) {
-            System.out.println(line);
-        }
+//** Deprecated `@screen-md` as of v3.0.1
+@screen-md:                  992px;
+@screen-md-min:              @screen-md;
 
-        LineIterator lineIterator = FileUtils.lineIterator(new File(&quot;hony&quot;), &quot;UTF-8&quot;);
-        while (lineIterator.hasNext()) {
-            System.out.println(lineIterator.nextLine());
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
+//** Deprecated `@screen-sm` as of v3.0.1
+@screen-sm:                  768px;
+@screen-sm-min:              @screen-sm;
+
+@container-large-desktop:      (1140px + @grid-gutter-width);
+//** For `@screen-lg-min` and up.
+@container-lg:                 @container-large-desktop;
+
+@container-desktop:            (940px + @grid-gutter-width);
+//** For `@screen-md-min` and up.
+@container-md:                 @container-desktop;
+
+@container-tablet:             (720px + @grid-gutter-width);
+//** For `@screen-sm-min` and up.
+@container-sm:                 @container-tablet;</code></pre>
+<p>看来显示的大小还和我们的<code>gutter</code>有关。</p>
+<p>上面就是对<code>.container</code>进行初始化，生成之前我们看过的那个代码。</p>
+<pre><code class="css">.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
 }</code></pre>
-<p>读取文件中的内容主要有上面的四种方式，无论哪一种都是比我们使用原始的Java IO流方便多了。</p>
-<p>第一种是直接将文件中的内容读取到一个String对象中。第二种则是读取到字节数组中。</p>
-<p>第三种是将文件的每一行都放入到一个List中。第四种方式倒是有点儿特殊，是使用迭代器的方式进行遍历文件的。</p>
-<h2 id="写出内容"><a href="#写出内容" class="headerlink" title="写出内容"></a>写出内容</h2><pre><code class="java">static void test4() {
-    try {
-        FileUtils.write(new File(&quot;happy.txt&quot;),
-                &quot;I am happy1!&quot;, StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy2!&quot;, StandardCharsets.UTF_8, true);
-        FileUtils.writeByteArrayToFile(new File(&quot;happy.txt&quot;),
-                &quot;I am happy3!&quot;.getBytes(StandardCharsets.UTF_8), true);
-
-        List&lt;String&gt; datas = new ArrayList&lt;&gt;();
-        datas.add(&quot;sher&quot;);
-        datas.add(&quot;hony&quot;);
-        datas.add(&quot;sherhony&quot;);
-
-        FileUtils.writeLines(new File(&quot;happy.txt&quot;),
-                datas, &quot;\r\n&quot;, true);
-
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
+<p>然后就是<code>container-fluid</code>的初始化。</p>
+<pre><code class="less">.container-fluid {
+  .container-fixed();
 }</code></pre>
-<p>写出到文件中同样有以上的好几种方式。上面函数的第四个参数都是代表<strong>是否一追加的形式写入</strong>到文件当中，在Java原始流当中也是使用的这种方式。不过下面的<code>FileUtils.writeLines</code>方法的第三个参数不再是编码了，而是分隔符，也就是说写入的这些data之间用什么隔开，这里我是用的是windows下的换行符。</p>
-<h2 id="拷贝"><a href="#拷贝" class="headerlink" title="拷贝"></a>拷贝</h2><p>拷贝包括拷贝文件或者说的是拷贝文件夹，拷贝文件的操作我们已经做过了，但是拷贝文件夹的操作是有点儿复杂，需要递归的操作。不过这个commons io提供给我们一个十分方便地方法。</p>
-<pre><code class="java">static void test5() {
-    try {
-        FileUtils.copyFile(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;Exercise/src/test-copy.jpg&quot;));
-        FileUtils.copyFileToDirectory(new File(&quot;Exercise/src/test.jpg&quot;),
-                new File(&quot;D:/&quot;));
-        FileUtils.copyDirectory(new File(&quot;Exercise/out&quot;), new File(&quot;Exercise/out-copy&quot;));
-        FileUtils.copyDirectoryToDirectory(new File(&quot;Exercise/out&quot;),
-                new File(&quot;Exercise/src&quot;));
-        String url = &quot;http://i1.hdslb.com/bfs/archive/9cc5e3fcc7d6c48e5a0d8d3dd8bbb6ed11937f89.jpg&quot;;
-        FileUtils.copyURLToFile(new URL(url), new File(&quot;Exercise/src/miaonei.jpg&quot;));
-        String baidu = &quot;http://www.baidu.com&quot;;
-        String wangyi = &quot;http://www.163.com&quot;;
-        String bd = IOUtils.toString(new URL(baidu), StandardCharsets.UTF_8);
-        String wy = IOUtils.toString(new URL(wangyi), &quot;GBK&quot;);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/baidu.txt&quot;), bd,
-                StandardCharsets.UTF_8);
-        FileUtils.writeStringToFile(new File(&quot;Exercise/src/wangyi.txt&quot;), wy,
-                &quot;GBK&quot;);
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
+<p>除了没有上面的媒体查询，其他都是一样的。</p>
+<h3 id="行和列的初始化"><a href="#行和列的初始化" class="headerlink" title="行和列的初始化"></a>行和列的初始化</h3><pre><code class="less">// Row
+//
+// Rows contain and clear the floats of your columns.
+
+.row {
+  .make-row();
+}
+
+//---------------------------
+// mixins/grid.less
+// Creates a wrapper for a series of columns
+.make-row(@gutter: @grid-gutter-width) {
+  margin-left:  ceil((@gutter / -2));
+  margin-right: floor((@gutter / -2));
+  &amp;:extend(.clearfix all);
 }</code></pre>
-<p>上面是拷贝的常见的操作。可以看到这个方法是什么的方便的。不过需要注意的是，从网络流中拷贝东西（也就是下载东西）的时候，如果是文字的话（也就网页的代码），可以使用<code>IOUtils.toString</code>方法，这个方法可以指定字符的编码。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面就是Commons IO中简单的常用的一些操作，不过Commons IO这么强大的库怎么可能就这么一点点功能，只不过其余的功能太过与强大，而且并不是经常用到，所以现在可以不用了解。现在就是简单的看看这个类，知道有这么个玩意就行了。</p>
+<p>上面是对行的创建过程，非常的简单易懂， 每个行也都是清除了浮动的。编译出来的代码如下。</p>
+<pre><code class="css">.row {
+  margin-right: -15px;
+  margin-left: -15px;
+}</code></pre>
+<pre><code class="less">// Columns
+//
+// Common styles for small and large grid columns
+
+.make-grid-columns();
+
+//--------------------------------
+// mixins/grid-frameword.less
+.make-grid-columns() {
+  // Common styles for all sizes of grid columns, widths 1-12
+  .col(@index) { // initial
+    @item: ~&quot;.col-xs-@{index}, .col-sm-@{index}, .col-md-@{index}, .col-lg-@{index}&quot;;
+    .col((@index + 1), @item);
+  }
+  .col(@index, @list) when (@index =&lt; @grid-columns) { // general; &quot;=&lt;&quot; isn&#39;t a typo
+    @item: ~&quot;.col-xs-@{index}, .col-sm-@{index}, .col-md-@{index}, .col-lg-@{index}&quot;;
+    .col((@index + 1), ~&quot;@{list}, @{item}&quot;);
+  }
+  .col(@index, @list) when (@index &gt; @grid-columns) { // terminal
+    @{list} {
+      position: relative;
+      // Prevent columns from collapsing when empty
+      min-height: 1px;
+      // Inner gutter via padding
+      padding-left:  ceil((@grid-gutter-width / 2));
+      padding-right: floor((@grid-gutter-width / 2));
+    }
+  }
+  .col(1); // kickstart it
+}
+
+//-----------------
+// variable.less
+// Number of columns in the grid.
+@grid-columns:              12;</code></pre>
+<p>这次的这个代码就非常的恐怖了，需要好好的看了。</p>
+<p><code>.make-grid-columns</code>中定义了三个混合，然后再最后调用<code>.col(1)</code>，这属性的样式，在<code>C++</code>也非常的常见，看来是要进行递归了。</p>
+<p>首先<code>.col(1)</code>只有一个参数那么只可以调用第一个混合。定义了一个变量<code>@item</code>，使用我们之前说的那个避免编译，而且当变量不是在属性值中使用的时候，在<code>url 选择器 属性名 import</code>等地方使用的时候，都是需要加上<code>{}</code>的。此时<code>item</code>值如下。</p>
+<pre><code>@item = &#39;.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1&#39;</code></pre><p>然后调用<code>.col(2, @item)</code>，这时候调用第二个混合，因为只满足第二个混合的条件<code>@index =&lt; @grid-colums</code>。</p>
+<p>在这个混合中也定义了一个<code>@item</code>。注意之前也说过，less中的变量是有作用域的，两个<code>@item</code>是不干扰的。此时<code>item</code>值如下。</p>
+<pre><code>@item = &#39;.col-xs-2, .col-sm-2, .col-md-2, .col-lg-2&#39;</code></pre><p>然后调用<code>.col(2, @｛list｝, @｛item｝)</code>，显然这已经是一个递归了，不过第二个参数究竟是什么呢？很容易看出来此时的第二个参数就是下面的这个。</p>
+<pre><code>.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2</code></pre><p>当<code>index = 13</code>的时候退出递归，经历了这么多次的递归之后第二个参数变成了。</p>
+<pre><code>.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2
+.......
+.col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12</code></pre><p>此时调用第三个混合。将上面的<code>@list</code>作为选择器进行设置属性。果然是高端操作。</p>
+<p>编译出来就是之前我们的看的那个代码。</p>
+<pre><code class="css">.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+  position: relative;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+}</code></pre>
+<h2 id="生成栅格"><a href="#生成栅格" class="headerlink" title="生成栅格"></a>生成栅格</h2><p>上面都还只是给行列设置一定的<code>margin padding</code>，清除浮动这些小操作而已，还没到栅格布局的地方。</p>
+<p>下面就是<code>grid.less</code>文件中的最后的代码，媒体查询的样式设置。</p>
+<pre><code class="less">// Extra small grid
+//
+// Columns, offsets, pushes, and pulls for extra small devices like
+// smartphones.
+
+.make-grid(xs);
+
+
+// Small grid
+//
+// Columns, offsets, pushes, and pulls for the small device range, from phones
+// to tablets.
+
+@media (min-width: @screen-sm-min) {
+  .make-grid(sm);
+}
+
+
+// Medium grid
+//
+// Columns, offsets, pushes, and pulls for the desktop device range.
+
+@media (min-width: @screen-md-min) {
+  .make-grid(md);
+}
+
+
+// Large grid
+//
+// Columns, offsets, pushes, and pulls for the large desktop device range.
+
+@media (min-width: @screen-lg-min) {
+  .make-grid(lg);
+}
+
+
+//----------------------------------
+// grid-framework.less
+// Create grid for specific class
+.make-grid(@class) {
+  .float-grid-columns(@class);
+  .loop-grid-columns(@grid-columns, @class, width);
+  .loop-grid-columns(@grid-columns, @class, pull);
+  .loop-grid-columns(@grid-columns, @class, push);
+  .loop-grid-columns(@grid-columns, @class, offset);
+}</code></pre>
+<p>从<code>float-grid-columns</code>开始看起吧。</p>
+<pre><code class="less">.float-grid-columns(@class) {
+  .col(@index) { // initial
+    @item: ~&quot;.col-@{class}-@{index}&quot;;
+    .col((@index + 1), @item);
+  }
+  .col(@index, @list) when (@index =&lt; @grid-columns) { // general
+    @item: ~&quot;.col-@{class}-@{index}&quot;;
+    .col((@index + 1), ~&quot;@{list}, @{item}&quot;);
+  }
+  .col(@index, @list) when (@index &gt; @grid-columns) { // terminal
+    @{list} {
+      float: left;
+    }
+  }
+  .col(1); // kickstart it
+}</code></pre>
+<p>传入的<code>@class</code>可能值是<code>xs sm md lg</code>。看到上面的代码，我感觉一秒钟我们就可以看出编译出来的结果是什么了。还是那个递归的套路，将所有的<code>col-@{class}-*</code>设置了左浮动！编译结果就不写了。</p>
+<p>该混合是将所有的列都设置左浮动。</p>
+<p>然后就是<code>.loop-grid-columns</code>，这是一个匹配模式的混合，通过第三个参数对不同的混合进行匹配。</p>
+<pre><code class="less">// Basic looping in LESS
+.loop-grid-columns(@index, @class, @type) when (@index &gt;= 0) {
+  .calc-grid-column(@index, @class, @type);
+  // next iteration
+  .loop-grid-columns((@index - 1), @class, @type);
+}
+
+.calc-grid-column(@index, @class, @type) when (@type = width) and (@index &gt; 0) {
+  .col-@{class}-@{index} {
+    width: percentage((@index / @grid-columns));
+  }
+}</code></pre>
+<p>这是个<code>.loop-grid-columns</code>统一进了一个混合，看来还不是立马进行匹配的。现在以<code>..loop-grid-columns(@grid-columns, @class, width)</code>为例进行说明。</p>
+<p><code>@type = width</code>进入了<code>.calc-grid-column</code>，还是一样的套路，将<code>col-md-1</code>这种样式的设置宽度，如果是<code>1</code>，那么<code>width</code>就是<code>1/12</code>的父元素，但是要转成百分比，于是调用了<code>percentage</code>函数(这是一个less函数，将数字转换成为百分比)。</p>
+<p>编译之后就是类似这样的。</p>
+<pre><code class="css">.col-xs-12 {
+  width: 100%;
+}
+.col-xs-11 {
+  width: 91.66666667%;
+}
+.col-xs-10 {
+  width: 83.33333333%;
+}
+.col-xs-9 {
+  width: 75%;
+}</code></pre>
+<p>这个我们也看过了。</p>
+<p>然后就是<code>.loop-grid-columns(@grid-columns, @class, pull);</code></p>
+<pre><code class="less">.calc-grid-column(@index, @class, @type) when (@type = push) and (@index &gt; 0) {
+  .col-@{class}-push-@{index} {
+    left: percentage((@index / @grid-columns));
+  }
+}
+.calc-grid-column(@index, @class, @type) when (@type = push) and (@index = 0) {
+  .col-@{class}-push-0 {
+    left: auto;
+  }
+}</code></pre>
+<p>这次有两个函数，因为这里需要对<code>.col-md-0</code>设置样式，<code>left: auto</code>。</p>
+<p><code>push offset</code>都是基本上相同的用法。</p>
+<pre><code class="less">.calc-grid-column(@index, @class, @type) when (@type = pull) and (@index &gt; 0) {
+  .col-@{class}-pull-@{index} {
+    right: percentage((@index / @grid-columns));
+  }
+}
+.calc-grid-column(@index, @class, @type) when (@type = pull) and (@index = 0) {
+  .col-@{class}-pull-0 {
+    right: auto;
+  }
+}
+.calc-grid-column(@index, @class, @type) when (@type = offset) {
+  .col-@{class}-offset-@{index} {
+    margin-left: percentage((@index / @grid-columns));
+  }
+}</code></pre>
+<p>上面基本上就是<code>栅格布局</code>的所有的less源码，可以看到源码其实非常短，但是编译出来的<code>css</code>代码是非常多的，可见<code>less</code>是真的less，写的少做的多。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我们之所以看这个栅格布局的源码，一方面是我们需要学习<code>Bootstrap</code>的栅格布局如何使用，然后就是学会使用媒体查询还有就是<code>less</code>中递归的使用。</p>
 
         </div>
         <!-- .entry-content -->
@@ -579,36 +772,19 @@ private static long sizeOf0(final File file) {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/09/27/IO应用——文件分割/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/49.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                IO应用——文件分割</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2019/09/26/Java中的IO-06/" rel="next">
+            <a href="/2019/12/08/Bootstrap栅格布局Less源码分析/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.11/img/cover/47.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/11.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/sheriby/cdn@1.12/img/cover/11.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                Java中的IO-06</h3>
+                Bootstrap栅格布局Less源码分析(i)</h3>
                 <hr>
               </div>
             </a>
